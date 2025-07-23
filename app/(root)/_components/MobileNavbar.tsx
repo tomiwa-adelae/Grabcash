@@ -15,7 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Logo } from "@/components/Logo";
 import { rootNavLinks } from "@/constants";
 
-export function MobileNavbar({ user }: { user: any }) {
+export function MobileNavbar() {
 	const [openMobile, setOpenMobile] = useState(false); // <-- add state
 	const pathname = usePathname();
 	const router = useRouter();
