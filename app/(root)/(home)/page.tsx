@@ -51,7 +51,7 @@ const page = () => {
 												your daily effort translates directly into real income."
 			/>
 			<GetStarted />
-			<FAQs />
+			<FAQs showTitle={true} />
 			<Testimonials />
 		</div>
 	);
