@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { rootNavLinks } from "@/constants";
 import Link from "next/link";
 import React from "react";
-import { MobileNavbar } from "./MobileNavbar";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const Header = () => {
 	return (
@@ -22,15 +22,7 @@ export const Header = () => {
 					))}
 				</div>
 				<div className="hidden md:flex items-center justify-end gap-4">
-					<Button size="md" asChild variant={"ghost"}>
-						<Link href="/login">Login</Link>
-					</Button>
-					<Button size="md" asChild>
-						<Link href="/register">Get started</Link>
-					</Button>
-				</div>
-				<div className="md:hidden">
-					<MobileNavbar />
+					<ThemeToggle />
 				</div>
 			</div>
 		</header>
