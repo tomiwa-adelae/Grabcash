@@ -33,10 +33,10 @@ export const How = ({ title, description }: Props) => {
 				</div>
 				<div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
 					{howDetails.map(
-						({ title, icon, subTitle, description }) => {
+						({ title, icon, subTitle, description }, index) => {
 							const Icon = icon;
 							return (
-								<Card className="gap-0 py-10">
+								<Card key={index} className="gap-0 py-10">
 									<CardHeader>
 										<Icon />
 										<CardTitle className="text-lg md:text-xl mt-2">

@@ -14,12 +14,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { loginSchema, LoginSchemaType } from "@/lib/zodSchemas";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
+import { Loader } from "@/components/Loader";
 
 export function LoginForm() {
+	const [pendingGoogle, startGoogleTransition] = useTransition();
+
 	const form = useForm<LoginSchemaType>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
@@ -30,6 +34,25 @@ export function LoginForm() {
 
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const toggleVisibility = () => setIsVisible((prevState) => !prevState);
+
+	const handleGoogle = () => {
+		startGoogleTransition(async () => {
+			await authClient.signIn.social({
+				provider: "google",
+				callbackURL: "/",
+				fetchOptions: {
+					onSuccess: () => {
+						toast.success(`Redirecting...`);
+					},
+					onError: (error) => {
+						toast.error(
+							error.error.message || "Internal server error"
+						);
+					},
+				},
+			});
+		});
+	};
 
 	function onSubmit(data: LoginSchemaType) {
 		toast("You submitted the following values", {
@@ -55,15 +78,23 @@ export function LoginForm() {
 						type="button"
 						variant={"black"}
 						size="md"
+						onClick={handleGoogle}
+						disabled={pendingGoogle}
 					>
-						<Image
-							src={"/assets/icons/google.svg"}
-							alt="Google icon"
-							width={1000}
-							height={1000}
-							className="size-5"
-						/>
-						Continue with Google
+						{pendingGoogle ? (
+							<Loader text="Continuing..." />
+						) : (
+							<>
+								<Image
+									src={"/assets/icons/google.svg"}
+									alt="Google icon"
+									width={1000}
+									height={1000}
+									className="size-5"
+								/>
+								Continue with Google
+							</>
+						)}
 					</Button>
 					<div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:flex after:items-center after:border-t after:border-border">
 						<span className="relative z-10 bg-card px-2 text-muted-foreground">
@@ -146,7 +177,12 @@ export function LoginForm() {
 							Forgotten password?
 						</Link>
 					</p>
-					<Button className="w-full" size="md" type="submit">
+					<Button
+						disabled={pendingGoogle}
+						className="w-full"
+						size="md"
+						type="submit"
+					>
 						Continue
 					</Button>
 				</form>

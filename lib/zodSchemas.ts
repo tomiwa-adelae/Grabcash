@@ -132,9 +132,12 @@ export const onboardingProfileSchema = z
 		email: z.string().email().min(2, {
 			message: "Email must be at least 2 characters.",
 		}),
-		username: z.string().min(2, {
-			message: "Username must be at least 2 characters.",
-		}),
+		username: z
+			.string()
+			.min(2, {
+				message: "Username must be at least 2 characters.",
+			})
+			.regex(/^[a-zA-Z0-9_]+$/, "Username must be alphanumeric"),
 		phoneNumber: z.string().regex(/^(\+?\d{10,15})$/, {
 			message: "Enter a valid phone number.",
 		}),

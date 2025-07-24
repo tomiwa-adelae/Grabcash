@@ -22,13 +22,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { registerSchema, RegisterSchemaType } from "@/lib/zodSchemas";
 import * as RPNInput from "react-phone-number-input";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { CheckIcon, EyeIcon, EyeOffIcon, XIcon } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { Loader } from "@/components/Loader";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 export function RegisterForm() {
+	const [pending, startTransition] = useTransition();
+	const [pendingGoogle, startGoogleTransition] = useTransition();
+
+	const router = useRouter();
+
 	const form = useForm<RegisterSchemaType>({
 		resolver: zodResolver(registerSchema),
 		defaultValues: {
@@ -80,15 +88,51 @@ export function RegisterForm() {
 		return "Strong password";
 	};
 
+	const handleGoogle = () => {
+		startGoogleTransition(async () => {
+			await authClient.signIn.social({
+				provider: "google",
+				callbackURL: "/",
+				fetchOptions: {
+					onSuccess: () => {
+						toast.success(`Redirecting...`);
+					},
+					onError: (error) => {
+						toast.error(
+							error.error.message || "Internal server error"
+						);
+					},
+				},
+			});
+		});
+	};
+
 	function onSubmit(data: RegisterSchemaType) {
-		toast("You submitted the following values", {
-			description: (
-				<pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
+		startTransition(async () => {
+			await authClient.signUp.email({
+				name: `${data.firstName} ${data.lastName}`,
+				email: data.email,
+				password: data.password,
+				callbackURL: "/verify-email",
+				fetchOptions: {
+					onSuccess: async (res) => {
+						toast.success(
+							"Your account was successfully created. Redirecting..."
+						);
+						await authClient.sendVerificationOTP({
+							email: data.email,
+							type: "email-verification",
+						});
+						router.push(`/verify-email?email=${data.email}`);
+					},
+					onError: (error) => {
+						console.log(error);
+						toast.error(
+							error.error.message || "Oops! Internal server error"
+						);
+					},
+				},
+			});
 		});
 	}
 
@@ -104,15 +148,23 @@ export function RegisterForm() {
 						type="button"
 						variant={"black"}
 						size="md"
+						onClick={handleGoogle}
+						disabled={pendingGoogle || pending}
 					>
-						<Image
-							src={"/assets/icons/google.svg"}
-							alt="Google icon"
-							width={1000}
-							height={1000}
-							className="size-5"
-						/>
-						Continue with Google
+						{pendingGoogle ? (
+							<Loader text="Continuing..." />
+						) : (
+							<>
+								<Image
+									src={"/assets/icons/google.svg"}
+									alt="Google icon"
+									width={1000}
+									height={1000}
+									className="size-5"
+								/>
+								Continue with Google
+							</>
+						)}
 					</Button>
 					<div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:flex after:items-center after:border-t after:border-border">
 						<span className="relative z-10 bg-card px-2 text-muted-foreground">
@@ -385,8 +437,17 @@ export function RegisterForm() {
 							</FormItem>
 						)}
 					/>
-					<Button className="w-full" size="md" type="submit">
-						Create account
+					<Button
+						disabled={pendingGoogle || pending}
+						className="w-full"
+						size="md"
+						type="submit"
+					>
+						{pending ? (
+							<Loader text="Creating..." />
+						) : (
+							"Create account"
+						)}
 					</Button>
 				</form>
 			</Form>
