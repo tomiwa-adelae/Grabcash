@@ -28,26 +28,47 @@ import {
 } from "@/components/ui/select";
 import { identificationTypes } from "@/constants";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { tryCatch } from "@/hooks/use-try-catch";
+import { saveIdentification } from "../actions";
+import { Loader } from "@/components/Loader";
+import { GetUserDetailsType } from "@/app/data/user/get-user-details";
 
-export function OnBoardingIdentityForm() {
+interface Props {
+	user: GetUserDetailsType;
+}
+
+export function OnBoardingIdentityForm({ user }: Props) {
+	const router = useRouter();
+	const [pending, startTransition] = useTransition();
 	const form = useForm<OnboardingIdentitySchemaType>({
 		resolver: zodResolver(onboardingIdentitySchema),
 		defaultValues: {
-			dob: "",
-			identificationType: "",
-			identificationNumber: "",
+			dob: user.dob || "",
+			identificationType: user.identificationType || "",
+			identificationNumber: user.identificationNumber as string,
 		},
 	});
 
 	function onSubmit(data: OnboardingIdentitySchemaType) {
-		toast("You submitted the following values", {
-			description: (
-				<pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
+		console.log(data);
+		startTransition(async () => {
+			const { data: result, error } = await tryCatch(
+				saveIdentification(data)
+			);
+
+			if (error) {
+				toast.error(error.message || "Oops! Internal server error");
+				return;
+			}
+
+			if (result?.status === "success") {
+				toast.success(result.message);
+				router.push("/onboarding/identity/success");
+			} else {
+				toast.error(result.message);
+			}
 		});
 	}
 
@@ -115,7 +136,7 @@ export function OnBoardingIdentityForm() {
 									<FormItem className="flex-1">
 										<FormControl>
 											<Input
-												type="number"
+												type="string"
 												placeholder="Enter number"
 												{...field}
 											/>
@@ -135,8 +156,17 @@ export function OnBoardingIdentityForm() {
 						>
 							<Link href="/">Skip</Link>
 						</Button>
-						<Button className="w-full" size="md" type="submit">
-							Submit for verification
+						<Button
+							disabled={pending}
+							className="w-full"
+							size="md"
+							type="submit"
+						>
+							{pending ? (
+								<Loader text="Saving..." />
+							) : (
+								"	Submit for verification"
+							)}
 						</Button>
 					</div>
 				</form>

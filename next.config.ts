@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
 				hostname: "icon-library.com",
 				port: "",
 			},
+			{
+				protocol: "https",
+				hostname: "earnsphere.fly.storage.tigris.dev",
+				port: "",
+			},
 		],
 	},
 };

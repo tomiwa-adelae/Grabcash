@@ -1,6 +1,9 @@
+import { getUserDetails } from "@/app/data/user/get-user-details";
 import { OnBoardingIdentityForm } from "./_components/OnBoardingIdentityForm";
 
-const page = () => {
+const page = async () => {
+	const user = await getUserDetails();
+
 	return (
 		<div>
 			<div className="pt-12 pb-8">
@@ -15,7 +18,7 @@ const page = () => {
 							one-time step and your details are safe with us.
 						</p>
 					</div>
-					<OnBoardingIdentityForm />
+					<OnBoardingIdentityForm user={user} />
 				</div>
 			</div>
 		</div>

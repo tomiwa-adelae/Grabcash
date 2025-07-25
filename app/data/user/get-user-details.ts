@@ -21,6 +21,15 @@ export const getUserDetails = async () => {
 			bankName: true,
 			bio: true,
 			image: true,
+			dob: true,
+			identificationType: true,
+			identificationNumber: true,
+			socials: {
+				select: {
+					id: true,
+					url: true,
+				},
+			},
 		},
 	});
 

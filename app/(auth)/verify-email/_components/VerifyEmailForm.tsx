@@ -65,7 +65,6 @@ export function VerifyEmailForm({ email }: { email: string }) {
 						);
 					},
 					onError: (error) => {
-						console.log(error);
 						toast.error(
 							error.error.message ||
 								`Oops! Verification failed. Try again later`

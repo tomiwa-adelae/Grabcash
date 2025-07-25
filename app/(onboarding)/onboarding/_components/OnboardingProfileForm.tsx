@@ -41,6 +41,7 @@ import {
 	Twitter,
 	X,
 	XIcon,
+	Youtube,
 } from "lucide-react";
 import { cn, splitName } from "@/lib/utils";
 import Image from "next/image";
@@ -48,16 +49,25 @@ import { banks, countries } from "@/constants";
 import { RichTextEditor } from "@/components/text-editor/Editor";
 import { UploadProfilePicture } from "@/components/UploadProfilePicture";
 import { GetUserDetailsType } from "@/app/data/user/get-user-details";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { authClient } from "@/lib/auth-client";
 import { Loader } from "@/components/Loader";
+import { saveProfile } from "../actions";
+import { tryCatch } from "@/hooks/use-try-catch";
+import { useRouter } from "next/navigation";
 
 interface Props {
 	user: GetUserDetailsType;
 }
 
 export function OnBoardingProfileForm({ user }: Props) {
+	const router = useRouter();
+
 	const { firstName, lastName } = splitName(user?.name);
+
+	console.log(user.image);
+
+	const [pending, startTransition] = useTransition();
 
 	const form = useForm<OnboardingProfileSchemaType>({
 		resolver: zodResolver(onboardingProfileSchema),
@@ -74,7 +84,9 @@ export function OnBoardingProfileForm({ user }: Props) {
 			accountNumber: user.accountNumber || "",
 			image: user.image || "",
 			selectedAvatar: undefined,
-			socialLinks: [{ url: "" }],
+			socialLinks: user.socials?.map((s) => ({
+				url: s?.url ?? "", // Ensures url is always a string
+			})) || [{ url: "" }],
 		},
 	});
 
@@ -155,7 +167,6 @@ export function OnBoardingProfileForm({ user }: Props) {
 	const handleAvatarSelect = (avatarId: string) => {
 		form.setValue("selectedAvatar", avatarId);
 		form.setValue("image", avatarId);
-		// setUploadedImage(null);
 	};
 
 	const getSocialIcon = (url: string) => {
@@ -164,6 +175,7 @@ export function OnBoardingProfileForm({ user }: Props) {
 		if (url.includes("instagram")) return <Instagram className="w-4 h-4" />;
 		if (url.includes("github")) return <Github className="w-4 h-4" />;
 		if (url.includes("linkedin")) return <Linkedin className="w-4 h-4" />;
+		if (url.includes("youtube")) return <Youtube className="w-4 h-4" />;
 		return <Globe className="w-4 h-4" />;
 	};
 
@@ -180,17 +192,51 @@ export function OnBoardingProfileForm({ user }: Props) {
 	const selectedAvatar = form.watch("selectedAvatar");
 	const currentProfileImage = form.watch("image");
 
-	console.log(currentProfileImage, selectedAvatar);
-
 	function onSubmit(data: OnboardingProfileSchemaType) {
-		toast("You submitted the following values", {
-			description: (
-				<pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
+		if (usernameStatus.available === false) {
+			toast.error("Please choose another username");
+			return;
+		}
+
+		startTransition(async () => {
+			const parsedData = {
+				name: `${data.firstName} ${data.lastName}`,
+				email: data.email,
+				username: data.username,
+				phoneNumber: data.phoneNumber,
+				country: data.country,
+				bio: data.bio,
+				accountName: data.accountName,
+				bankName: data.bankName,
+				accountNumber: data.accountNumber,
+				image: data.image || data.selectedAvatar,
+				socialLinks:
+					// @ts-ignore
+					data?.socialLinks.length === 1 &&
+					// @ts-ignore
+					data?.socialLinks[0].url.trim() === ""
+						? []
+						: // @ts-ignore
+							data?.socialLinks.filter(
+								(link: any) => link?.url.trim() !== ""
+							),
+			};
+
+			const { data: result, error } = await tryCatch(
+				saveProfile(parsedData)
+			);
+
+			if (error) {
+				toast.error(error.message || "Oops! Internal server error");
+				return;
+			}
+
+			if (result?.status === "success") {
+				toast.success(result.message);
+				router.push("/onboarding/identity");
+			} else {
+				toast.error(result.message);
+			}
 		});
 	}
 
@@ -306,24 +352,6 @@ export function OnBoardingProfileForm({ user }: Props) {
 												)}
 											</div>
 										</FormControl>
-										{/* {usernameStatus.message && (
-											<p
-												className={cn(
-													"text-sm",
-													usernameStatus.available ===
-														true &&
-														"text-green-600",
-													usernameStatus.available ===
-														false &&
-														"text-destructive",
-													usernameStatus.available ===
-														null &&
-														"text-muted-foreground"
-												)}
-											>
-												{usernameStatus.message}
-											</p>
-										)} */}
 										<FormMessage />
 									</FormItem>
 								)}
@@ -539,6 +567,7 @@ export function OnBoardingProfileForm({ user }: Props) {
 								type="button"
 								onClick={addSocialLink}
 								size="md"
+								disabled={pending}
 							>
 								<Plus className="w-4 h-4 mr-1" />
 								Add Link
@@ -554,7 +583,7 @@ export function OnBoardingProfileForm({ user }: Props) {
 								control={form.control}
 								name="image"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className="mb-8">
 										<FormControl className="flex items-center justify-start">
 											<UploadProfilePicture
 												onChange={field.onChange}
@@ -562,56 +591,75 @@ export function OnBoardingProfileForm({ user }: Props) {
 													field.value ||
 													selectedAvatar
 												}
+												disabled={pending}
 											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
-							<div className="mt-8">
-								<FormField
-									control={form.control}
-									name="selectedAvatar"
-									render={() => (
-										<FormItem>
-											<FormLabel>
-												Select a profile picture from
-												avatar
-											</FormLabel>
-											<div className="flex flex-wrap items-center justify-start gap-4">
-												{avatarOptions.map((avatar) => (
-													<div
-														key={avatar.id}
-														onClick={() =>
-															handleAvatarSelect(
-																avatar.src
+							{!currentProfileImage ||
+								(currentProfileImage.startsWith("/assets") && (
+									<div>
+										<FormField
+											control={form.control}
+											name="selectedAvatar"
+											render={() => (
+												<FormItem>
+													<FormLabel>
+														Select a profile picture
+														from avatar
+													</FormLabel>
+													<div className="flex flex-wrap items-center justify-start gap-4">
+														{avatarOptions.map(
+															(avatar) => (
+																<div
+																	key={
+																		avatar.id
+																	}
+																	onClick={() =>
+																		handleAvatarSelect(
+																			avatar.src
+																		)
+																	}
+																	className={cn(
+																		"cursor-pointer bg-muted hover:bg-primary/10 transition-all flex items-center justify-center size-[80px] lg:size-[100px] rounded-full",
+																		selectedAvatar ===
+																			avatar.src &&
+																			"bg-primary/30"
+																	)}
+																>
+																	<Image
+																		src={
+																			avatar.src
+																		}
+																		alt={`Avatar icon`}
+																		width={
+																			1000
+																		}
+																		height={
+																			1000
+																		}
+																		className="size-[40px] object-cover"
+																	/>
+																</div>
 															)
-														}
-														className={cn(
-															"cursor-pointer bg-muted hover:bg-primary/10 transition-all flex items-center justify-center size-[80px] lg:size-[100px] rounded-full",
-															selectedAvatar ===
-																avatar.src &&
-																"bg-primary/30"
 														)}
-													>
-														<Image
-															src={avatar.src}
-															alt={`Avatar icon`}
-															width={1000}
-															height={1000}
-															className="size-[40px] object-cover"
-														/>
 													</div>
-												))}
-											</div>
-										</FormItem>
-									)}
-								/>
-							</div>
+												</FormItem>
+											)}
+										/>
+									</div>
+								))}
 						</div>
 					</div>
-					<Button className="w-full" size="md" type="submit">
-						Save profile
+					<Button
+						disabled={pending}
+						className="w-full"
+						size="md"
+						type="submit"
+					>
+						{pending ? <Loader text="Saving..." /> : "Save profile"}
 					</Button>
 				</form>
 			</Form>

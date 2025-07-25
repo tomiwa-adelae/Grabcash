@@ -159,12 +159,18 @@ export const onboardingProfileSchema = z
 		phoneNumber: z.string().regex(/^(\+?\d{10,15})$/, {
 			message: "Enter a valid phone number.",
 		}),
-		country: z.string().min(2, {
-			message: "Country must be selected.",
-		}),
-		bio: z.string().min(32, {
-			message: "Bio must be selected.",
-		}),
+		country: z
+			.string()
+			.min(2, {
+				message: "Country must be selected.",
+			})
+			.optional(),
+		bio: z
+			.string()
+			// .min(32, {
+			// 	message: "Bio must be selected.",
+			// })
+			.optional(),
 		accountName: z.string().min(3, {
 			message: "Account name must be at least 3 character.",
 		}),
@@ -180,12 +186,10 @@ export const onboardingProfileSchema = z
 				z.object({
 					url: z
 						.string()
-						.url({ message: "Please enter a valid URL" })
-						.optional()
-						.or(z.literal("")),
+						.url({ message: "Please enter a valid URL" }),
 				})
 			)
-			.min(1, "At least one social link field is required"),
+			.optional(), // makes the whole field optional
 		selectedAvatar: z.string().optional(),
 	})
 	.refine((data) => data.image || data.selectedAvatar, {
@@ -193,19 +197,69 @@ export const onboardingProfileSchema = z
 		path: ["image"],
 	});
 
+export const onboardingPrismaProfileSchema = z.object({
+	name: z.string().min(2, {
+		message: "First name must be at least 2 characters.",
+	}),
+	email: z.string().email().min(2, {
+		message: "Email must be at least 2 characters.",
+	}),
+	username: z
+		.string()
+		.min(3, "Username must be at least 3 characters")
+		.max(20, "Username must be at most 20 characters")
+		.regex(
+			/^[a-zA-Z0-9_]+$/,
+			"Username can only contain letters, numbers, and underscores"
+		)
+		.regex(/^[a-zA-Z]/, "Username must start with a letter"),
+	phoneNumber: z.string().regex(/^(\+?\d{10,15})$/, {
+		message: "Enter a valid phone number.",
+	}),
+	country: z
+		.string()
+		.min(2, {
+			message: "Country must be selected.",
+		})
+		.optional(),
+	bio: z.string().optional(),
+	accountName: z.string().min(3, {
+		message: "Account name must be at least 3 character.",
+	}),
+	bankName: z.string().min(8, {
+		message: "Bank must be selected.",
+	}),
+	accountNumber: z.string().min(8, {
+		message: "Account number must be at least 8 character.",
+	}),
+	image: z.string().optional(),
+	socialLinks: z
+		.array(
+			z.object({
+				url: z.string().url({ message: "Please enter a valid URL" }),
+			})
+		)
+		.optional(), // makes the whole field optional
+});
+
 export const onboardingIdentitySchema = z.object({
 	dob: z
 		.string()
-		.min(1, { message: "Availability date is required." })
+		.min(1, { message: "Date of birth is required." })
 		.refine((val) => !isNaN(Date.parse(val)), {
 			message: "Invalid date format.",
 		}),
 	identificationType: z.string().min(2, {
 		message: "Identification type must be selected.",
 	}),
-	identificationNumber: z.string().min(2, {
-		message: "Identification number must be at least 8 character.",
-	}),
+	identificationNumber: z
+		.string()
+		.min(11, {
+			message: "Identification number must be at least 11 character.",
+		})
+		.max(11, {
+			message: "Identification number must be at least 11 character.",
+		}),
 });
 
 export type NewsLetterSchemaType = z.infer<typeof newsLetterSchema>;
@@ -219,6 +273,9 @@ export type VerifyCodeSchemaType = z.infer<typeof verifyCodeSchema>;
 export type ResetPasswordSchemaType = z.infer<typeof resetPasswordSchema>;
 export type OnboardingProfileSchemaType = z.infer<
 	typeof onboardingProfileSchema
+>;
+export type OnboardingPrismaProfileSchemaType = z.infer<
+	typeof onboardingPrismaProfileSchema
 >;
 export type OnboardingIdentitySchemaType = z.infer<
 	typeof onboardingIdentitySchema

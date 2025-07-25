@@ -25,7 +25,7 @@ export const ResponsiveModal = ({ open, children, closeModal }: Props) => {
 				}
 			}}
 		>
-			<DialogContent className="sm:max-w-xl max-h-[550px] overflow-hidden">
+			<DialogContent className="sm:max-w-xl max-h-[550px] p-0 overflow-hidden">
 				<ScrollArea className="max-h-[550px]">{children}</ScrollArea>
 			</DialogContent>
 		</Dialog>
