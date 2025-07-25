@@ -22,7 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { registerSchema, RegisterSchemaType } from "@/lib/zodSchemas";
 import * as RPNInput from "react-phone-number-input";
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { CheckIcon, EyeIcon, EyeOffIcon, XIcon } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
@@ -32,9 +32,6 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
 export function RegisterForm() {
-	const [pending, startTransition] = useTransition();
-	const [pendingGoogle, startGoogleTransition] = useTransition();
-
 	const router = useRouter();
 
 	const form = useForm<RegisterSchemaType>({
@@ -51,11 +48,73 @@ export function RegisterForm() {
 	});
 
 	const password = form.watch("password");
+	const username = form.watch("username");
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isConfirmVisible, setConfirmIsVisible] = useState<boolean>(false);
+	const [usernameStatus, setUsernameStatus] = useState<{
+		checking: boolean;
+		available: boolean | null;
+		message: string;
+	}>({
+		checking: false,
+		available: null,
+		message: "",
+	});
+
+	const [pending, startTransition] = useTransition();
+	const [pendingGoogle, startGoogleTransition] = useTransition();
+
 	const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 	const toggleConfirmVisibility = () =>
 		setConfirmIsVisible((prevState) => !prevState);
+
+	useEffect(() => {
+		if (username && username.length >= 3) {
+			const timeoutId = setTimeout(async () => {
+				setUsernameStatus({
+					checking: true,
+					available: null,
+					message: "Checking availability...",
+				});
+
+				try {
+					await authClient.isUsernameAvailable({
+						username,
+						fetchOptions: {
+							onSuccess: (res) => {
+								setUsernameStatus({
+									checking: false,
+									available: true,
+									message: `${username} is available`,
+								});
+							},
+							onError: (error) => {
+								setUsernameStatus({
+									checking: false,
+									available: false,
+									message: `${username} is already taken`,
+								});
+							},
+						},
+					});
+				} catch (error) {
+					setUsernameStatus({
+						checking: false,
+						available: null,
+						message: "Failed to check username",
+					});
+				}
+			}, 300);
+
+			return () => clearTimeout(timeoutId);
+		} else {
+			setUsernameStatus({
+				checking: false,
+				available: null,
+				message: "",
+			});
+		}
+	}, [username]);
 
 	const checkStrength = (pass: string) => {
 		const requirements = [
@@ -108,25 +167,42 @@ export function RegisterForm() {
 	};
 
 	function onSubmit(data: RegisterSchemaType) {
+		if (usernameStatus.available === false) {
+			toast.error("Please choose another username");
+			return;
+		}
 		startTransition(async () => {
 			await authClient.signUp.email({
 				name: `${data.firstName} ${data.lastName}`,
 				email: data.email,
+				username: data.username,
+				phoneNumber: data.phoneNumber,
 				password: data.password,
 				callbackURL: "/verify-email",
 				fetchOptions: {
-					onSuccess: async (res) => {
-						toast.success(
-							"Your account was successfully created. Redirecting..."
-						);
-						await authClient.sendVerificationOTP({
+					onSuccess: async () => {
+						await authClient.emailOtp.sendVerificationOtp({
 							email: data.email,
 							type: "email-verification",
+							fetchOptions: {
+								onSuccess: () => {
+									toast.success(
+										"Your account was successfully created. Redirecting..."
+									);
+									router.push(
+										`/verify-email?email=${data.email}`
+									);
+								},
+								onError: (error) => {
+									toast.error(
+										error.error.message ||
+											"Oops! Internal server error"
+									);
+								},
+							},
 						});
-						router.push(`/verify-email?email=${data.email}`);
 					},
 					onError: (error) => {
-						console.log(error);
 						toast.error(
 							error.error.message || "Oops! Internal server error"
 						);
@@ -230,11 +306,63 @@ export function RegisterForm() {
 							<FormItem>
 								<FormLabel>Username</FormLabel>
 								<FormControl>
-									<Input
-										placeholder="Enter your username"
-										{...field}
-									/>
+									<div className="relative">
+										<Input
+											placeholder="Enter your username"
+											{...field}
+											className={cn(
+												usernameStatus.available ===
+													false &&
+													"border-destructive"
+											)}
+										/>
+										{usernameStatus.checking && (
+											<Button
+												size="icon"
+												type="button"
+												variant={"ghost"}
+												className="absolute top-1/2 -right-3 transform -translate-1/2 flex items-center justify-center"
+											>
+												<Loader text="" />
+											</Button>
+										)}
+										{usernameStatus.available === true && (
+											<Button
+												size="icon"
+												type="button"
+												variant={"ghost"}
+												className="absolute top-1/2 -right-3 transform -translate-1/2"
+											>
+												<CheckIcon />
+											</Button>
+										)}
+										{usernameStatus.available === false && (
+											<Button
+												size="icon"
+												type="button"
+												variant={"ghost"}
+												className="absolute top-1/2 -right-3 transform -translate-1/2"
+											>
+												<XIcon className="text-red-500 size-4" />
+											</Button>
+										)}
+									</div>
 								</FormControl>
+								{usernameStatus.message && (
+									<p
+										className={cn(
+											"text-sm",
+											usernameStatus.available === true &&
+												"text-green-600",
+											usernameStatus.available ===
+												false && "text-destructive",
+											usernameStatus.available === null &&
+												"text-muted-foreground"
+										)}
+									>
+										{usernameStatus.message}
+									</p>
+								)}
 								<FormMessage />
 							</FormItem>
 						)}

@@ -9,16 +9,23 @@ datasource db {
 }
 
 model User {
-  id            String    @id
-  name          String
-  username      String?   @unique
-  email         String
-  emailVerified Boolean
-  image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  sessions      Session[]
-  accounts      Account[]
+  id              String    @id
+  name            String
+  email           String
+  username        String?   @unique
+  displayUsername String?
+  phoneNumber     String?
+  country         String?
+  bio             String?
+  accountName     String?
+  bankName        String?
+  accountNumber   String?
+  emailVerified   Boolean
+  image           String?
+  createdAt       DateTime
+  updatedAt       DateTime
+  sessions        Session[]
+  accounts        Account[]
 
   @@unique([email, username])
   @@map("user")

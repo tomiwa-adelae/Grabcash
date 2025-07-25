@@ -30,7 +30,7 @@ export const UploadProfilePicture = ({
 		<div>
 			<div className="relative flex items-center justify-center w-full">
 				<Image
-					src={DEFAULT_PROFILE_PICTURE}
+					src={value || DEFAULT_PROFILE_PICTURE}
 					alt="User profile picture"
 					width={1000}
 					height={1000}

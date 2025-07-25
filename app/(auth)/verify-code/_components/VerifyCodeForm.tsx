@@ -17,11 +17,12 @@ import { OTPInput, SlotProps } from "input-otp";
 import { verifyCodeSchema, VerifyCodeSchemaType } from "@/lib/zodSchemas";
 import { cn } from "@/lib/utils";
 
-export function VerifyCodeForm() {
+export function VerifyCodeForm({ email }: { email: string }) {
 	const form = useForm<VerifyCodeSchemaType>({
 		resolver: zodResolver(verifyCodeSchema),
 		defaultValues: {
 			code: "",
+			email,
 		},
 	});
 

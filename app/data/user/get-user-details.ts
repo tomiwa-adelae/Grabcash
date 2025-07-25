@@ -1,0 +1,32 @@
+import "server-only";
+import { requireUser } from "./require-user";
+import { prisma } from "@/lib/db";
+import { notFound } from "next/navigation";
+
+export const getUserDetails = async () => {
+	const session = await requireUser();
+	const user = await prisma.user.findUnique({
+		where: {
+			id: session.user.id,
+		},
+		select: {
+			id: true,
+			name: true,
+			email: true,
+			username: true,
+			phoneNumber: true,
+			country: true,
+			accountName: true,
+			accountNumber: true,
+			bankName: true,
+			bio: true,
+			image: true,
+		},
+	});
+
+	if (!user) return notFound();
+
+	return user;
+};
+
+export type GetUserDetailsType = Awaited<ReturnType<typeof getUserDetails>>;

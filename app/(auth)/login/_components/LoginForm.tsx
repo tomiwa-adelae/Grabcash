@@ -20,8 +20,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { Loader } from "@/components/Loader";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
+	const router = useRouter();
+
+	const [pending, startTransition] = useTransition();
 	const [pendingGoogle, startGoogleTransition] = useTransition();
 
 	const form = useForm<LoginSchemaType>({
@@ -55,14 +59,47 @@ export function LoginForm() {
 	};
 
 	function onSubmit(data: LoginSchemaType) {
-		toast("You submitted the following values", {
-			description: (
-				<pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
+		startTransition(async () => {
+			const result = await authClient.signIn.email({
+				email: data.email,
+				password: data.password,
+				fetchOptions: {
+					onSuccess: async (res) => {
+						if (res.data.user.emailVerified) {
+							toast.success(
+								`Welcome back, ${res.data.user.name}`
+							);
+							router.push(`/`);
+						} else {
+							await authClient.emailOtp.sendVerificationOtp({
+								email: data.email,
+								type: "email-verification",
+								fetchOptions: {
+									onSuccess: () => {
+										toast.success(
+											`Welcome back, ${res.data.user.name}`
+										);
+										router.push(
+											`/verify-email?email=${data.email}`
+										);
+									},
+									onError: (error) => {
+										toast.error(
+											error.error.message ||
+												"Oops! Internal server error"
+										);
+									},
+								},
+							});
+						}
+					},
+					onError: (error) => {
+						toast.error(
+							error.error.message || "Oops! Internal server error"
+						);
+					},
+				},
+			});
 		});
 	}
 
@@ -79,7 +116,7 @@ export function LoginForm() {
 						variant={"black"}
 						size="md"
 						onClick={handleGoogle}
-						disabled={pendingGoogle}
+						disabled={pendingGoogle || pending}
 					>
 						{pendingGoogle ? (
 							<Loader text="Continuing..." />
@@ -178,12 +215,12 @@ export function LoginForm() {
 						</Link>
 					</p>
 					<Button
-						disabled={pendingGoogle}
+						disabled={pendingGoogle || pending}
 						className="w-full"
 						size="md"
 						type="submit"
 					>
-						Continue
+						{pending ? <Loader /> : "Continue"}
 					</Button>
 				</form>
 			</Form>

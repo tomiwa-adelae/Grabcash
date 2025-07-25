@@ -1,6 +1,9 @@
+import { getUserDetails } from "@/app/data/user/get-user-details";
 import { OnBoardingProfileForm } from "./_components/OnboardingProfileForm";
 
-const page = () => {
+const page = async () => {
+	const user = await getUserDetails();
+
 	return (
 		<div>
 			<div className="pt-12 pb-8">
@@ -14,7 +17,7 @@ const page = () => {
 							profile.
 						</p>
 					</div>
-					<OnBoardingProfileForm />
+					<OnBoardingProfileForm user={user} />
 				</div>
 			</div>
 		</div>

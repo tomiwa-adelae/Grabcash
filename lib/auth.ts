@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth";
-import { emailOTP, username } from "better-auth/plugins";
+import { emailOTP, phoneNumber, username } from "better-auth/plugins";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./db";
 import { env } from "./env";
@@ -17,19 +17,23 @@ export const auth = betterAuth({
 	},
 	emailAndPassword: {
 		enabled: true,
-		requireEmailVerification: true,
+		// requireEmailVerification: true,
+		// autoSignIn: true,
 	},
 	plugins: [
 		emailOTP({
 			otpLength: 6,
 			async sendVerificationOTP({ email, otp, type }) {
+				console.log(email, type, otp);
 				await resend.emails.send({
-					from: "Earnsphere <${env.EARNSPHERE_SENDING_EMAIL}>",
+					from: `Earnsphere <${env.EARNSPHERE_SENDING_EMAIL}>`,
 					to: [email],
 					subject: "Verify your email - Earnsphere",
 					html: `<p>Your OTP is <strong>${otp}</strong></p>`,
 				});
 			},
 		}),
+		username({ minUsernameLength: 3, maxUsernameLength: 20 }),
+		phoneNumber(),
 	],
 });

@@ -32,6 +32,7 @@ import {
 import * as RPNInput from "react-phone-number-input";
 import {
 	Check,
+	CheckIcon,
 	Github,
 	Globe,
 	Instagram,
@@ -39,32 +40,102 @@ import {
 	Plus,
 	Twitter,
 	X,
+	XIcon,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, splitName } from "@/lib/utils";
 import Image from "next/image";
 import { banks, countries } from "@/constants";
 import { RichTextEditor } from "@/components/text-editor/Editor";
 import { UploadProfilePicture } from "@/components/UploadProfilePicture";
+import { GetUserDetailsType } from "@/app/data/user/get-user-details";
+import { useEffect, useState } from "react";
+import { authClient } from "@/lib/auth-client";
+import { Loader } from "@/components/Loader";
 
-export function OnBoardingProfileForm() {
+interface Props {
+	user: GetUserDetailsType;
+}
+
+export function OnBoardingProfileForm({ user }: Props) {
+	const { firstName, lastName } = splitName(user?.name);
+
 	const form = useForm<OnboardingProfileSchemaType>({
 		resolver: zodResolver(onboardingProfileSchema),
 		defaultValues: {
-			firstName: "",
-			lastName: "",
-			email: "",
-			username: "",
-			phoneNumber: "",
-			country: "",
-			bio: "",
-			accountName: "",
-			bankName: "",
-			accountNumber: "",
-			image: "",
+			firstName: firstName || "",
+			lastName: lastName || "",
+			email: user.email || "",
+			username: user.username || "",
+			phoneNumber: user.phoneNumber || "",
+			country: user.country || "",
+			bio: user.bio || "",
+			accountName: user.accountName || "",
+			bankName: user.bankName || "",
+			accountNumber: user.accountNumber || "",
+			image: user.image || "",
 			selectedAvatar: undefined,
 			socialLinks: [{ url: "" }],
 		},
 	});
+
+	const username = form.watch("username");
+	const [usernameStatus, setUsernameStatus] = useState<{
+		checking: boolean;
+		available: boolean | null;
+		message: string;
+	}>({
+		checking: false,
+		available: null,
+		message: "",
+	});
+
+	useEffect(() => {
+		if (username && username.length >= 3) {
+			const timeoutId = setTimeout(async () => {
+				setUsernameStatus({
+					checking: true,
+					available: null,
+					message: "Checking availability...",
+				});
+
+				try {
+					await authClient.isUsernameAvailable({
+						username,
+						fetchOptions: {
+							onSuccess: (res) => {
+								setUsernameStatus({
+									checking: false,
+									available: true,
+									message: `${username} is available`,
+								});
+							},
+							onError: (error) => {
+								setUsernameStatus({
+									checking: false,
+									available: false,
+									message: `${username} is already taken`,
+								});
+							},
+						},
+					});
+				} catch (error) {
+					setUsernameStatus({
+						checking: false,
+						available: null,
+						message: "Failed to check username",
+					});
+				}
+			}, 300);
+
+			return () => clearTimeout(timeoutId);
+		} else {
+			setUsernameStatus({
+				checking: false,
+				available: null,
+				message: "",
+			});
+		}
+	}, [username]);
 
 	const { fields, append, remove } = useFieldArray({
 		control: form.control,
@@ -73,17 +144,17 @@ export function OnBoardingProfileForm() {
 
 	// Modern avatar options with gradients
 	const avatarOptions = [
-		{ id: 1, src: "/assets/icons/boy.svg" },
-		{ id: 2, src: "/assets/icons/man.svg" },
-		{ id: 3, src: "/assets/icons/woman.svg" },
-		{ id: 4, src: "/assets/icons/lady.svg" },
-		{ id: 5, src: "/assets/icons/baby.svg" },
-		{ id: 6, src: "/assets/icons/girl.svg" },
+		{ id: "1", src: "/assets/icons/boy.svg" },
+		{ id: "2", src: "/assets/icons/man.svg" },
+		{ id: "3", src: "/assets/icons/woman.svg" },
+		{ id: "4", src: "/assets/icons/lady.svg" },
+		{ id: "5", src: "/assets/icons/baby.svg" },
+		{ id: "6", src: "/assets/icons/girl.svg" },
 	];
 
-	const handleAvatarSelect = (avatarId: number) => {
+	const handleAvatarSelect = (avatarId: string) => {
 		form.setValue("selectedAvatar", avatarId);
-		form.setValue("image", "");
+		form.setValue("image", avatarId);
 		// setUploadedImage(null);
 	};
 
@@ -108,6 +179,8 @@ export function OnBoardingProfileForm() {
 
 	const selectedAvatar = form.watch("selectedAvatar");
 	const currentProfileImage = form.watch("image");
+
+	console.log(currentProfileImage, selectedAvatar);
 
 	function onSubmit(data: OnboardingProfileSchemaType) {
 		toast("You submitted the following values", {
@@ -189,11 +262,68 @@ export function OnBoardingProfileForm() {
 									<FormItem>
 										<FormLabel>Username</FormLabel>
 										<FormControl>
-											<Input
-												placeholder="Enter your username"
-												{...field}
-											/>
+											<div className="relative">
+												<Input
+													placeholder="Enter your username"
+													{...field}
+													className={cn(
+														usernameStatus.available ===
+															false &&
+															"border-destructive"
+													)}
+												/>
+												{usernameStatus.checking && (
+													<Button
+														size="icon"
+														type="button"
+														variant={"ghost"}
+														className="absolute top-1/2 -right-3 transform -translate-1/2 flex items-center justify-center"
+													>
+														<Loader text="" />
+													</Button>
+												)}
+												{usernameStatus.available ===
+													true && (
+													<Button
+														size="icon"
+														type="button"
+														variant={"ghost"}
+														className="absolute top-1/2 -right-3 transform -translate-1/2"
+													>
+														<CheckIcon className="text-primary" />
+													</Button>
+												)}
+												{usernameStatus.available ===
+													false && (
+													<Button
+														size="icon"
+														type="button"
+														variant={"ghost"}
+														className="absolute top-1/2 -right-3 transform -translate-1/2"
+													>
+														<XIcon className="text-red-500 size-4" />
+													</Button>
+												)}
+											</div>
 										</FormControl>
+										{/* {usernameStatus.message && (
+											<p
+												className={cn(
+													"text-sm",
+													usernameStatus.available ===
+														true &&
+														"text-green-600",
+													usernameStatus.available ===
+														false &&
+														"text-destructive",
+													usernameStatus.available ===
+														null &&
+														"text-muted-foreground"
+												)}
+											>
+												{usernameStatus.message}
+											</p>
+										)} */}
 										<FormMessage />
 									</FormItem>
 								)}
@@ -327,7 +457,7 @@ export function OnBoardingProfileForm() {
 								control={form.control}
 								name="accountNumber"
 								render={({ field }) => (
-									<FormItem>
+									<FormItem className="md:col-span-2 lg:col-span-1">
 										<FormLabel>Account number</FormLabel>
 										<FormControl>
 											<Input
@@ -375,7 +505,12 @@ export function OnBoardingProfileForm() {
 													/>
 													<div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-2">
 														{formField.value && (
-															<Check className="w-4 h-4 text-green-500" />
+															<Button
+																type="button"
+																variant="ghost"
+															>
+																<Check className="w-4 h-4 text-green-500" />
+															</Button>
 														)}
 														{fields.length > 1 && (
 															<Button
@@ -423,7 +558,10 @@ export function OnBoardingProfileForm() {
 										<FormControl className="flex items-center justify-start">
 											<UploadProfilePicture
 												onChange={field.onChange}
-												value={field.value}
+												value={
+													field.value ||
+													selectedAvatar
+												}
 											/>
 										</FormControl>
 										<FormMessage />
@@ -446,13 +584,13 @@ export function OnBoardingProfileForm() {
 														key={avatar.id}
 														onClick={() =>
 															handleAvatarSelect(
-																avatar.id
+																avatar.src
 															)
 														}
 														className={cn(
 															"cursor-pointer bg-muted hover:bg-primary/10 transition-all flex items-center justify-center size-[80px] lg:size-[100px] rounded-full",
 															selectedAvatar ===
-																avatar.id &&
+																avatar.src &&
 																"bg-primary/30"
 														)}
 													>

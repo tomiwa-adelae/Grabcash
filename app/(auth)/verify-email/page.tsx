@@ -1,7 +1,16 @@
 import Link from "next/link";
-import { VerifyCodeForm } from "./_components/VerifyCodeForm";
+import { VerifyEmailForm } from "./_components/VerifyEmailForm";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-const page = () => {
+const page = async ({ searchParams }: { searchParams: any }) => {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+
+	if (!session) return redirect("/login");
+	const { email } = await searchParams;
 	return (
 		<div>
 			<div className="pt-12 pb-8">
@@ -17,7 +26,7 @@ const page = () => {
 							your account.
 						</p>
 					</div>
-					<VerifyCodeForm />
+					<VerifyEmailForm email={email} />
 				</div>
 			</div>
 		</div>
