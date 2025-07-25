@@ -65,8 +65,6 @@ export function OnBoardingProfileForm({ user }: Props) {
 
 	const { firstName, lastName } = splitName(user?.name);
 
-	console.log(user.image);
-
 	const [pending, startTransition] = useTransition();
 
 	const form = useForm<OnboardingProfileSchemaType>({
@@ -293,6 +291,8 @@ export function OnBoardingProfileForm({ user }: Props) {
 										<FormControl>
 											<Input
 												type="email"
+												className="read-only:bg-muted"
+												readOnly
 												placeholder="Enter your email"
 												{...field}
 											/>

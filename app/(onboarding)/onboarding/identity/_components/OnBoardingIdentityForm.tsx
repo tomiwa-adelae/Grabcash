@@ -52,7 +52,6 @@ export function OnBoardingIdentityForm({ user }: Props) {
 	});
 
 	function onSubmit(data: OnboardingIdentitySchemaType) {
-		console.log(data);
 		startTransition(async () => {
 			const { data: result, error } = await tryCatch(
 				saveIdentification(data)

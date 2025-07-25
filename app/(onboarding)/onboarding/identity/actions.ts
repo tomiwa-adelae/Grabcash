@@ -14,10 +14,7 @@ export const saveIdentification = async (
 	const { user } = await requireUser();
 
 	try {
-		console.log(data);
 		const validation = onboardingIdentitySchema.safeParse(data);
-		console.log(validation);
-
 		if (!validation.success)
 			return { status: "error", message: "Invalid form data" };
 
