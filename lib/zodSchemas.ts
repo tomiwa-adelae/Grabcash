@@ -113,6 +113,9 @@ export const verifyCodeSchema = z.object({
 
 export const resetPasswordSchema = z
 	.object({
+		token: z.string().min(2, {
+			message: "Code must be 6 characters.",
+		}),
 		password: z
 			.string()
 			.min(8, { message: "Password must be at least 8 characters." })

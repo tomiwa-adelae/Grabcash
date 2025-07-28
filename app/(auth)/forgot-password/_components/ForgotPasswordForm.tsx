@@ -17,8 +17,15 @@ import {
 	forgotPasswordSchema,
 	ForgotPasswordSchemaType,
 } from "@/lib/zodSchemas";
+import { Loader } from "@/components/Loader";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 export function ForgotPasswordForm() {
+	const router = useRouter();
+	const [pending, startTransition] = useTransition();
+
 	const form = useForm<ForgotPasswordSchemaType>({
 		resolver: zodResolver(forgotPasswordSchema),
 		defaultValues: {
@@ -27,14 +34,22 @@ export function ForgotPasswordForm() {
 	});
 
 	function onSubmit(data: ForgotPasswordSchemaType) {
-		toast("You submitted the following values", {
-			description: (
-				<pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
+		startTransition(async () => {
+			await authClient.requestPasswordReset({
+				email: data.email,
+				fetchOptions: {
+					onSuccess: (res) => {
+						toast.success(
+							"A password reset link has been sent to your email."
+						);
+					},
+					onError: (error) => {
+						toast.error(
+							error.error.message || "Oops! Internal server error"
+						);
+					},
+				},
+			});
 		});
 	}
 
@@ -62,8 +77,13 @@ export function ForgotPasswordForm() {
 							</FormItem>
 						)}
 					/>
-					<Button className="w-full" size="md" type="submit">
-						Continue
+					<Button
+						className="w-full"
+						disabled={pending}
+						size="md"
+						type="submit"
+					>
+						{pending ? <Loader text="Loading..." /> : "Continue"}
 					</Button>
 				</form>
 			</Form>

@@ -16,8 +16,17 @@ import { Input } from "@/components/ui/input";
 import { OTPInput, SlotProps } from "input-otp";
 import { verifyCodeSchema, VerifyCodeSchemaType } from "@/lib/zodSchemas";
 import { cn } from "@/lib/utils";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { Loader } from "@/components/Loader";
 
 export function VerifyCodeForm({ email }: { email: string }) {
+	const router = useRouter();
+
+	const [pending, startTransition] = useTransition();
+	const [pendingResend, startResendTransition] = useTransition();
+
 	const form = useForm<VerifyCodeSchemaType>({
 		resolver: zodResolver(verifyCodeSchema),
 		defaultValues: {
@@ -26,15 +35,46 @@ export function VerifyCodeForm({ email }: { email: string }) {
 		},
 	});
 
+	const handleResendOTP = () => {
+		startResendTransition(async () => {
+			await authClient.emailOtp.sendVerificationOtp({
+				email,
+				type: "forget-password",
+				fetchOptions: {
+					onSuccess: () => {
+						toast.success(`Verification code sent`);
+					},
+					onError: (error) => {
+						toast.error(
+							error.error.message || "Oops! Internal server error"
+						);
+					},
+				},
+			});
+		});
+	};
+
 	function onSubmit(data: VerifyCodeSchemaType) {
-		toast("You submitted the following values", {
-			description: (
-				<pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
+		startTransition(async () => {
+			await authClient.emailOtp.resetPassword({
+				email,
+				otp: data.code,
+				password: "",
+				fetchOptions: {
+					onSuccess: async () => {
+						toast.success(`Verification successful`);
+						router.push(
+							`/reset-password?email=${data.email}&otp=${data.code}`
+						);
+					},
+					onError: (error) => {
+						toast.error(
+							error.error.message ||
+								`Oops! Verification failed. Try again later`
+						);
+					},
+				},
+			});
 		});
 	}
 
@@ -52,6 +92,7 @@ export function VerifyCodeForm({ email }: { email: string }) {
 							<FormItem>
 								<FormControl>
 									<OTPInput
+										{...field}
 										containerClassName="flex items-center justify-center gap-3 has-disabled:opacity-50"
 										maxLength={6}
 										render={({ slots }) => (
@@ -67,8 +108,27 @@ export function VerifyCodeForm({ email }: { email: string }) {
 							</FormItem>
 						)}
 					/>
-					<Button className="w-full" size="md" type="submit">
-						Continue
+					<Button
+						disabled={pending || pendingResend}
+						className="w-full"
+						size="md"
+						type="submit"
+					>
+						{pending ? <Loader text="Verifying..." /> : "Continue"}
+					</Button>
+					<Button
+						variant={"ghost"}
+						disabled={pending || pendingResend}
+						className="w-full"
+						size="md"
+						type="button"
+						onClick={handleResendOTP}
+					>
+						{pendingResend ? (
+							<Loader text="Resending..." />
+						) : (
+							"Resend OTP code"
+						)}
 					</Button>
 				</form>
 			</Form>

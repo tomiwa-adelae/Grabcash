@@ -22,16 +22,35 @@ import {
 import { Input } from "@/components/ui/input";
 import { resetPasswordSchema, ResetPasswordSchemaType } from "@/lib/zodSchemas";
 import * as RPNInput from "react-phone-number-input";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { CheckIcon, EyeIcon, EyeOffIcon, XIcon } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { Loader } from "@/components/Loader";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { OTPInput, SlotProps } from "input-otp";
 
-export function ResetPasswordForm() {
+interface Props {
+	email: string;
+	token: string;
+}
+
+export function ResetPasswordForm({ email, token }: Props) {
+	const router = useRouter();
+
+	if (!email || !token) {
+		router.push("/forgot-password");
+		return null;
+	}
+
+	const [pending, startTransition] = useTransition();
+	const [pendingResend, startResendTransition] = useTransition();
 	const form = useForm<ResetPasswordSchemaType>({
 		resolver: zodResolver(resetPasswordSchema),
 		defaultValues: {
+			token,
 			password: "",
 			confirmPassword: "",
 		},
@@ -39,6 +58,7 @@ export function ResetPasswordForm() {
 
 	const password = form.watch("password");
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+
 	const [isConfirmVisible, setConfirmIsVisible] = useState<boolean>(false);
 	const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 	const toggleConfirmVisibility = () =>
@@ -75,15 +95,45 @@ export function ResetPasswordForm() {
 		return "Strong password";
 	};
 
+	const handleResendOTP = () => {
+		startResendTransition(async () => {
+			await authClient.requestPasswordReset({
+				email,
+				fetchOptions: {
+					onSuccess: () => {
+						toast.success(
+							"A password reset link has been resent to your email."
+						);
+					},
+					onError: (error) => {
+						toast.error(
+							error.error.message || "Oops! Internal server error"
+						);
+					},
+				},
+			});
+		});
+	};
+
 	function onSubmit(data: ResetPasswordSchemaType) {
-		toast("You submitted the following values", {
-			description: (
-				<pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-					<code className="text-white">
-						{JSON.stringify(data, null, 2)}
-					</code>
-				</pre>
-			),
+		startTransition(async () => {
+			await authClient.resetPassword({
+				token: data.token,
+				newPassword: data.password,
+				fetchOptions: {
+					onSuccess: async () => {
+						toast.success(
+							"Password was successfully changed. Redirecting..."
+						);
+						router.push(`/reset-password/success`);
+					},
+					onError: (error) => {
+						toast.error(
+							error.error.message || "Oops! Internal server error"
+						);
+					},
+				},
+			});
 		});
 	}
 
@@ -252,8 +302,27 @@ export function ResetPasswordForm() {
 							</FormItem>
 						)}
 					/>
-					<Button className="w-full" size="md" type="submit">
-						Continue
+					<Button
+						disabled={pending}
+						className="w-full"
+						size="md"
+						type="submit"
+					>
+						{pending ? <Loader text="Loading..." /> : "Continue"}
+					</Button>
+					<Button
+						variant={"ghost"}
+						disabled={pending || pendingResend}
+						className="w-full"
+						size="md"
+						type="button"
+						onClick={handleResendOTP}
+					>
+						{pendingResend ? (
+							<Loader text="Resending..." />
+						) : (
+							"Resend reset link"
+						)}
 					</Button>
 				</form>
 			</Form>

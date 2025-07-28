@@ -14,7 +14,9 @@ export const SuccessButton = () => {
 	return (
 		<div className="mt-8 max-w-2xl mx-auto">
 			<Button className="w-full" size="md" asChild>
-				<Link href="/login">Return to login</Link>
+				<Link href="/login?reset-password=success">
+					Return to login
+				</Link>
 			</Button>
 		</div>
 	);

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ResetPasswordForm } from "./_components/ResetPasswordForm";
 
-const page = () => {
+const page = async ({ searchParams }: { searchParams: any }) => {
+	const { email, token } = await searchParams;
 	return (
 		<div>
 			<div className="pt-12 pb-8">
@@ -15,7 +16,7 @@ const page = () => {
 							account.
 						</p>
 					</div>
-					<ResetPasswordForm />
+					<ResetPasswordForm email={email} token={token} />
 					<p className="text-center text-balance text-muted-foreground text-base mt-6">
 						Remember password?{" "}
 						<Link
