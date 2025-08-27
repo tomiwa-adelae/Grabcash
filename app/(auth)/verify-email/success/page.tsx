@@ -1,32 +1,36 @@
 import { auth } from "@/lib/auth";
-import { SuccessButton } from "./_components/SuccessButton";
 import { headers } from "next/headers";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Confetti } from "@/components/Confetti";
 
 const page = async () => {
-	const session = await auth.api.getSession({
-		headers: await headers(),
-	});
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
-	return (
-		<div>
-			<div className="pt-12 pb-8">
-				<div className="container">
-					<div className="space-y-2.5 flex flex-col items-center justify-center text-center">
-						<h1 className="font-semibold text-4xl md:text-5xl">
-							Success
-						</h1>
-						<p className="text-base text-muted-foreground max-w-2xl">
-							Welcome to earnsphere, {session?.user.name}. Your
-							account has been successfully created and verified.
-							Let's complete a few quick steps to unlock your
-							dashboard and start earning.
-						</p>
-					</div>
-					<SuccessButton />
-				</div>
-			</div>
-		</div>
-	);
+  return (
+    <div>
+      <div className="pt-12 pb-8">
+        <div className="container">
+          <div className="space-y-2.5 flex flex-col items-center justify-center text-center">
+            <h1 className="font-semibold text-4xl md:text-5xl">Success</h1>
+            <p className="text-base text-muted-foreground max-w-2xl">
+              Welcome to earnsphere, {session?.user.name}. Your account has been
+              successfully created and verified. Let's complete a few quick
+              steps to unlock your dashboard and start earning.
+            </p>
+          </div>
+          <div className="mt-8 max-w-2xl mx-auto">
+            <Button className="w-full" size="md" asChild>
+              <Link href="/onboarding">Continue registration</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+      <Confetti />
+    </div>
+  );
 };
 
 export default page;

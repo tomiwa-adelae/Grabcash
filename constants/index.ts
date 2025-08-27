@@ -24,6 +24,47 @@ export const rootNavLinks = [
   },
 ];
 
+export const memberNavLinks = [
+  {
+    label: "Jobs and Campaigns",
+    submenu: true,
+    items: [
+      {
+        slug: "/available-jobs",
+        label: "Available jobs",
+      },
+      {
+        slug: "/submitted-jobs",
+        label: "Submitted jobs",
+      },
+      {
+        slug: "/my-jobs",
+        label: "My jobs",
+      },
+      {
+        slug: "/new-job",
+        label: "Post new job",
+      },
+    ],
+  },
+  {
+    slug: "/credits",
+    label: "Credits",
+  },
+  {
+    slug: "/Earnings",
+    label: "Earnings",
+  },
+  {
+    slug: "/academy",
+    label: "Academy",
+  },
+  {
+    slug: "/community",
+    label: "Community",
+  },
+];
+
 export const footer = [
   {
     title: "Earnsphere",
@@ -390,3 +431,390 @@ export const DEFAULT_PROFILE_PICTURE =
   "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg";
 
 export const identificationTypes = ["NIN", "BVN"];
+
+export const filters = [
+  {
+    value: "high-paying",
+    label: "High paying",
+  },
+  {
+    value: "newest",
+    label: "Newest",
+  },
+  {
+    value: "oldest",
+    label: "Oldest",
+  },
+];
+
+export const jobTypes = [
+  {
+    value: "micro",
+    label: "Micro-Job (simple, one-time tasks)",
+  },
+  {
+    value: "bounty",
+    label:
+      "Bounty Campaign (multi-step or content-based tasks with bigger rewards)",
+  },
+];
+
+export const jobCategories = [
+  // Digital Marketing & Social Media
+  {
+    value: "Social Media Management",
+    label: "Social Media Management",
+  },
+  {
+    value: "Social Media Engagement",
+    label: "Social Media Engagement",
+  },
+  {
+    value: "Content Creation",
+    label: "Content Creation",
+  },
+  {
+    value: "Instagram Marketing",
+    label: "Instagram Marketing",
+  },
+  {
+    value: "TikTok Marketing",
+    label: "TikTok Marketing",
+  },
+  {
+    value: "YouTube Marketing",
+    label: "YouTube Marketing",
+  },
+  {
+    value: "Facebook Marketing",
+    label: "Facebook Marketing",
+  },
+  {
+    value: "Twitter Marketing",
+    label: "Twitter Marketing",
+  },
+  {
+    value: "Influencer Marketing",
+    label: "Influencer Marketing",
+  },
+  {
+    value: "Brand Promotion",
+    label: "Brand Promotion",
+  },
+
+  // Content & Writing
+  {
+    value: "Article Writing",
+    label: "Article Writing",
+  },
+  {
+    value: "Blog Writing",
+    label: "Blog Writing",
+  },
+  {
+    value: "Copywriting",
+    label: "Copywriting",
+  },
+  {
+    value: "Product Descriptions",
+    label: "Product Descriptions",
+  },
+  {
+    value: "Reviews & Testimonials",
+    label: "Reviews & Testimonials",
+  },
+  {
+    value: "Proofreading & Editing",
+    label: "Proofreading & Editing",
+  },
+  {
+    value: "Translation Services",
+    label: "Translation Services",
+  },
+  {
+    value: "SEO Content Writing",
+    label: "SEO Content Writing",
+  },
+
+  // Design & Creative
+  {
+    value: "Logo Design",
+    label: "Logo Design",
+  },
+  {
+    value: "Graphic Design",
+    label: "Graphic Design",
+  },
+  {
+    value: "Banner Creation",
+    label: "Banner Creation",
+  },
+  {
+    value: "Photo Editing",
+    label: "Photo Editing",
+  },
+  {
+    value: "Video Editing",
+    label: "Video Editing",
+  },
+  {
+    value: "Thumbnail Design",
+    label: "Thumbnail Design",
+  },
+  {
+    value: "UI/UX Design",
+    label: "UI/UX Design",
+  },
+  {
+    value: "Illustration",
+    label: "Illustration",
+  },
+
+  // Technology & Programming
+  {
+    value: "Web Development",
+    label: "Web Development",
+  },
+  {
+    value: "App Development",
+    label: "App Development",
+  },
+  {
+    value: "Website Testing",
+    label: "Website Testing",
+  },
+  {
+    value: "Bug Testing",
+    label: "Bug Testing",
+  },
+  {
+    value: "Data Entry",
+    label: "Data Entry",
+  },
+  {
+    value: "Database Management",
+    label: "Database Management",
+  },
+  {
+    value: "WordPress Tasks",
+    label: "WordPress Tasks",
+  },
+  {
+    value: "Technical Support",
+    label: "Technical Support",
+  },
+
+  // Business & Administration
+  {
+    value: "Virtual Assistant",
+    label: "Virtual Assistant",
+  },
+  {
+    value: "Lead Generation",
+    label: "Lead Generation",
+  },
+  {
+    value: "Market Research",
+    label: "Market Research",
+  },
+  {
+    value: "Survey Completion",
+    label: "Survey Completion",
+  },
+  {
+    value: "Email Management",
+    label: "Email Management",
+  },
+  {
+    value: "Customer Service",
+    label: "Customer Service",
+  },
+  {
+    value: "Online Research",
+    label: "Online Research",
+  },
+  {
+    value: "Transcription",
+    label: "Transcription",
+  },
+
+  // Marketing & Sales
+  {
+    value: "Email Marketing",
+    label: "Email Marketing",
+  },
+  {
+    value: "Affiliate Marketing",
+    label: "Affiliate Marketing",
+  },
+  {
+    value: "Product Promotion",
+    label: "Product Promotion",
+  },
+  {
+    value: "Online Advertising",
+    label: "Online Advertising",
+  },
+  {
+    value: "Marketing Research",
+    label: "Marketing Research",
+  },
+  {
+    value: "Sales Support",
+    label: "Sales Support",
+  },
+  {
+    value: "Link Building",
+    label: "Link Building",
+  },
+  {
+    value: "SEO Tasks",
+    label: "SEO Tasks",
+  },
+
+  // Audio & Video
+  {
+    value: "Video Creation",
+    label: "Video Creation",
+  },
+  {
+    value: "Audio Editing",
+    label: "Audio Editing",
+  },
+  {
+    value: "Voiceover Services",
+    label: "Voiceover Services",
+  },
+  {
+    value: "Podcast Editing",
+    label: "Podcast Editing",
+  },
+  {
+    value: "Music Promotion",
+    label: "Music Promotion",
+  },
+  {
+    value: "YouTube Services",
+    label: "YouTube Services",
+  },
+  {
+    value: "Live Streaming Support",
+    label: "Live Streaming Support",
+  },
+
+  // Education & Training
+  {
+    value: "Online Tutoring",
+    label: "Online Tutoring",
+  },
+  {
+    value: "Course Creation",
+    label: "Course Creation",
+  },
+  {
+    value: "Educational Content",
+    label: "Educational Content",
+  },
+  {
+    value: "Training Material Development",
+    label: "Training Material Development",
+  },
+  {
+    value: "Language Teaching",
+    label: "Language Teaching",
+  },
+  {
+    value: "Skill Assessment",
+    label: "Skill Assessment",
+  },
+
+  // E-commerce
+  {
+    value: "Product Listing",
+    label: "Product Listing",
+  },
+  {
+    value: "Store Management",
+    label: "Store Management",
+  },
+  {
+    value: "Order Processing",
+    label: "Order Processing",
+  },
+  {
+    value: "Customer Reviews",
+    label: "Customer Reviews",
+  },
+  {
+    value: "Price Research",
+    label: "Price Research",
+  },
+  {
+    value: "Inventory Management",
+    label: "Inventory Management",
+  },
+
+  // Miscellaneous
+  {
+    value: "Gaming Tasks",
+    label: "Gaming Tasks",
+  },
+  {
+    value: "App Downloads & Reviews",
+    label: "App Downloads & Reviews",
+  },
+  {
+    value: "Survey Participation",
+    label: "Survey Participation",
+  },
+  {
+    value: "Simple Tasks",
+    label: "Simple Tasks",
+  },
+  {
+    value: "Data Collection",
+    label: "Data Collection",
+  },
+  {
+    value: "Online Contests",
+    label: "Online Contests",
+  },
+];
+
+export const estimatedTimeUnits = [
+  {
+    value: "hour",
+    label: "Hour",
+  },
+  {
+    value: "day",
+    label: "Day",
+  },
+  {
+    value: "month",
+    label: "Month",
+  },
+];
+
+export const estimatedTimes = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+];
+
+export const submissionTypes = [
+  { value: "screenshots", label: "Screenshots" },
+  { value: "documents", label: "Documents" },
+  { value: "link", label: "Link" },
+  { value: "shortText", label: "Short Text" },
+  { value: "longParagraph", label: "Long Paragraph" },
+];
