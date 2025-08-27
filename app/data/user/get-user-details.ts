@@ -4,38 +4,40 @@ import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 
 export const getUserDetails = async () => {
-	const session = await requireUser();
-	const user = await prisma.user.findUnique({
-		where: {
-			id: session.user.id,
-		},
-		select: {
-			id: true,
-			name: true,
-			email: true,
-			username: true,
-			phoneNumber: true,
-			country: true,
-			accountName: true,
-			accountNumber: true,
-			bankName: true,
-			bio: true,
-			image: true,
-			dob: true,
-			identificationType: true,
-			identificationNumber: true,
-			socials: {
-				select: {
-					id: true,
-					url: true,
-				},
-			},
-		},
-	});
+  const session = await requireUser();
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      username: true,
+      phoneNumber: true,
+      country: true,
+      accountName: true,
+      accountNumber: true,
+      bankName: true,
+      bio: true,
+      image: true,
+      dob: true,
+      identificationType: true,
+      identificationNumber: true,
+      onboardingCompleted: true,
+      emailVerified: true,
+      socials: {
+        select: {
+          id: true,
+          url: true,
+        },
+      },
+    },
+  });
 
-	if (!user) return notFound();
+  if (!user) return notFound();
 
-	return user;
+  return user;
 };
 
 export type GetUserDetailsType = Awaited<ReturnType<typeof getUserDetails>>;
