@@ -1,3 +1,5 @@
+"use client";
+import { Loader } from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,13 +12,39 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { tryCatch } from "@/hooks/use-try-catch";
+import { useTransition } from "react";
+import { createJob } from "../actions";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface Props {
   open: boolean;
   closeModal: () => void;
+  data: any;
 }
 
-export function ConfirmPostingModal({ open, closeModal }: Props) {
+export function ConfirmPostingModal({ open, closeModal, data }: Props) {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+
+  const handleSubmit = () => {
+    startTransition(async () => {
+      const { data: result, error } = await tryCatch(createJob(data));
+
+      if (error) {
+        toast.error(error.message || "Oops! Internal server error");
+        return;
+      }
+
+      if (result?.status === "success") {
+        toast.success(result.message);
+        router.push(`/new-job/success?slug=${result.slug}`);
+      } else {
+        toast.error(result.message);
+      }
+    });
+  };
   return (
     <Dialog open={open} onOpenChange={closeModal}>
       <DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-lg [&>button:last-child]:top-3.5">
@@ -39,12 +67,22 @@ export function ConfirmPostingModal({ open, closeModal }: Props) {
           </div>
           <DialogFooter className="px-6 pb-6 sm:justify-end">
             <DialogClose asChild>
-              <Button type="button" size={"md"} variant="outline">
+              <Button
+                disabled={pending}
+                type="button"
+                size={"md"}
+                variant="outline"
+              >
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" size="md">
-              Post Job
+            <Button
+              type="submit"
+              disabled={pending}
+              onClick={handleSubmit}
+              size="md"
+            >
+              {pending ? <Loader /> : "Post Job"}
             </Button>
           </DialogFooter>
         </DialogHeader>

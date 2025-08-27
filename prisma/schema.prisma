@@ -31,6 +31,7 @@ model User {
   sessions             Session[]
   accounts             Account[]
   socials              Socials[]
+  jobs                 Job[]
 
   @@unique([email, username])
   @@map("user")
@@ -89,4 +90,41 @@ model Socials {
   userId String
 
   @@map("socials")
+}
+
+model Job {
+  id                 String  @id @default(uuid())
+  type               String
+  title              String
+  slug               String? @unique
+  description        String?
+  category           String?
+  jobLink            String?
+  deadline           String?
+  reward             String?
+  noOfWorkers        String?
+  estimatedTime      String?
+  estimatedTimeUnit  String?
+  instructions       String?
+  proofOfCompletion  String?
+  submissionType     String?
+  submissionRequired String?
+  finalNotes         String?
+
+  status JobStatus @default(Draft)
+
+  createdAt DateTime?
+  updatedAt DateTime?
+
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@unique([slug, userId])
+}
+
+enum JobStatus {
+  Draft
+  Published
+  Deleted
+  Archived
 }

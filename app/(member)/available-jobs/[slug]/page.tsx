@@ -6,8 +6,26 @@ import { getDefaultClassNames } from "react-day-picker";
 import { JobCTAs } from "./_components/JobCTAs";
 import { ProofForm } from "./_components/ProofForm";
 import { EMAIL_ADDRESS } from "@/constants";
+import {
+  getJobDetails,
+  GetJobDetailsType,
+} from "@/app/data/job/get-job-details";
+import {
+  extractTiptapText,
+  RenderDescription,
+} from "@/components/text-editor/RenderDescription";
+import { env } from "@/lib/env";
+import { formatDate, formatMoneyInput } from "@/lib/utils";
 
-const page = () => {
+type Params = Promise<{
+  slug: string;
+}>;
+
+const page = async ({ params }: { params: Params }) => {
+  const { slug } = await params;
+
+  const job: GetJobDetailsType = await getJobDetails(slug);
+
   return (
     <div className="py-12">
       <div className="container">
@@ -15,59 +33,58 @@ const page = () => {
         <div className="space-y-4 mt-4">
           <p className="text-base">
             Job title:{" "}
-            <span className="text-muted-foreground">App store review</span>
+            <span className="text-muted-foreground">{job.title}</span>
           </p>
           <p className="text-base">
-            Job ID: <span className="text-muted-foreground">ES21089</span>
+            Job ID: <span className="text-muted-foreground">{job.id}</span>
           </p>
           <p className="text-base">
             Job Description:
             <span className="text-muted-foreground">
-              {" "}
-              You're required to download the SmartBudget Tracker on App Store,
-              explore its features for a few minutes, and leave a short, honest
-              review on the app store. This job is for genuine users only —
-              avoid spam or generic feedback.  We encourage you to mention
-              specific features you found useful, any improvements you’d
-              suggest, or your overall experience with the app. Once your review
-              is submitted and visible on the app store, kindly upload a
-              screenshot of your live review along with proof that the app is
-              installed on your device. To maintain quality, only submissions
-              with a 4-star rating or above and thoughtful feedback will be
-              approved.
+              <RenderDescription json={job?.description} />
             </span>
           </p>
           <p className="text-base">
             Job Type:{" "}
-            <span className="text-primary hover:underline">Micro-Job</span>
+            <span className="text-primary hover:underline">
+              {job.type?.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase())}
+            </span>
           </p>
           <p className="text-base">
             Job Category:{" "}
-            <span className="text-muted-foreground">App Promotion</span>
+            <span className="text-muted-foreground">{job.category}</span>
           </p>
           <p className="text-base">
             Job Poster:{" "}
             <span className="text-blue-400 underline hover:text-primary">
-              Adam Sandler
+              {job.User.name}
             </span>
           </p>
           <p className="text-base">
             Job Link:{" "}
             <span className="text-blue-400 hover:underline hover:text-primary">
-              https://earnsphere.com/job/one{" "}
-              <CopyToClipboard text={"https://earnsphere.com/job/one"} />
+              <a
+                href={`${env.BETTER_AUTH_URL}/available-jobs/${job.slug}`}
+                target={"_blank"}
+              >{`${env.BETTER_AUTH_URL}/available-jobs/${job.slug}`}</a>
+              <CopyToClipboard
+                text={`${env.BETTER_AUTH_URL}/available-jobs/${job.slug}`}
+              />
             </span>
           </p>
           <p className="text-base">
             Reward:{" "}
             <span className="text-muted-foreground">
               <NairaIcon />
-              200.00
+              {formatMoneyInput(job.reward)}
             </span>
           </p>
           <p className="text-base">
             Time Estimate:{" "}
-            <span className="text-muted-foreground">6-8 minutes</span>
+            <span className="text-muted-foreground">
+              {job.estimatedTime} {job.estimatedTimeUnit}
+              {job.estimatedTime !== "1" && "s"}
+            </span>
           </p>
           <p className="text-base">
             Available Slots:{" "}
@@ -76,7 +93,9 @@ const page = () => {
           <p className="text-base">
             Status: <span className="text-primary">Open</span>
           </p>
-          <p className="text-base">Submission Deadline: 23 Movember, 2025</p>
+          <p className="text-base">
+            Submission Deadline: {formatDate(job.deadline)}
+          </p>
         </div>
         <div className="mt-6">
           <p className="text-base text-muted-foreground">
@@ -87,26 +106,14 @@ const page = () => {
         </div>
         <div className="mt-6">
           <h2 className="font-semibold text-xl md:text-2xl">Instructions</h2>
-          <ul className="space-y-2 mt-2 text-base">
-            <li>1. Click on the job link and install the app.</li>
-            <li>2. Explore the features for at least 3 minutes.</li>
-            <li>
-              3. Leave a genuine review (mention what you liked or what could be
-              improved).
-            </li>
-            <li>4. Give a 4-star rating or higher.</li>
-            <li>5. Take a screenshot of your review once it goes live.</li>
-          </ul>
+          <RenderDescription json={job.instructions} />
         </div>
         <div className="mt-6">
           <h2 className="font-semibold text-xl md:text-2xl">
             Proof of Completion
           </h2>
           <p className="text-base text-muted-foreground">You must upload:</p>
-          <ul className="space-y-2 mt-2 text-base list-disc list-inside">
-            <li>Screenshot of your review on the app store</li>
-            <li>Optional: Screenshot of the installed app on your device</li>
-          </ul>
+          <RenderDescription json={job.proofOfCompletion} />
           <ProofForm />
         </div>
         <div className="mt-10 space-y-2.5 text-base">

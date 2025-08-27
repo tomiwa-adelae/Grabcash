@@ -50,6 +50,8 @@ export function NewJobForm() {
   const [openModal, setOpenModal] = useState(false);
   const [reward, setReward] = useState("15");
 
+  const [jobData, setJobData] = useState<NewJobFormSchemaType>();
+
   const form = useForm<NewJobFormSchemaType>({
     resolver: zodResolver(newJobFormSchema),
     defaultValues: {
@@ -144,6 +146,7 @@ export function NewJobForm() {
 
   function onSubmit(data: NewJobFormSchemaType) {
     setOpenModal(true);
+    setJobData(data);
   }
 
   return (
@@ -274,14 +277,13 @@ export function NewJobForm() {
               )}
             />
           </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <FormField
               control={form.control}
               name="reward"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Price</FormLabel>
+                  <FormLabel>Reward</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <div className="absolute top-[50%] left-2 translate-y-[-50%]">
@@ -533,6 +535,7 @@ export function NewJobForm() {
           closeModal={() => {
             setOpenModal(false);
           }}
+          data={jobData}
         />
       )}
       <SaveDraftModal

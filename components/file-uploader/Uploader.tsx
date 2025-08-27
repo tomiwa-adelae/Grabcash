@@ -278,6 +278,7 @@ export const Uploader = forwardRef<UploaderHandle, iAppProps>(
           onUploadSuccess?.(uploadedKey);
         } catch (error) {
           console.error("Failed to upload photo:", error);
+          return;
         }
       },
 

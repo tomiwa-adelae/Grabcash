@@ -125,16 +125,7 @@ export function OnBoardingProfileForm({ user }: Props) {
                 });
               },
               onError: (error) => {
-                console.log(error);
-                // setUsernameStatus({
-                //   checking: false,
-                //   available: false,
-                //   message: `${username} is already taken`,
-                // });
-
                 // Handle different types of errors
-                console.error("Username check error:", error);
-
                 // If it's a 409 or conflict error, username is taken
                 if (
                   error?.error?.status === 409 ||
