@@ -23,6 +23,7 @@ export const createJob = async (data: NewJobFormSchemaType) => {
         userId: user.id,
         ...validation.data,
         slug,
+        status: "Published",
       },
     });
 
@@ -33,5 +34,35 @@ export const createJob = async (data: NewJobFormSchemaType) => {
     };
   } catch (error) {
     return { status: "error", message: "Failed to create new job" };
+  }
+};
+
+export const saveDraft = async (
+  data: NewJobFormSchemaType
+): Promise<ApiResponse> => {
+  const { user } = await requireUser();
+
+  try {
+    if (!data.title) return { status: "error", message: "Please enter title" };
+
+    const slug = slugify(data.title);
+
+    await prisma.job.create({
+      data: {
+        userId: user.id,
+        ...data,
+        slug,
+        status: "Draft",
+      },
+    });
+
+    return {
+      status: "success",
+      message:
+        "Your job has been saved as a draft. You can find it anytime in your Drafts folder to review, edit, and post when you’re ready.",
+    };
+  } catch (error) {
+    console.log(error);
+    return { status: "error", message: "Failed to save to draft" };
   }
 };

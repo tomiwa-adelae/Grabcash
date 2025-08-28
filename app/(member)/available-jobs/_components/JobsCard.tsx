@@ -1,17 +1,17 @@
 import React from "react";
 import { JobCard } from "./JobCard";
+import { GetAvailableJobsType } from "@/app/data/job/get-available-jobs";
 
-export const JobsCard = () => {
+interface Props {
+  jobs: GetAvailableJobsType[];
+}
+
+export const JobsCard = ({ jobs }: Props) => {
   return (
     <div className="sm:hidden grid gap-4">
-      <JobCard />
-      <JobCard />
-      <JobCard />
-      <JobCard />
-      <JobCard />
-      <JobCard />
-      <JobCard />
-      <JobCard />
+      {jobs.map((job) => (
+        <JobCard job={job} />
+      ))}
     </div>
   );
 };

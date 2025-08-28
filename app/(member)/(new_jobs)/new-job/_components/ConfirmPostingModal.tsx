@@ -9,7 +9,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { tryCatch } from "@/hooks/use-try-catch";
@@ -40,6 +39,7 @@ export function ConfirmPostingModal({ open, closeModal, data }: Props) {
       if (result?.status === "success") {
         toast.success(result.message);
         router.push(`/new-job/success?slug=${result.slug}`);
+        localStorage.removeItem("jobPreview");
       } else {
         toast.error(result.message);
       }
@@ -82,7 +82,7 @@ export function ConfirmPostingModal({ open, closeModal, data }: Props) {
               onClick={handleSubmit}
               size="md"
             >
-              {pending ? <Loader /> : "Post Job"}
+              {pending ? <Loader text="Posting..." /> : "Post Job"}
             </Button>
           </DialogFooter>
         </DialogHeader>

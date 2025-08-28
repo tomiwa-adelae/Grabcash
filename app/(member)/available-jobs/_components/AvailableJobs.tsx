@@ -1,13 +1,18 @@
 import React from "react";
-import JobsTable from "./JobsTable";
+import { JobsTable } from "./JobsTable";
 import { PaginationComponent } from "@/components/Pagination";
 import { JobsCard } from "./JobsCard";
+import { GetAvailableJobsType } from "@/app/data/job/get-available-jobs";
 
-export const AvailableJobs = () => {
+interface Props {
+  jobs: GetAvailableJobsType[];
+}
+
+export const AvailableJobs = ({ jobs }: Props) => {
   return (
     <div className="mt-4">
-      <JobsTable />
-      <JobsCard />
+      <JobsTable jobs={jobs} />
+      <JobsCard jobs={jobs} />
       <PaginationComponent totalPages={10} />
     </div>
   );

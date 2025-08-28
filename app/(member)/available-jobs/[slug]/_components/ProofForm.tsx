@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,17 +18,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { proofFormSchema, ProofFormSchemaType } from "@/lib/zodSchemas";
 import { Label } from "@/components/ui/label";
 import { UploadScreenshotModal } from "./UploadScreenshotModal";
-
-const FormSchema = z.object({
-  bio: z
-    .string()
-    .min(10, {
-      message: "Bio must be at least 10 characters.",
-    })
-    .max(160, {
-      message: "Bio must not be longer than 30 characters.",
-    }),
-});
 
 export function ProofForm() {
   const form = useForm<ProofFormSchemaType>({

@@ -1,28 +1,35 @@
-import { PageHeader } from "../../_components/PageHeader";
+"use client";
+import { PageHeader } from "@/app/(member)/_components/PageHeader";
+import { JobCTAs } from "@/app/(member)/available-jobs/[slug]/_components/JobCTAs";
+import { ProofForm } from "@/app/(member)/available-jobs/[slug]/_components/ProofForm";
 import { CopyToClipboard } from "@/components/CopyToClipboard";
 import { NairaIcon } from "@/components/NairaIcon";
-import { JobCTAs } from "./_components/JobCTAs";
-import { ProofForm } from "./_components/ProofForm";
-import { EMAIL_ADDRESS } from "@/constants";
-import {
-  getJobDetails,
-  GetJobDetailsType,
-} from "@/app/data/job/get-job-details";
 import { RenderDescription } from "@/components/text-editor/RenderDescription";
+import { EMAIL_ADDRESS } from "@/constants";
 import { env } from "@/lib/env";
 import { formatDate, formatMoneyInput } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ConfirmPostingModal } from "../../_components/ConfirmPostingModal";
+import { useEffect, useState } from "react";
+import { Loader } from "@/components/Loader";
 
-type Params = Promise<{
-  slug: string;
-}>;
+export const PreviewJob = ({ user }: { user: string }) => {
+  const [openModal, setOpenModal] = useState(false);
+  const [job, setJob] = useState<any>(null);
 
-const page = async ({ params }: { params: Params }) => {
-  const { slug } = await params;
+  useEffect(() => {
+    const saved = localStorage.getItem("jobPreview");
+    if (saved) {
+      setJob(JSON.parse(saved));
+    }
+  }, []);
 
-  const job: GetJobDetailsType = await getJobDetails(slug);
+  if (!job) {
+    return <Loader text="Loading details..." />;
+  }
 
   return (
-    <div>
+    <div className="mt-6">
       <PageHeader title="Job Details" />
       <div className="space-y-4 mt-4">
         <p className="text-base">
@@ -40,7 +47,9 @@ const page = async ({ params }: { params: Params }) => {
         <p className="text-base">
           Job Type:{" "}
           <span className="text-primary hover:underline">
-            {job.type?.toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase())}
+            {job.type
+              ?.toLowerCase()
+              .replace(/\b\w/g, (l: any) => l.toUpperCase())}
           </span>
         </p>
         <p className="text-base">
@@ -50,18 +59,18 @@ const page = async ({ params }: { params: Params }) => {
         <p className="text-base">
           Job Poster:{" "}
           <span className="text-blue-400 underline hover:text-primary">
-            {job.User.name}
+            {user}
           </span>
         </p>
         <p className="text-base">
           Job Link:{" "}
           <span className="text-blue-400 hover:underline hover:text-primary">
             <a
-              href={`${env.BETTER_AUTH_URL}/available-jobs/${job.slug}`}
+              href={`${env.NEXT_PUBLIC_BETTER_AUTH_URL}/available-jobs/${job.slug}`}
               target={"_blank"}
-            >{`${env.BETTER_AUTH_URL}/available-jobs/${job.slug}`}</a>
+            >{`${env.NEXT_PUBLIC_BETTER_AUTH_URL}/available-jobs/${job.slug}`}</a>
             <CopyToClipboard
-              text={`${env.BETTER_AUTH_URL}/available-jobs/${job.slug}`}
+              text={`${env.NEXT_PUBLIC_BETTER_AUTH_URL}/available-jobs/${job.slug}`}
             />
           </span>
         </p>
@@ -129,8 +138,32 @@ const page = async ({ params }: { params: Params }) => {
           </a>
         </p>
       </div>
+      <div className="mt-10 flex flex-col sm:flex-row items-center justify-end gap-4">
+        <Button
+          size="md"
+          variant={"outline"}
+          className="border-primary text-primary hover:bg-primary/10 hover:text-primary w-full sm:w-auto"
+          onClick={() => window.close()}
+        >
+          Edit details
+        </Button>
+        <Button
+          onClick={() => setOpenModal(true)}
+          size="md"
+          className="w-full sm:w-auto"
+        >
+          Post Job Now
+        </Button>
+      </div>
+      {openModal && (
+        <ConfirmPostingModal
+          open={openModal}
+          closeModal={() => {
+            setOpenModal(false);
+          }}
+          data={job}
+        />
+      )}
     </div>
   );
 };
-
-export default page;

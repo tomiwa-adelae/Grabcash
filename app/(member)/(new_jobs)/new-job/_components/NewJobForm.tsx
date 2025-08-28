@@ -3,13 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,7 +15,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { newJobFormSchema, NewJobFormSchemaType } from "@/lib/zodSchemas";
-import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   jobCategories,
@@ -27,8 +24,6 @@ import {
   submissionTypes,
 } from "@/constants";
 import { Separator } from "@/components/ui/separator";
-
-import { useCharacterLimit } from "@/hooks/use-character-limit";
 import {
   Select,
   SelectContent,
@@ -38,19 +33,26 @@ import {
 } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/text-editor/Editor";
 import { DateSelector } from "@/components/ui/DateSelector";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatMoneyInput } from "@/lib/utils";
 import { NairaIcon } from "@/components/NairaIcon";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { ConfirmPostingModal } from "./ConfirmPostingModal";
 import { SaveDraftModal } from "./SaveDraftModal";
+import { useJob } from "@/context/JobContext";
+import { useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
+import slugify from "slugify";
 
 export function NewJobForm() {
   const [openModal, setOpenModal] = useState(false);
   const [reward, setReward] = useState("15");
+  const [openDraft, setOpenDraft] = useState(false);
 
   const [jobData, setJobData] = useState<NewJobFormSchemaType>();
+
+  const { jobPreview, setJobPreview } = useJob();
 
   const form = useForm<NewJobFormSchemaType>({
     resolver: zodResolver(newJobFormSchema),
@@ -71,6 +73,27 @@ export function NewJobForm() {
       finalNotes: "",
     },
   });
+
+  useEffect(() => {
+    if (jobPreview) {
+      form.reset({
+        type: jobPreview.type || "micro",
+        title: jobPreview.title || "",
+        category: jobPreview.category || "",
+        description: jobPreview.description || "",
+        jobLink: jobPreview.jobLink || "",
+        deadline: jobPreview.deadline || "",
+        reward: jobPreview.reward || "15",
+        noOfWorkers: jobPreview.noOfWorkers || "",
+        estimatedTime: jobPreview.estimatedTime || "",
+        estimatedTimeUnit: jobPreview.estimatedTimeUnit || "",
+        instructions: jobPreview.instructions || "",
+        proofOfCompletion: jobPreview.proofOfCompletion || "",
+        submissionType: jobPreview.submissionType || "screenshots",
+        finalNotes: jobPreview.finalNotes || "",
+      });
+    }
+  }, [jobPreview]);
 
   const handleRewardChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -142,6 +165,36 @@ export function NewJobForm() {
     if (/^[0-9,]*\.?[0-9]*$/.test(inputValue)) {
       field.onChange(inputValue);
     }
+  };
+
+  const handlePreview = () => {
+    const data = form.getValues();
+    const validation = newJobFormSchema.safeParse(data);
+
+    if (!validation.success)
+      return toast.error("You have to field the required fields!");
+
+    const slug = slugify(validation.data.title);
+
+    const previewData = {
+      ...validation.data,
+      id: uuidv4(),
+      slug,
+    };
+
+    localStorage.setItem("jobPreview", JSON.stringify(previewData));
+    setJobPreview(previewData);
+    window.open(
+      `/new-job/preview?slug=${previewData.slug}`,
+      "_blank",
+      "noopener,noreferrer"
+    );
+  };
+
+  const handleDraft = () => {
+    const data = form.getValues();
+    setOpenDraft(true);
+    setJobData(data);
   };
 
   function onSubmit(data: NewJobFormSchemaType) {
@@ -513,13 +566,21 @@ export function NewJobForm() {
             )}
           />
           <div className="flex flex-col sm:flex-row items-center justify-end gap-4">
-            <Button size="md" variant={"outline"} className="w-full sm:w-auto">
+            <Button
+              onClick={handleDraft}
+              type="button"
+              size="md"
+              variant={"outline"}
+              className="w-full sm:w-auto"
+            >
               Save Draft
             </Button>
             <Button
               variant={"outline"}
               className="border-primary text-primary hover:bg-primary/10 hover:text-primary w-full sm:w-auto"
               size="md"
+              onClick={handlePreview}
+              type="button"
             >
               Preview job
             </Button>
@@ -538,12 +599,16 @@ export function NewJobForm() {
           data={jobData}
         />
       )}
-      <SaveDraftModal
-        open={false}
-        closeModal={() => {
-          //   setOpenModal(false);
-        }}
-      />
+      {openDraft && (
+        <SaveDraftModal
+          open={openDraft}
+          closeModal={() => {
+            setOpenDraft(false);
+          }}
+          description={"Are you sure you want to save this to your draft?"}
+          data={jobData}
+        />
+      )}
     </div>
   );
 }
