@@ -10,7 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { formatDate, formatMoneyInput } from "@/lib/utils";
 import Link from "next/link";
 
-const page = async ({ searchParams }: { searchParams: { slug: string } }) => {
+const page = async ({ searchParams }: { searchParams: any }) => {
   const { slug } = await searchParams;
 
   const job: GetJobDetailsType = await getJobDetails(slug);
