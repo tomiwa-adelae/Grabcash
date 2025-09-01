@@ -1,7 +1,5 @@
 "use client";
 import { PageHeader } from "@/app/(member)/_components/PageHeader";
-import { JobCTAs } from "@/app/(member)/available-jobs/[slug]/_components/JobCTAs";
-import { ProofForm } from "@/app/(member)/available-jobs/[slug]/_components/ProofForm";
 import { CopyToClipboard } from "@/components/CopyToClipboard";
 import { NairaIcon } from "@/components/NairaIcon";
 import { RenderDescription } from "@/components/text-editor/RenderDescription";
@@ -12,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { ConfirmPostingModal } from "../../_components/ConfirmPostingModal";
 import { useEffect, useState } from "react";
 import { Loader } from "@/components/Loader";
+import { JobCTAs } from "@/app/(member)/(jobs)/available-jobs/[slug]/_components/JobCTAs";
+import { ProofForm } from "@/app/(member)/(jobs)/available-jobs/[slug]/_components/ProofForm";
 
 export const PreviewJob = ({ user }: { user: string }) => {
   const [openModal, setOpenModal] = useState(false);
