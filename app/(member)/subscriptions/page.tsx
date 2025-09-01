@@ -2,7 +2,7 @@ import { getUserDetails } from "@/app/data/user/get-user-details";
 import { PricingPlans } from "./_components/PricingPlans";
 import { getSubscriptionPlans } from "@/app/data/user/subscription/get-subscription-plans";
 
-export const page = async () => {
+const page = async () => {
   const user = await getUserDetails();
   const plans = await getSubscriptionPlans();
 
