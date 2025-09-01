@@ -9,7 +9,7 @@ import { Check } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-const page = async ({ searchParams }: { searchParams: { id: string } }) => {
+const page = async ({ searchParams }: { searchParams: any }) => {
   const { id } = await searchParams;
 
   const subscriptionDetails = await getSubscriptionDetails(id);
