@@ -1,6 +1,6 @@
 import React from "react";
-import { PageHeader } from "../../_components/PageHeader";
 import { NewJobForm } from "./_components/NewJobForm";
+import { PageHeader } from "@/app/(member)/_components/PageHeader";
 
 const page = () => {
   return (

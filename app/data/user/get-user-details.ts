@@ -32,6 +32,15 @@ export const getUserDetails = async () => {
           url: true,
         },
       },
+      subscription: {
+        select: {
+          plan: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 

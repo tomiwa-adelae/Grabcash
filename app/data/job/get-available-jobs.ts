@@ -1,10 +1,12 @@
 import { prisma } from "@/lib/db";
 import "server-only";
+import { requireSubscription } from "../user/subscription/require-subscription";
 
 export const getAvailableJobs = async () => {
+  await requireSubscription();
   const jobs = await prisma.job.findMany({
     where: {
-      status: "Published",
+      status: "PUBLISHED",
     },
     select: {
       id: true,

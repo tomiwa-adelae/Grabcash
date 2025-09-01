@@ -1,4 +1,3 @@
-import { PageHeader } from "../../_components/PageHeader";
 import { CopyToClipboard } from "@/components/CopyToClipboard";
 import { NairaIcon } from "@/components/NairaIcon";
 import { JobCTAs } from "./_components/JobCTAs";
@@ -11,6 +10,7 @@ import {
 import { RenderDescription } from "@/components/text-editor/RenderDescription";
 import { env } from "@/lib/env";
 import { formatDate, formatMoneyInput } from "@/lib/utils";
+import { PageHeader } from "@/app/(member)/_components/PageHeader";
 
 type Params = Promise<{
   slug: string;
@@ -22,7 +22,7 @@ const page = async ({ params }: { params: Params }) => {
   const job: GetJobDetailsType = await getJobDetails(slug);
 
   return (
-    <div>
+    <div className="py-12 container">
       <PageHeader title="Job Details" />
       <div className="space-y-4 mt-4">
         <p className="text-base">

@@ -818,3 +818,65 @@ export const submissionTypes = [
   { value: "shortText", label: "Short Text" },
   { value: "longParagraph", label: "Long Paragraph" },
 ];
+
+type ButtonVariant =
+  | "outline"
+  | "default"
+  | "link"
+  | "destructive"
+  | "secondary"
+  | "ghost";
+
+export const subscriptionPlans: {
+  name: string;
+  price: {
+    monthly: string;
+    annually: string;
+  };
+  description: string;
+  features: string[];
+  buttonVariant: ButtonVariant | null | undefined;
+  badge: string | null;
+}[] = [
+  {
+    name: "Basic",
+    price: {
+      monthly: "0/month",
+      annually: "0/year",
+    },
+    description:
+      "Basic access with essential features — perfect for exploring earnsphere and getting started.",
+    features: [
+      "Limited access to earning opportunities",
+      "Basic task feed with concise search",
+    ],
+    buttonVariant: "default",
+    badge: null,
+  },
+  {
+    name: "Pro",
+    price: {
+      monthly: "1000/month",
+      annually: "8000/year",
+    },
+    description:
+      "Unlock the full earnsphere experience — access all earning tools, campaigns, and learning resources.",
+    features: [
+      "Access real, verified earning tasks",
+      "Weekly payouts to your bank or wallet",
+      "Join bounty campaigns & create job listings",
+      "Earn from referrals & affiliate programs",
+      "Full access to the Earnsphere Academy",
+      "Advanced search & filtering tools",
+      "Eligibility for Leaderboards & Hall of Champions",
+      "Premium customer support",
+    ],
+    buttonVariant: "default",
+    badge: "Popular",
+  },
+];
+
+export const EARNSPHERE_LOGO =
+  "https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg";
+
+export const CREDIT_TO_POST_NEW_JOB = 6;

@@ -1,6 +1,7 @@
 "use server";
 
 import { requireUser } from "@/app/data/user/require-user";
+import { requireSubscription } from "@/app/data/user/subscription/require-subscription";
 import { prisma } from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
 import { newJobFormSchema, NewJobFormSchemaType } from "@/lib/zodSchemas";
@@ -9,6 +10,7 @@ import slugify from "slugify";
 
 export const createJob = async (data: NewJobFormSchemaType) => {
   const { user } = await requireUser();
+  await requireSubscription();
 
   try {
     const validation = newJobFormSchema.safeParse(data);
@@ -23,7 +25,7 @@ export const createJob = async (data: NewJobFormSchemaType) => {
         userId: user.id,
         ...validation.data,
         slug,
-        status: "Published",
+        status: "PUBLISHED",
       },
     });
 
@@ -41,6 +43,7 @@ export const saveDraft = async (
   data: NewJobFormSchemaType
 ): Promise<ApiResponse> => {
   const { user } = await requireUser();
+  await requireSubscription();
 
   try {
     if (!data.title) return { status: "error", message: "Please enter title" };
@@ -52,7 +55,7 @@ export const saveDraft = async (
         userId: user.id,
         ...data,
         slug,
-        status: "Draft",
+        status: "DRAFT",
       },
     });
 

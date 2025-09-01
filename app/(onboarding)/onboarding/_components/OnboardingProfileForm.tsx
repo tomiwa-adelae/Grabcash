@@ -101,6 +101,7 @@ export function OnBoardingProfileForm({ user }: Props) {
   });
 
   useEffect(() => {
+    if (user.username === username) return;
     if (username && username.length >= 3) {
       const timeoutId = setTimeout(async () => {
         setUsernameStatus({
@@ -573,43 +574,39 @@ export function OnBoardingProfileForm({ user }: Props) {
                   </FormItem>
                 )}
               />
-              {!currentProfileImage ||
-                (currentProfileImage.startsWith("/assets") && (
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name="selectedAvatar"
-                      render={() => (
-                        <FormItem>
-                          <FormLabel>
-                            Select a profile picture from avatar
-                          </FormLabel>
-                          <div className="flex flex-wrap items-center justify-start gap-4">
-                            {avatarOptions.map((avatar) => (
-                              <div
-                                key={avatar.id}
-                                onClick={() => handleAvatarSelect(avatar.src)}
-                                className={cn(
-                                  "cursor-pointer bg-muted hover:bg-primary/10 transition-all flex items-center justify-center size-[80px] lg:size-[100px] rounded-full",
-                                  selectedAvatar === avatar.src &&
-                                    "bg-primary/30"
-                                )}
-                              >
-                                <Image
-                                  src={avatar.src}
-                                  alt={`Avatar icon`}
-                                  width={1000}
-                                  height={1000}
-                                  className="size-[40px] object-cover"
-                                />
-                              </div>
-                            ))}
+              <div>
+                <FormField
+                  control={form.control}
+                  name="selectedAvatar"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>
+                        Select a profile picture from avatar
+                      </FormLabel>
+                      <div className="flex flex-wrap items-center justify-start gap-4">
+                        {avatarOptions.map((avatar) => (
+                          <div
+                            key={avatar.id}
+                            onClick={() => handleAvatarSelect(avatar.src)}
+                            className={cn(
+                              "cursor-pointer bg-muted hover:bg-primary/10 transition-all flex items-center justify-center size-[80px] lg:size-[100px] rounded-full",
+                              selectedAvatar === avatar.src && "bg-primary/30"
+                            )}
+                          >
+                            <Image
+                              src={avatar.src}
+                              alt={`Avatar icon`}
+                              width={1000}
+                              height={1000}
+                              className="size-[40px] object-cover"
+                            />
                           </div>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                ))}
+                        ))}
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
           </div>
           <Button disabled={pending} className="w-full" size="md" type="submit">

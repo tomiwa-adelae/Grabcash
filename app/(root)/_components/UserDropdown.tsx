@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {} from "@/constants";
 import { useSignout } from "@/hooks/use-signout";
+import Link from "next/link";
 
 interface Props {
   name: string;
@@ -57,9 +58,11 @@ export default function UserDropdown({ image, name, email }: Props) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Crown size={16} className="opacity-60" aria-hidden="true" />
-            <span>Get earnsphere+</span>
+          <DropdownMenuItem asChild>
+            <Link href="/subscriptions">
+              <Crown size={16} className="opacity-60" aria-hidden="true" />
+              <span>Get earnsphere+</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Users size={16} className="opacity-60" aria-hidden="true" />

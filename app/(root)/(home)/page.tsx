@@ -64,7 +64,7 @@ const page = async () => {
       <GetStarted />
       <FAQs showTitle={true} />
       <Testimonials />
-      <OnboardingModal user={user} />
+      {user && <OnboardingModal user={user} />}
     </div>
   );
 };

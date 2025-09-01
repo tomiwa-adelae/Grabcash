@@ -9,10 +9,10 @@ datasource db {
 }
 
 model User {
-  id                   String    @id
+  id                   String   @id
   name                 String
   email                String
-  username             String?   @unique
+  username             String?  @unique
   displayUsername      String?
   phoneNumber          String?
   country              String?
@@ -25,13 +25,20 @@ model User {
   dob                  String?
   identificationType   String?
   identificationNumber String?
-  onboardingCompleted  Boolean?  @default(false)
-  createdAt            DateTime
-  updatedAt            DateTime
-  sessions             Session[]
-  accounts             Account[]
-  socials              Socials[]
-  jobs                 Job[]
+  onboardingCompleted  Boolean? @default(false)
+
+  credits Int @default(20)
+
+  subscription Subscription?
+
+  createdAt DateTime
+  updatedAt DateTime
+
+  sessions Session[]
+  accounts Account[]
+  socials  Socials[]
+  jobs     Job[]
+  Payment  Payment[]
 
   @@unique([email, username])
   @@map("user")
@@ -111,7 +118,7 @@ model Job {
   submissionRequired String?
   finalNotes         String?
 
-  status JobStatus @default(Draft)
+  status JobStatus @default(DRAFT)
 
   createdAt DateTime?
   updatedAt DateTime?
@@ -123,8 +130,70 @@ model Job {
 }
 
 enum JobStatus {
-  Draft
-  Published
-  Deleted
-  Archived
+  DRAFT
+  PUBLISHED
+  DELETED
+  ARCHIVED
+}
+
+model SubscriptionPlan {
+  id           String       @id @default(uuid())
+  name         String       @default("Basic")
+  billingCycle BillingCycle @default(MONTHLY)
+  price        String
+  durationDays String
+  description  String
+  features     Json?
+  badge        String?
+  isActive     Boolean      @default(true)
+
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Subscription Subscription[]
+  Payment      Payment[]
+}
+
+enum BillingCycle {
+  MONTHLY
+  ANNUALLY
+}
+
+model Subscription {
+  id        String             @id @default(uuid())
+  startDate DateTime
+  endDate   DateTime
+  status    SubscriptionStatus
+
+  user               User             @relation(fields: [userId], references: [id])
+  userId             String           @unique
+  plan               SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
+  subscriptionPlanId String
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELED
+}
+
+model Payment {
+  id String @id @default(uuid())
+
+  amount        String
+  transactionId String
+  reference     String
+  status        PaymentStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  user          User          @relation(fields: [userId], references: [id])
+  userId        String
+
+  plan               SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
+  subscriptionPlanId String
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
 }

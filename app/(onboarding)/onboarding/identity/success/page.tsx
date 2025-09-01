@@ -16,7 +16,7 @@ const page = () => {
           </div>
           <div className="mt-8 max-w-2xl mx-auto">
             <Button className="w-full" size="md" asChild>
-              <Link href="/dashboard">Proceed to dashboard</Link>
+              <Link href="/subscriptions">Proceed to subscriptions</Link>
             </Button>
           </div>
         </div>
