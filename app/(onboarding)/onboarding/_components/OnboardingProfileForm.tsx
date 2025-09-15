@@ -188,6 +188,11 @@ export function OnBoardingProfileForm({ user }: Props) {
     form.setValue("image", avatarId);
   };
 
+  const isUploadedImage = (imageValue: string | undefined) => {
+    if (!imageValue) return false;
+    return !avatarOptions.some((avatar) => avatar.src === imageValue);
+  };
+
   const getSocialIcon = (url: string) => {
     if (url.includes("twitter") || url.includes("x.com"))
       return <Twitter className="w-4 h-4" />;
@@ -210,6 +215,10 @@ export function OnBoardingProfileForm({ user }: Props) {
 
   const selectedAvatar = form.watch("selectedAvatar");
   const currentProfileImage = form.watch("image");
+
+  // Determine what to show: uploaded image takes priority, then selected avatar
+  const hasUploadedImage = isUploadedImage(currentProfileImage);
+  const showAvatars = !hasUploadedImage;
 
   function onSubmit(data: OnboardingProfileSchemaType) {
     if (usernameStatus.available === false) {
@@ -254,6 +263,12 @@ export function OnBoardingProfileForm({ user }: Props) {
       }
     });
   }
+
+  // Handle image upload - clear selected avatar when image is uploaded
+  const handleImageUpload = (imageUrl: string) => {
+    form.setValue("image", imageUrl);
+    form.setValue("selectedAvatar", ""); // Clear selected avatar when image is uploaded
+  };
 
   return (
     <div className="mt-8">
@@ -574,39 +589,41 @@ export function OnBoardingProfileForm({ user }: Props) {
                   </FormItem>
                 )}
               />
-              <div>
-                <FormField
-                  control={form.control}
-                  name="selectedAvatar"
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>
-                        Select a profile picture from avatar
-                      </FormLabel>
-                      <div className="flex flex-wrap items-center justify-start gap-4">
-                        {avatarOptions.map((avatar) => (
-                          <div
-                            key={avatar.id}
-                            onClick={() => handleAvatarSelect(avatar.src)}
-                            className={cn(
-                              "cursor-pointer bg-muted hover:bg-primary/10 transition-all flex items-center justify-center size-[80px] lg:size-[100px] rounded-full",
-                              selectedAvatar === avatar.src && "bg-primary/30"
-                            )}
-                          >
-                            <Image
-                              src={avatar.src}
-                              alt={`Avatar icon`}
-                              width={1000}
-                              height={1000}
-                              className="size-[40px] object-cover"
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    </FormItem>
-                  )}
-                />
-              </div>
+              {showAvatars && (
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="selectedAvatar"
+                    render={() => (
+                      <FormItem>
+                        <FormLabel>
+                          Select a profile picture from avatar
+                        </FormLabel>
+                        <div className="flex flex-wrap items-center justify-start gap-4">
+                          {avatarOptions.map((avatar) => (
+                            <div
+                              key={avatar.id}
+                              onClick={() => handleAvatarSelect(avatar.src)}
+                              className={cn(
+                                "cursor-pointer bg-muted hover:bg-primary/10 transition-all flex items-center justify-center size-[80px] lg:size-[100px] rounded-full",
+                                selectedAvatar === avatar.src && "bg-primary/30"
+                              )}
+                            >
+                              <Image
+                                src={avatar.src}
+                                alt={`Avatar icon`}
+                                width={1000}
+                                height={1000}
+                                className="size-[40px] object-cover"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
             </div>
           </div>
           <Button disabled={pending} className="w-full" size="md" type="submit">

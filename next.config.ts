@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
         port: "",
       },
       {
+        protocol: "http",
+        hostname: "icon-library.com",
+        port: "",
+      },
+      {
         protocol: "https",
         hostname: "earnsphere.fly.storage.tigris.dev",
         port: "",

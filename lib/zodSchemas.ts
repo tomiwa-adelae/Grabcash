@@ -198,7 +198,7 @@ export const onboardingProfileSchema = z
 
 export const onboardingPrismaProfileSchema = z.object({
   name: z.string().min(2, {
-    message: "First name must be at least 2 characters.",
+    message: "Name must be at least 2 characters.",
   }),
   email: z.string().email().min(2, {
     message: "Email must be at least 2 characters.",
@@ -326,6 +326,60 @@ export const newJobFormSchema = z.object({
   finalNotes: z.string().optional(),
 });
 
+export const editPersonalDetailsSchema = z.object({
+  firstName: z.string().min(2, {
+    message: "First name must be at least 2 characters.",
+  }),
+  lastName: z.string().min(2, {
+    message: "Last name must be at least 2 characters.",
+  }),
+  email: z.string().email().min(2, {
+    message: "Email must be at least 2 characters.",
+  }),
+  username: z
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .max(20, "Username must be at most 20 characters")
+    .regex(
+      /^[a-zA-Z0-9_]+$/,
+      "Username can only contain letters, numbers, and underscores"
+    )
+    .regex(/^[a-zA-Z]/, "Username must start with a letter"),
+  phoneNumber: z.string().regex(/^(\+?\d{10,15})$/, {
+    message: "Enter a valid phone number.",
+  }),
+  country: z
+    .string()
+    .min(2, {
+      message: "Country must be selected.",
+    })
+    .optional(),
+  bio: z.string().optional(),
+});
+
+export const editBankDetailsSchema = z.object({
+  accountName: z.string().min(3, {
+    message: "Account name must be at least 3 character.",
+  }),
+  bankName: z.string().min(8, {
+    message: "Bank must be selected.",
+  }),
+  accountNumber: z.string().min(8, {
+    message: "Account number must be at least 8 character.",
+  }),
+});
+
+export const editSocialMediaSchema = z.object({
+  socialLinks: z
+    .array(
+      z.object({
+        url: z.string().url({ message: "Please enter a valid URL" }),
+      })
+    )
+    .optional(), // makes the whole field optional
+  selectedAvatar: z.string().optional(),
+});
+
 export type NewsLetterSchemaType = z.infer<typeof newsLetterSchema>;
 export type HelpFormSchemaType = z.infer<typeof helpFormSchema>;
 export type ContactFormSchemaType = z.infer<typeof contactFormSchema>;
@@ -346,3 +400,8 @@ export type OnboardingIdentitySchemaType = z.infer<
 >;
 export type ProofFormSchemaType = z.infer<typeof proofFormSchema>;
 export type NewJobFormSchemaType = z.infer<typeof newJobFormSchema>;
+export type EditPersonalDetailsSchemaType = z.infer<
+  typeof editPersonalDetailsSchema
+>;
+export type EditBankDetailsSchemaType = z.infer<typeof editBankDetailsSchema>;
+export type EditSocialMediaSchemaType = z.infer<typeof editSocialMediaSchema>;

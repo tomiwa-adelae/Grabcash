@@ -75,16 +75,9 @@ export const Uploader = forwardRef<UploaderHandle, iAppProps>(
     const inputRef = useRef<HTMLInputElement>(null);
     const filesRef = useRef<File[]>([]);
 
-    const profilePictureUrl = useConstructUrl(
-      value && !value.startsWith("https") ? value : ""
-    );
-    const [photo, setPhoto] = useState<string>(
-      value?.startsWith("/assets/")
-        ? value
-        : value?.startsWith("https")
-          ? value // Use the https URL directly
-          : profilePictureUrl || ""
-    );
+    const profilePictureUrl = useConstructUrl(value);
+    const [photo, setPhoto] = useState<string>(value ? profilePictureUrl : "");
+
     const [photos, setPhotos] = useState<string[]>([]);
     const [uploadedKeys, setUploadedKeys] = useState<string[]>([]);
 

@@ -48,3 +48,22 @@ export function formatDate(dateString: string | any): string {
   // Format the date
   return `${month} ${getOrdinalSuffix(day)}, ${year}`;
 }
+
+export function formatPhoneNumber(
+  phone: string | null,
+  style: "international" | "local" = "international"
+): string {
+  if (!phone) return "";
+
+  // Remove all non-digit chars but keep +
+  const cleaned = phone.replace(/[^\d+]/g, "");
+
+  // Nigerian numbers start with +234 or 0
+  if (style === "international") {
+    // Format as +234 802 783 6001
+    return cleaned.replace(/^(\+234)(\d{3})(\d{3})(\d{4})$/, "$1 $2 $3 $4");
+  } else {
+    // Convert +2348027836001 → 08027836001
+    return cleaned.replace(/^\+234(\d{3})(\d{3})(\d{4})$/, "0$1 $2 $3");
+  }
+}

@@ -4,69 +4,72 @@ import { requireUser } from "@/app/data/user/require-user";
 import { prisma } from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
 import {
-	onboardingPrismaProfileSchema,
-	OnboardingPrismaProfileSchemaType,
-	onboardingProfileSchema,
-	OnboardingProfileSchemaType,
+  onboardingPrismaProfileSchema,
+  OnboardingPrismaProfileSchemaType,
+  onboardingProfileSchema,
+  OnboardingProfileSchemaType,
 } from "@/lib/zodSchemas";
+import { revalidatePath } from "next/cache";
 
 export const saveProfilePicture = async (
-	image: string
+  image: string
 ): Promise<ApiResponse> => {
-	const { user } = await requireUser();
-	try {
-		if (!image)
-			return { status: "error", message: "No profile picture to save" };
+  const { user } = await requireUser();
+  try {
+    if (!image)
+      return { status: "error", message: "No profile picture to save" };
 
-		await prisma.user.update({
-			where: {
-				id: user.id,
-			},
-			data: {
-				image,
-			},
-		});
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        image,
+      },
+    });
 
-		return {
-			status: "success",
-			message: "Profile picture successfully saved",
-		};
-	} catch (error) {
-		return { status: "error", message: "Failed to save profile picture" };
-	}
+    revalidatePath("/");
+
+    return {
+      status: "success",
+      message: "Profile picture successfully saved",
+    };
+  } catch (error) {
+    return { status: "error", message: "Failed to save profile picture" };
+  }
 };
 
 export const saveProfile = async (
-	data: OnboardingPrismaProfileSchemaType
+  data: OnboardingPrismaProfileSchemaType
 ): Promise<ApiResponse> => {
-	const { user } = await requireUser();
+  const { user } = await requireUser();
 
-	try {
-		const validation = onboardingPrismaProfileSchema.safeParse(data);
+  try {
+    const validation = onboardingPrismaProfileSchema.safeParse(data);
 
-		if (!validation.success)
-			return { status: "error", message: "Invalid form data" };
+    if (!validation.success)
+      return { status: "error", message: "Invalid form data" };
 
-		const { socialLinks, ...userData } = validation.data;
+    const { socialLinks, ...userData } = validation.data;
 
-		await prisma.user.update({
-			where: {
-				id: user.id,
-			},
-			data: {
-				...userData,
-				socials: {
-					deleteMany: {}, // Delete existing socials first
-					create:
-						socialLinks?.map((social) => ({
-							url: social.url!,
-						})) || [],
-				},
-			},
-		});
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        ...userData,
+        socials: {
+          deleteMany: {}, // Delete existing socials first
+          create:
+            socialLinks?.map((social) => ({
+              url: social.url!,
+            })) || [],
+        },
+      },
+    });
 
-		return { status: "success", message: "Profile details saved" };
-	} catch (error) {
-		return { status: "error", message: "Failed to save profile details" };
-	}
+    return { status: "success", message: "Profile details saved" };
+  } catch (error) {
+    return { status: "error", message: "Failed to save profile details" };
+  }
 };

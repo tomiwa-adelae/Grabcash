@@ -55,7 +55,6 @@ export const activateSubscription = async (planId: string, response: any) => {
       data: subscription,
     };
   } catch (error) {
-    console.log(error);
     return {
       status: "error",
       message:

@@ -65,7 +65,6 @@ export const saveDraft = async (
         "Your job has been saved as a draft. You can find it anytime in your Drafts folder to review, edit, and post when you’re ready.",
     };
   } catch (error) {
-    console.log(error);
     return { status: "error", message: "Failed to save to draft" };
   }
 };

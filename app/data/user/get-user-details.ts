@@ -26,6 +26,7 @@ export const getUserDetails = async () => {
       identificationNumber: true,
       onboardingCompleted: true,
       emailVerified: true,
+      createdAt: true,
       socials: {
         select: {
           id: true,

@@ -19,9 +19,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {} from "@/constants";
+import { UserDropdownLinks } from "@/constants";
 import { useSignout } from "@/hooks/use-signout";
 import Link from "next/link";
+import { useConstructUrl } from "@/hooks/use-construct-url";
 
 interface Props {
   name: string;
@@ -31,12 +32,18 @@ interface Props {
 
 export default function UserDropdown({ image, name, email }: Props) {
   const handleSignout = useSignout();
+  const profilePicture = useConstructUrl(image);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="w-fit">
         <Button variant="ghost" size="icon" className="hover:bg-transparent">
           <Avatar>
-            <AvatarImage src={image} alt={`${name}'s profile picture`} />
+            <AvatarImage
+              src={profilePicture}
+              alt={`${name}'s profile picture`}
+              className="object-cover"
+            />
             <AvatarFallback>{name[0].toUpperCase()}</AvatarFallback>
           </Avatar>
           <h5 className="font-medium text-sm">{name}</h5>
@@ -58,24 +65,17 @@ export default function UserDropdown({ image, name, email }: Props) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
-            <Link href="/subscriptions">
-              <Crown size={16} className="opacity-60" aria-hidden="true" />
-              <span>Get earnsphere+</span>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Users size={16} className="opacity-60" aria-hidden="true" />
-            <span>Top members</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <UserRoundPen size={16} className="opacity-60" aria-hidden="true" />
-            <span>Edit profile</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <User size={16} className="opacity-60" aria-hidden="true" />
-            <span>My profile</span>
-          </DropdownMenuItem>
+          {UserDropdownLinks.map(({ icon, label, slug }, index) => {
+            const Icon = icon;
+            return (
+              <DropdownMenuItem className="cursor-pointer" asChild>
+                <Link href={slug}>
+                  <Icon size={16} className="opacity-60" aria-hidden="true" />
+                  <span>{label}</span>
+                </Link>
+              </DropdownMenuItem>
+            );
+          })}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignout}>

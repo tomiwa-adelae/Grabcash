@@ -1,9 +1,30 @@
 import {
   Banknote,
   BriefcaseBusiness,
+  Crown,
   Lightbulb,
+  User,
+  UserRoundPen,
+  Users,
   UsersRound,
 } from "lucide-react";
+
+export const EMAIL_ADDRESS = "contact@earnsphere.com";
+export const PHONE_NUMBER = "+234 800 233 4433";
+export const YOUTUBE_URL = "www.youtube.com";
+export const INSTAGRAM_URL = "www.instagram.com";
+export const FACEBOOK_URL = "www.facebook.com";
+export const X_URL = "www.x.com";
+
+export const DEFAULT_PROFILE_PICTURE =
+  "http://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg";
+
+export const identificationTypes = ["NIN", "BVN"];
+
+export const EARNSPHERE_LOGO =
+  "https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg";
+
+export const CREDIT_TO_POST_NEW_JOB = 6;
 
 export const rootNavLinks = [
   {
@@ -189,13 +210,6 @@ export const howDetails = [
       "Connect with others through forums, climb the leaderboard, and unlock champion rewards as you complete tasks. Our platform celebrates your progress, so every effort moves you forward in the community.",
   },
 ];
-
-export const EMAIL_ADDRESS = "contact@earnsphere.com";
-export const PHONE_NUMBER = "+234 800 233 4433";
-export const YOUTUBE_URL = "www.youtube.com";
-export const INSTAGRAM_URL = "www.instagram.com";
-export const FACEBOOK_URL = "www.facebook.com";
-export const X_URL = "www.x.com";
 
 export const subjects = [
   "General enquiry",
@@ -426,11 +440,6 @@ export const banks = [
   "Wema Bank",
   "Zenith Bank",
 ];
-
-export const DEFAULT_PROFILE_PICTURE =
-  "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg";
-
-export const identificationTypes = ["NIN", "BVN"];
 
 export const filters = [
   {
@@ -841,8 +850,8 @@ export const subscriptionPlans: {
   {
     name: "Basic",
     price: {
-      monthly: "0/month",
-      annually: "0/year",
+      monthly: "0",
+      annually: "0",
     },
     description:
       "Basic access with essential features — perfect for exploring earnsphere and getting started.",
@@ -856,8 +865,8 @@ export const subscriptionPlans: {
   {
     name: "Pro",
     price: {
-      monthly: "1000/month",
-      annually: "8000/year",
+      monthly: "1000",
+      annually: "8000",
     },
     description:
       "Unlock the full earnsphere experience — access all earning tools, campaigns, and learning resources.",
@@ -876,7 +885,20 @@ export const subscriptionPlans: {
   },
 ];
 
-export const EARNSPHERE_LOGO =
-  "https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg";
-
-export const CREDIT_TO_POST_NEW_JOB = 6;
+export const UserDropdownLinks = [
+  {
+    icon: Crown,
+    slug: "/subscriptions",
+    label: "Get earnsphere+",
+  },
+  {
+    icon: Users,
+    slug: "/",
+    label: "Top members",
+  },
+  {
+    icon: User,
+    slug: "/profile",
+    label: "Profile",
+  },
+];
