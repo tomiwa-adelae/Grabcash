@@ -10,7 +10,7 @@ export const JobsCard = ({ jobs }: Props) => {
   return (
     <div className="sm:hidden grid gap-4">
       {jobs.map((job) => (
-        <JobCard job={job} />
+        <JobCard key={job.id} job={job} />
       ))}
     </div>
   );

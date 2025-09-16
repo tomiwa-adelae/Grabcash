@@ -380,6 +380,42 @@ export const editSocialMediaSchema = z.object({
   selectedAvatar: z.string().optional(),
 });
 
+export const changePasswordFormSchema = (hashPassword: string | null) =>
+  z
+    .object({
+      newPassword: z
+        .string()
+        .min(8, { message: "Password must be at least 8 characters." })
+        .refine((val) => /[a-z]/.test(val), {
+          message: "Password must contain at least one lowercase letter.",
+        })
+        .refine((val) => /[A-Z]/.test(val), {
+          message: "Password must contain at least one uppercase letter.",
+        })
+        .refine((val) => /[0-9]/.test(val), {
+          message: "Password must contain at least one number.",
+        })
+        .refine((val) => /[!@#$%^&*(),.?\":{}|<>]/.test(val), {
+          message: "Password must contain at least one special character.",
+        }),
+
+      confirmPassword: z.string().min(2, { message: "Enter your password" }),
+      oldPassword: z.string().optional(),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    })
+    .superRefine((data, ctx) => {
+      if (hashPassword && !data.oldPassword) {
+        ctx.addIssue({
+          code: "custom",
+          message: "Current password is required",
+          path: ["oldPassword"],
+        });
+      }
+    });
+
 export type NewsLetterSchemaType = z.infer<typeof newsLetterSchema>;
 export type HelpFormSchemaType = z.infer<typeof helpFormSchema>;
 export type ContactFormSchemaType = z.infer<typeof contactFormSchema>;
@@ -405,3 +441,7 @@ export type EditPersonalDetailsSchemaType = z.infer<
 >;
 export type EditBankDetailsSchemaType = z.infer<typeof editBankDetailsSchema>;
 export type EditSocialMediaSchemaType = z.infer<typeof editSocialMediaSchema>;
+
+export type ChangePasswordFormSchemaType = z.infer<
+  ReturnType<typeof changePasswordFormSchema>
+>;

@@ -1,12 +1,5 @@
 "use client";
-import {
-  ChevronDownIcon,
-  Crown,
-  LogOutIcon,
-  User,
-  UserRoundPen,
-  Users,
-} from "lucide-react";
+import { ChevronDownIcon, LogOutIcon, User } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -19,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { UserDropdownLinks } from "@/constants";
+import { userDropdownLinks } from "@/constants";
 import { useSignout } from "@/hooks/use-signout";
 import Link from "next/link";
 import { useConstructUrl } from "@/hooks/use-construct-url";
@@ -28,9 +21,10 @@ interface Props {
   name: string;
   email: string;
   image?: string;
+  username: string;
 }
 
-export default function UserDropdown({ image, name, email }: Props) {
+export default function UserDropdown({ image, name, email, username }: Props) {
   const handleSignout = useSignout();
   const profilePicture = useConstructUrl(image);
 
@@ -65,10 +59,16 @@ export default function UserDropdown({ image, name, email }: Props) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {UserDropdownLinks.map(({ icon, label, slug }, index) => {
+          <DropdownMenuItem className="cursor-pointer" asChild>
+            <Link href={`/${username}`}>
+              <User size={16} className="opacity-60" aria-hidden="true" />
+              <span>Profile</span>
+            </Link>
+          </DropdownMenuItem>
+          {userDropdownLinks.map(({ icon, label, slug }, index) => {
             const Icon = icon;
             return (
-              <DropdownMenuItem className="cursor-pointer" asChild>
+              <DropdownMenuItem key={index} className="cursor-pointer" asChild>
                 <Link href={slug}>
                   <Icon size={16} className="opacity-60" aria-hidden="true" />
                   <span>{label}</span>
@@ -78,7 +78,7 @@ export default function UserDropdown({ image, name, email }: Props) {
           })}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleSignout}>
+        <DropdownMenuItem className="cursor-pointer" onClick={handleSignout}>
           <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
           <span>Logout</span>
         </DropdownMenuItem>

@@ -5,7 +5,7 @@ const page = async () => {
   const user = await getUserDetails();
 
   return (
-    <div className="py-12 container">
+    <div className="py-16 md:py-32 container">
       <h1 className="font-medium text-2xl md:text-3xl">Social Media</h1>
       <EditSocialMediaForm user={user} />
     </div>

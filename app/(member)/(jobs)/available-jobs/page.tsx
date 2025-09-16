@@ -7,7 +7,7 @@ import { SearchBar } from "../../_components/SearchBar";
 const page = async () => {
   const jobs = await getAvailableJobs();
   return (
-    <div className="py-12 container">
+    <div className="py-16 md:py-32 container">
       <PageHeader title="Available Jobs and Campaigns" />
       <SearchBar />
       <AvailableJobs jobs={jobs} />

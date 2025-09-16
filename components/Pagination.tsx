@@ -575,7 +575,7 @@ export function PaginationComponent({
     };
 
     return (
-      <div className="mx-auto max-w-6xl px-4 py-12">
+      <div className="mx-auto max-w-6xl px-4 py-16 md:py-32">
         <div className="mb-12 text-center">
           <h2 className="mb-2 text-3xl font-bold tracking-tight">
             Pagination Examples

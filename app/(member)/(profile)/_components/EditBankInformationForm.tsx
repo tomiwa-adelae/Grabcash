@@ -63,7 +63,7 @@ export function EditBankInformationForm({ user }: Props) {
 
       if (result?.status === "success") {
         toast.success(result.message);
-        router.push("/profile");
+        router.back();
       } else {
         toast.error(result.message);
       }
@@ -140,9 +140,9 @@ export function EditBankInformationForm({ user }: Props) {
               size="md"
               variant={"outline"}
               type="button"
-              asChild
+              onClick={() => router.back()}
             >
-              <Link href={"/profile"}>Cancel</Link>
+              Cancel
             </Button>
             <Button
               disabled={pending}

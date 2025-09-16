@@ -3,11 +3,11 @@ import { requireUser } from "./require-user";
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 
-export const getUserDetails = async () => {
+export const getUserDetails = async (username?: string) => {
   const session = await requireUser();
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: {
-      id: session.user.id,
+      OR: [{ id: session.user.id }, { username }],
     },
     select: {
       id: true,
@@ -40,6 +40,11 @@ export const getUserDetails = async () => {
               name: true,
             },
           },
+        },
+      },
+      accounts: {
+        select: {
+          password: true,
         },
       },
     },

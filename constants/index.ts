@@ -885,7 +885,7 @@ export const subscriptionPlans: {
   },
 ];
 
-export const UserDropdownLinks = [
+export const userDropdownLinks = [
   {
     icon: Crown,
     slug: "/subscriptions",
@@ -898,7 +898,7 @@ export const UserDropdownLinks = [
   },
   {
     icon: User,
-    slug: "/profile",
-    label: "Profile",
+    slug: "/settings",
+    label: "Settings",
   },
 ];

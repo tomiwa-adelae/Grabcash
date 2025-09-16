@@ -69,7 +69,13 @@ export const saveProfile = async (
     });
 
     return { status: "success", message: "Profile details saved" };
-  } catch (error) {
-    return { status: "error", message: "Failed to save profile details" };
+  } catch (error: any) {
+    return {
+      status: "error",
+      message:
+        error.code === "P2002"
+          ? "This email is already in use. Please use another one."
+          : "Failed to save profile details",
+    };
   }
 };

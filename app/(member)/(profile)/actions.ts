@@ -45,8 +45,14 @@ export const updatePersonalDetails = async (
     revalidatePath("/");
 
     return { status: "success", message: "Personal details updated" };
-  } catch (error) {
-    return { status: "error", message: "Failed to update personal details" };
+  } catch (error: any) {
+    return {
+      status: "error",
+      message:
+        error.code === "P2002"
+          ? "This email is already in use. Please use another one."
+          : "Failed to update personal details",
+    };
   }
 };
 

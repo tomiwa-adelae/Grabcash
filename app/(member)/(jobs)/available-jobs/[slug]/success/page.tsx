@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const page = () => {
   return (
-    <div className="py-12 container">
+    <div className="py-16 md:py-32 container">
       <PageHeader title="Nice work! You’ve just submitted your tasks🎉" />
       <p className="text-base text-muted-foreground mt-1.5">
         Thank you for using Earnsphere! Keep going — the more tasks you

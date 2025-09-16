@@ -25,7 +25,7 @@ const page = async () => {
   }
 
   return (
-    <div>
+    <div className="relative">
       <Showcase
         title={
           <>

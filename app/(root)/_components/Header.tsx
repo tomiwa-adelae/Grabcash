@@ -44,12 +44,13 @@ export const Header = () => {
                 image={session?.user.image || DEFAULT_PROFILE_PICTURE}
                 name={session?.user.name!}
                 email={session?.user.email!}
+                username={session?.user.username!}
               />
             )
           )}
         </div>
         <div className="md:hidden">
-          <MobileNavbar />
+          <MobileNavbar session={session} />
         </div>
       </div>
     </header>

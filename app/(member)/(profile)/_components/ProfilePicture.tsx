@@ -15,9 +15,10 @@ import { toast } from "sonner";
 interface Props {
   image: string | null;
   name: string;
+  myProfile: boolean;
 }
 
-export const ProfilePicture = ({ image, name }: Props) => {
+export const ProfilePicture = ({ image, name, myProfile }: Props) => {
   const uploaderRef = useRef<UploaderHandle>(null);
 
   const profilePicture = useConstructUrl(image);
@@ -67,16 +68,18 @@ export const ProfilePicture = ({ image, name }: Props) => {
           height={1000}
           className="rounded-full size-32 object-cover"
         />
-        <Button
-          size="sm"
-          type="button"
-          // disabled={disabled}
-          variant={"secondary"}
-          className="shadow-[0_3px_10px_rgb(0,0,0,0.2)] px-2 p-0.5 rounded-full absolute bottom-[-15px] text-xs left-[50%] translate-x-[-50%] "
-          onClick={() => setOpenModal(true)}
-        >
-          <Camera /> Edit
-        </Button>
+        {myProfile && (
+          <Button
+            size="sm"
+            type="button"
+            // disabled={disabled}
+            variant={"secondary"}
+            className="shadow-[0_3px_10px_rgb(0,0,0,0.2)] px-2 p-0.5 rounded-full absolute bottom-[-15px] text-xs left-[50%] translate-x-[-50%] "
+            onClick={() => setOpenModal(true)}
+          >
+            <Camera /> Edit
+          </Button>
+        )}
       </div>
       {openModal && (
         <ResponsiveModal open={openModal}>

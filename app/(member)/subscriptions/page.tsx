@@ -1,6 +1,7 @@
 import { getUserDetails } from "@/app/data/user/get-user-details";
 import { PricingPlans } from "./_components/PricingPlans";
 import { getSubscriptionPlans } from "@/app/data/user/subscription/get-subscription-plans";
+import { PageGradient } from "@/components/PageGradient";
 
 const page = async () => {
   const user = await getUserDetails();
@@ -8,11 +9,7 @@ const page = async () => {
 
   return (
     <div className="not-prose relative w-full py-16 md:py-32">
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="bg-primary/10 absolute -top-[10%] left-[50%] h-[40%] w-[60%] -translate-x-1/2 rounded-full blur-3xl" />
-        <div className="bg-primary/5 absolute -right-[10%] -bottom-[10%] h-[40%] w-[40%] rounded-full blur-3xl" />
-        <div className="bg-primary/5 absolute -bottom-[10%] -left-[10%] h-[40%] w-[40%] rounded-full blur-3xl" />
-      </div>
+      <PageGradient />
 
       <div className="container px-6">
         <div className="space-y-6 text-center">

@@ -22,7 +22,7 @@ const page = async ({ params }: { params: Params }) => {
   const job: GetJobDetailsType = await getJobDetails(slug);
 
   return (
-    <div className="py-12 container">
+    <div className="py-16 md:py-32 container">
       <PageHeader title="Job Details" />
       <div className="space-y-4 mt-4">
         <p className="text-base">

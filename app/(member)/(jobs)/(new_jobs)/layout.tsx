@@ -4,7 +4,7 @@ import React, { ReactNode } from "react";
 const layout = ({ children }: { children: ReactNode }) => {
   return (
     <JobProvider>
-      <div className="py-12 container">{children}</div>
+      <div className="container py-16 md:py-32">{children}</div>
     </JobProvider>
   );
 };

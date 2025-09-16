@@ -264,12 +264,6 @@ export function OnBoardingProfileForm({ user }: Props) {
     });
   }
 
-  // Handle image upload - clear selected avatar when image is uploaded
-  const handleImageUpload = (imageUrl: string) => {
-    form.setValue("image", imageUrl);
-    form.setValue("selectedAvatar", ""); // Clear selected avatar when image is uploaded
-  };
-
   return (
     <div className="mt-8">
       <Form {...form}>
@@ -315,7 +309,6 @@ export function OnBoardingProfileForm({ user }: Props) {
                       <Input
                         type="email"
                         className="read-only:bg-muted"
-                        readOnly
                         placeholder="Enter your email"
                         {...field}
                       />

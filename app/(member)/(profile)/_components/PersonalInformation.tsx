@@ -10,6 +10,7 @@ interface Props {
   phoneNumber: string | null;
   bio: string | null;
   username: string | null;
+  myProfile: boolean;
 }
 
 export const PersonalInformation = ({
@@ -19,15 +20,18 @@ export const PersonalInformation = ({
   phoneNumber,
   bio,
   username,
+  myProfile,
 }: Props) => {
   return (
     <div className="bg-muted py-8 rounded-lg">
       <div className="container">
-        <div className="flex items-center justify-end pb-8">
-          <Button size={"md"} asChild variant={"outline"}>
-            <Link href="/profile/personal-information/edit">Edit Profile</Link>
-          </Button>
-        </div>
+        {myProfile && (
+          <div className="flex items-center justify-end pb-8">
+            <Button size={"md"} asChild variant={"outline"}>
+              <Link href="/personal-information/edit">Edit Profile</Link>
+            </Button>
+          </div>
+        )}
         <div className="grid grid-cols-1 gap-8 text-sm text-left">
           <div>
             <h4 className="text-muted-foreground">Name</h4>
@@ -48,19 +52,27 @@ export const PersonalInformation = ({
           </div>
           <div>
             <h4 className="text-muted-foreground">Phone number</h4>
-            <a
-              href={`tel:${phoneNumber}`}
-              className="font-medium hover:underline hover:text-primary transition-all"
-            >
-              {formatPhoneNumber(phoneNumber)}
-            </a>
+            {phoneNumber ? (
+              <a
+                href={`tel:${phoneNumber}`}
+                className="font-medium hover:underline hover:text-primary transition-all"
+              >
+                {formatPhoneNumber(phoneNumber)}
+              </a>
+            ) : (
+              <span className="italic">No phone number</span>
+            )}
           </div>
         </div>
         <div className="mt-8">
           <h4 className="text-muted-foreground">Bio</h4>
-          <h4 className="font-medium">
-            <RenderDescription json={bio} />
-          </h4>
+          {bio ? (
+            <h4 className="font-medium">
+              <RenderDescription json={bio} />
+            </h4>
+          ) : (
+            <span className="italic">No bio</span>
+          )}
         </div>
       </div>
     </div>

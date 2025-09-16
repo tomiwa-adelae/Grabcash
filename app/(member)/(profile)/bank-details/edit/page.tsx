@@ -5,8 +5,8 @@ const page = async () => {
   const user = await getUserDetails();
 
   return (
-    <div className="py-12 container">
-      <h1 className="font-medium text-2xl md:text-3xl">Bank Details</h1>
+    <div className="py-16 md:py-32 container">
+      <h1 className="font-medium text-2xl md:text-3xl">Edit Bank Details</h1>
       <EditBankInformationForm user={user} />
     </div>
   );

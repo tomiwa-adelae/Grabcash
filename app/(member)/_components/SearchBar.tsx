@@ -63,8 +63,10 @@ export const SearchBar = () => {
           <SelectValue placeholder="Filter" />
         </SelectTrigger>
         <SelectContent>
-          {filters.map((filter) => (
-            <SelectItem value={filter.value}>{filter.label}</SelectItem>
+          {filters.map((filter, index) => (
+            <SelectItem key={index} value={filter.value}>
+              {filter.label}
+            </SelectItem>
           ))}
         </SelectContent>
       </Select>

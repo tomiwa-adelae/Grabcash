@@ -4,7 +4,7 @@ import { PopularBlog } from "../_components/PopularBlog";
 
 const page = () => {
   return (
-    <div className="py-12">
+    <div className="py-16 md:py-32">
       <div className="container">
         <h1 className="font-semibold text-4xl md:text-4xl lg:text-6xl">
           Earnsphere Blog

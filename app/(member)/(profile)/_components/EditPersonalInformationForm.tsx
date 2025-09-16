@@ -164,7 +164,7 @@ export function EditPersonalInformationForm({ user }: Props) {
 
       if (result?.status === "success") {
         toast.success(result.message);
-        router.push("/profile");
+        router.back();
       } else {
         toast.error(result.message);
       }
@@ -212,7 +212,6 @@ export function EditPersonalInformationForm({ user }: Props) {
                     <Input
                       type="email"
                       className="read-only:bg-muted"
-                      readOnly
                       placeholder="Enter your email"
                       {...field}
                     />
@@ -344,9 +343,9 @@ export function EditPersonalInformationForm({ user }: Props) {
               size="md"
               variant={"outline"}
               type="button"
-              asChild
+              onClick={() => router.back()}
             >
-              <Link href={"/profile"}>Cancel</Link>
+              Cancel
             </Button>
             <Button
               disabled={pending}
