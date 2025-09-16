@@ -47,6 +47,11 @@ export const getUserDetails = async (username?: string) => {
           password: true,
         },
       },
+      following: {
+        select: {
+          followerId: true,
+        },
+      },
     },
   });
 

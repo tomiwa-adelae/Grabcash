@@ -11,6 +11,8 @@ import { headers } from "next/headers";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { IconMessage } from "@tabler/icons-react";
+import { FollowButton } from "@/components/FollowButton";
+import { isFollowing } from "@/app/data/follow/is-following";
 
 type Params = Promise<{
   username: string;
@@ -25,6 +27,7 @@ const page = async ({ params }: { params: Params }) => {
 
   const user = await getUserDetails(username);
   const jobs = await getAvailableJobs();
+  const following = await isFollowing(user.id);
 
   const myProfile = username === session?.user.username;
 
@@ -57,9 +60,12 @@ const page = async ({ params }: { params: Params }) => {
                 profileUrl={`${env.NEXT_PUBLIC_BETTER_AUTH_URL}/${user.username}`}
                 className="rounded-lg bg-secondary text-black"
               />
-              <Button size="md" className="rounded-full">
-                Follow
-              </Button>
+              <FollowButton
+                image={user.image}
+                following={following}
+                id={user.id}
+                username={user.username}
+              />
               <Button asChild size="md" variant={"secondary"}>
                 <Link href={`mailto:${user.email}`}>
                   <IconMessage />
