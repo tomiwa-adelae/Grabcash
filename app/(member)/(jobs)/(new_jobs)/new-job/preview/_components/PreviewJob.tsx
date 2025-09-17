@@ -13,7 +13,13 @@ import { Loader } from "@/components/Loader";
 import { JobCTAs } from "@/app/(member)/(jobs)/available-jobs/[slug]/_components/JobCTAs";
 import { ProofForm } from "@/app/(member)/(jobs)/available-jobs/[slug]/_components/ProofForm";
 
-export const PreviewJob = ({ user }: { user: string }) => {
+interface Props {
+  name: string;
+  email: string;
+  phoneNumber: string | null;
+}
+
+export const PreviewJob = ({ name, email, phoneNumber }: Props) => {
   const [openModal, setOpenModal] = useState(false);
   const [job, setJob] = useState<any>(null);
 
@@ -59,7 +65,7 @@ export const PreviewJob = ({ user }: { user: string }) => {
         <p className="text-base">
           Job Poster:{" "}
           <span className="text-blue-400 underline hover:text-primary">
-            {user}
+            {name}
           </span>
         </p>
         <p className="text-base">
@@ -82,21 +88,11 @@ export const PreviewJob = ({ user }: { user: string }) => {
           </span>
         </p>
         <p className="text-base">
-          Time Estimate:{" "}
-          <span className="text-muted-foreground">
-            {job.estimatedTime} {job.estimatedTimeUnit}
-            {job.estimatedTime !== "1" && "s"}
-          </span>
-        </p>
-        <p className="text-base">
           Available Slots:{" "}
           <span className="text-muted-foreground">49 remaining</span>
         </p>
         <p className="text-base">
           Status: <span className="text-primary">Open</span>
-        </p>
-        <p className="text-base">
-          Submission Deadline: {formatDate(job.deadline)}
         </p>
       </div>
       <div className="mt-6">
@@ -162,6 +158,9 @@ export const PreviewJob = ({ user }: { user: string }) => {
             setOpenModal(false);
           }}
           data={job}
+          name={name}
+          email={email}
+          phoneNumber={phoneNumber}
         />
       )}
     </div>

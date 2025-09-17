@@ -1,6 +1,8 @@
+"use client";
 import { GetAvailableJobsType } from "@/app/data/job/get-available-jobs";
 import { NairaIcon } from "@/components/NairaIcon";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import {
   Table,
   TableBody,
@@ -9,14 +11,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatMoneyInput } from "@/lib/utils";
+import { cn, formatMoneyInput } from "@/lib/utils";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface Props {
   jobs: GetAvailableJobsType[];
 }
 
 export function JobsTable({ jobs }: Props) {
+  const router = useRouter();
   return (
     <div className="[&>div]:max-h-screen hidden sm:block">
       <Table className="[&_td]:border-border [&_th]:border-border border-separate border-spacing-0 [&_tfoot_td]:border-t [&_th]:border-b [&_tr]:border-none [&_tr:not(:last-child)_td]:border-b">
@@ -31,7 +35,11 @@ export function JobsTable({ jobs }: Props) {
         </TableHeader>
         <TableBody>
           {jobs.map((job) => (
-            <TableRow key={job.id}>
+            <TableRow
+              onClick={() => router.push(`/available-jobs/${job.slug}`)}
+              className="cursor-pointer"
+              key={job.id}
+            >
               <TableCell className="font-medium">
                 <Link
                   href={`/available-jobs/${job.slug}`}
@@ -41,7 +49,17 @@ export function JobsTable({ jobs }: Props) {
                 </Link>
               </TableCell>
               <TableCell>{job.category}</TableCell>
-              <TableCell>tomiwa</TableCell>
+              <TableCell>
+                <div className="flex flex-col items-start justify-center gap-1">
+                  {job._count.applicants}/{job.noOfWorkers}
+                  <Progress
+                    value={
+                      (job._count.applicants / Number(job.noOfWorkers)) * 100
+                    }
+                    className={cn("h-1")}
+                  />
+                </div>
+              </TableCell>
               <TableCell>
                 <NairaIcon />
                 {formatMoneyInput(job.reward)}

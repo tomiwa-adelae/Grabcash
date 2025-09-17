@@ -59,7 +59,7 @@ export const memberNavLinks = [
         label: "Submitted jobs",
       },
       {
-        slug: "/my-jobs",
+        slug: "/jobs",
         label: "My jobs",
       },
       {

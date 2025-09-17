@@ -4,6 +4,7 @@ import {
   GetJobDetailsType,
 } from "@/app/data/job/get-job-details";
 import { Confetti } from "@/components/Confetti";
+import { CopyToClipboard } from "@/components/CopyToClipboard";
 import { NairaIcon } from "@/components/NairaIcon";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -25,13 +26,15 @@ const page = async ({ searchParams }: { searchParams: any }) => {
       <h3 className="font-medium text-lg">Job Summary</h3>
       <div className="space-y-4 mt-6 text-base">
         <p>Job title: {job.title}</p>
-        <p>Job ID: {job.id}</p>
+        <p>
+          Job ID: {job.jobID}
+          <CopyToClipboard text={job.jobID!} />
+        </p>
         <p>Category: {job.category}</p>
         <p>
           Reward: <NairaIcon />
           {formatMoneyInput(job.reward)}
         </p>
-        <p>Deadline: {formatDate(job.deadline)}</p>
       </div>
       <div className="grid grid-cols-2 gap-4 mt-4">
         <Button
@@ -42,7 +45,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
           Track Applicants
         </Button>
         <Button size="md" asChild className="w-full">
-          <Link href={`/available-jobs/${job.slug}`}>View Job Listing</Link>
+          <Link href={`/jobs/${job.slug}`}>View Job Listing</Link>
         </Button>
       </div>
       <Button className="mt-4 w-full" size="md" asChild variant={"black"}>

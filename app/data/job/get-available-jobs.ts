@@ -7,13 +7,20 @@ export const getAvailableJobs = async () => {
   const jobs = await prisma.job.findMany({
     where: {
       status: "PUBLISHED",
+      paymentVerified: true,
     },
     select: {
       id: true,
       slug: true,
       title: true,
       category: true,
+      noOfWorkers: true,
       reward: true,
+      _count: {
+        select: {
+          applicants: true,
+        },
+      },
     },
   });
 

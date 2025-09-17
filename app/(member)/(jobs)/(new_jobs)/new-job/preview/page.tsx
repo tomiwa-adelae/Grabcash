@@ -1,17 +1,19 @@
 import React from "react";
 import { PreviewJob } from "./_components/PreviewJob";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { Banner } from "@/components/Banner";
+import { getUserDetails } from "@/app/data/user/get-user-details";
 
 const page = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const user = await getUserDetails();
+
   return (
     <div>
       <Banner />
-      <PreviewJob user={session?.user.name!} />
+      <PreviewJob
+        name={user.name}
+        email={user.email}
+        phoneNumber={user.phoneNumber}
+      />
     </div>
   );
 };

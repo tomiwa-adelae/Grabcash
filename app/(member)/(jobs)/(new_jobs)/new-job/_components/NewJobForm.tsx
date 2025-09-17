@@ -45,12 +45,18 @@ import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import slugify from "slugify";
 
-export function NewJobForm() {
+interface Props {
+  name: string;
+  email: string;
+  phoneNumber: string | null;
+}
+
+export function NewJobForm({ name, email, phoneNumber }: Props) {
   const [openModal, setOpenModal] = useState(false);
   const [reward, setReward] = useState("15");
   const [openDraft, setOpenDraft] = useState(false);
 
-  const [jobData, setJobData] = useState<NewJobFormSchemaType>();
+  const [jobData, setJobData] = useState<any>();
 
   const { jobPreview, setJobPreview } = useJob();
 
@@ -62,11 +68,11 @@ export function NewJobForm() {
       category: "",
       description: "",
       jobLink: "",
-      deadline: "",
+      // deadline: "",
       reward: "15",
       noOfWorkers: "",
-      estimatedTime: "",
-      estimatedTimeUnit: "",
+      // estimatedTime: "",
+      // estimatedTimeUnit: "",
       instructions: "",
       proofOfCompletion: "",
       submissionType: "screenshots",
@@ -82,11 +88,11 @@ export function NewJobForm() {
         category: jobPreview.category || "",
         description: jobPreview.description || "",
         jobLink: jobPreview.jobLink || "",
-        deadline: jobPreview.deadline || "",
+        // deadline: jobPreview.deadline || "",
         reward: jobPreview.reward || "15",
         noOfWorkers: jobPreview.noOfWorkers || "",
-        estimatedTime: jobPreview.estimatedTime || "",
-        estimatedTimeUnit: jobPreview.estimatedTimeUnit || "",
+        // estimatedTime: jobPreview.estimatedTime || "",
+        // estimatedTimeUnit: jobPreview.estimatedTimeUnit || "",
         instructions: jobPreview.instructions || "",
         proofOfCompletion: jobPreview.proofOfCompletion || "",
         submissionType: jobPreview.submissionType || "screenshots",
@@ -298,25 +304,25 @@ export function NewJobForm() {
               </FormItem>
             )}
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="jobLink"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Job Link</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="url"
-                      placeholder="Enter job directory such as links"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> */}
+          <FormField
+            control={form.control}
+            name="jobLink"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Job Link</FormLabel>
+                <FormControl>
+                  <Input
+                    type="url"
+                    placeholder="Enter job directory such as links"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* <FormField
               control={form.control}
               name="deadline"
               render={({ field }) => (
@@ -328,9 +334,9 @@ export function NewJobForm() {
                   <FormMessage />
                 </FormItem>
               )}
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            /> */}
+          {/* </div> */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
               name="reward"
@@ -371,7 +377,7 @@ export function NewJobForm() {
                 </FormItem>
               )}
             />
-            <div className="md:col-span-2 lg:col-span-1">
+            {/* <div className="md:col-span-2 lg:col-span-1">
               <FormLabel className="mb-2.5">
                 Estimated Time to complete
               </FormLabel>
@@ -429,7 +435,7 @@ export function NewJobForm() {
                   )}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
           <FormField
             control={form.control}
@@ -597,6 +603,9 @@ export function NewJobForm() {
             setOpenModal(false);
           }}
           data={jobData}
+          name={name}
+          email={email}
+          phoneNumber={phoneNumber}
         />
       )}
       {openDraft && (

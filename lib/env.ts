@@ -16,6 +16,11 @@ export const env = createEnv({
     AWS_ENDPOINT_URL_IAM: z.string().min(1),
     AWS_REGION: z.string().min(1),
     FW_SECRET_KEY: z.string().min(1),
+    MAILJET_API_PUBLIC_KEY: z.string().min(1),
+    MAILJET_API_PRIVATE_KEY: z.string().min(1),
+    SENDER_EMAIL_ADDRESS: z.string().min(1),
+    ADMIN_EMAIL_ADDRESS: z.string().min(1),
+    SUPPORT_EMAIL_ADDRESS: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_S3_BUCKET_NAME_IMAGES: z.string().min(1),

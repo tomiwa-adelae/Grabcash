@@ -148,3 +148,30 @@ export function removeKeysFromQuery({
     }
   );
 }
+
+export function generateSuffix(length = 4): string {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return result;
+}
+
+export const formattedStatus: Record<string, string> = {
+  PENDING: "Pending",
+  FAILED: "Failed",
+  REFUNDED: "Refunded",
+  SUCCESS: "Success",
+  APPROVED: "Approved",
+  REJECTED: "Rejected",
+  ACTIVE: "Active",
+  EXPIRED: "Expired",
+  CANCELED: "Canceled",
+  MONTHLY: "Monthly",
+  ANNUALLY: "Annually",
+  DRAFT: "Draft",
+  PUBLISHED: "Published",
+  DELETED: "Deleted",
+  ARCHIVED: "Archived",
+};

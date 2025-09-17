@@ -19,7 +19,13 @@ import { proofFormSchema, ProofFormSchemaType } from "@/lib/zodSchemas";
 import { Label } from "@/components/ui/label";
 import { UploadScreenshotModal } from "./UploadScreenshotModal";
 
-export function ProofForm() {
+interface Props {
+  submissionType: string;
+  id: string;
+  slug: string;
+}
+
+export function ProofForm({ submissionType, id, slug }: Props) {
   const form = useForm<ProofFormSchemaType>({
     resolver: zodResolver(proofFormSchema),
   });
@@ -35,33 +41,17 @@ export function ProofForm() {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="mt-4 space-y-6">
+    <div>
+      {submissionType === "screenshots" && (
         <div>
           <Label className="mb-2">Upload screenshots</Label>
-          <UploadScreenshotModal />
+          <UploadScreenshotModal id={id} slug={slug} />
         </div>
-        <FormField
-          control={form.control}
-          name="additionalInformation"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Additional information (Optional)</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Type your message here..."
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button size="md" type="submit">
-          Submit proof of completion
-        </Button>
-      </form>
-    </Form>
+      )}
+
+      {/* <Button size="md" type="submit">
+        Submit proof of completion
+      </Button> */}
+    </div>
   );
 }

@@ -282,12 +282,12 @@ export const newJobFormSchema = z.object({
   jobLink: z
     .string()
     .url({ message: "Please enter a link for workers to start your job" }),
-  deadline: z
-    .string()
-    .min(1, { message: "Submission deadline is required." })
-    .refine((val) => !isNaN(Date.parse(val)), {
-      message: "Invalid date format.",
-    }),
+  // deadline: z
+  //   .string()
+  //   .min(1, { message: "Submission deadline is required." })
+  //   .refine((val) => !isNaN(Date.parse(val)), {
+  //     message: "Invalid date format.",
+  //   }),
   reward: z
     .string()
     .min(1, { message: "Reward is required" })
@@ -303,10 +303,10 @@ export const newJobFormSchema = z.object({
   noOfWorkers: z
     .string()
     .min(1, { message: "Please select the numbers of workers required" }),
-  estimatedTime: z.string().min(1, { message: "Please select estimated time" }),
-  estimatedTimeUnit: z
-    .string()
-    .min(1, { message: "Please select estimated time unit" }),
+  // estimatedTime: z.string().min(1, { message: "Please select estimated time" }),
+  // estimatedTimeUnit: z
+  //   .string()
+  //   .min(1, { message: "Please select estimated time unit" }),
   instructions: z
     .string()
     .min(2, { message: "Please enter the job's instructions" }),

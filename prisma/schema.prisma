@@ -31,8 +31,8 @@ model User {
 
   subscription Subscription?
 
-  createdAt DateTime
-  updatedAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   sessions Session[]
   accounts Account[]
@@ -42,6 +42,9 @@ model User {
 
   following Follow[] @relation("UserFollowing")
   followers Follow[] @relation("UserFollowers")
+
+  jobPayments JobPayment[]
+  applicants  Applicant[]
 
   @@unique([email, username])
   @@map("user")
@@ -110,26 +113,35 @@ model Job {
   description        String?
   category           String?
   jobLink            String?
-  deadline           String?
+  // deadline           String?
   reward             String?
   noOfWorkers        String?
-  estimatedTime      String?
-  estimatedTimeUnit  String?
+  // estimatedTime      String?
+  // estimatedTimeUnit  String?
   instructions       String?
   proofOfCompletion  String?
   submissionType     String?
   submissionRequired String?
   finalNotes         String?
 
+  jobID String?
+
   status JobStatus @default(DRAFT)
 
-  createdAt DateTime?
-  updatedAt DateTime?
+  paymentVerified Boolean @default(false)
 
-  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  User    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  jobOpen Boolean @default(true) // <-- NEW FIELD
+
+  jobPayments JobPayment[]
+  applicants  Applicant[]
 
   @@unique([slug, userId])
+  @@unique([jobID])
 }
 
 model SubscriptionPlan {
@@ -181,6 +193,46 @@ model Follow {
   @@map("follow")
 }
 
+model JobPayment {
+  id            String @id @default(uuid())
+  txRef         String
+  transactionId String
+  amount        String
+
+  status JobPaymentStatus @default(PENDING)
+
+  User   User   @relation(fields: [userId], references: [id])
+  userId String
+  Job    Job    @relation(fields: [jobId], references: [id])
+  jobId  String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Applicant {
+  id String @id @default(uuid())
+
+  User   User   @relation(fields: [userId], references: [id])
+  userId String
+  Job    Job    @relation(fields: [jobId], references: [id])
+  jobId  String
+
+  screenshots String[] @default([])
+  shortText   String?
+  paragraph   String?
+
+  applicationID String
+
+  status JobApplicationStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, jobId])
+  @@unique([applicationID])
+}
+
 enum JobStatus {
   DRAFT
   PUBLISHED
@@ -219,4 +271,17 @@ enum PaymentStatus {
   PENDING
   SUCCESS
   FAILED
+}
+
+enum JobPaymentStatus {
+  PENDING
+  FAILED
+  REFUNDED
+  SUCCESS
+}
+
+enum JobApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

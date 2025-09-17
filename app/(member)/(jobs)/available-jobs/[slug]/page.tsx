@@ -3,14 +3,17 @@ import { NairaIcon } from "@/components/NairaIcon";
 import { JobCTAs } from "./_components/JobCTAs";
 import { ProofForm } from "./_components/ProofForm";
 import { EMAIL_ADDRESS } from "@/constants";
-import {
-  getJobDetails,
-  GetJobDetailsType,
-} from "@/app/data/job/get-job-details";
+import { getJobDetails } from "@/app/data/job/get-job-details";
 import { RenderDescription } from "@/components/text-editor/RenderDescription";
 import { env } from "@/lib/env";
 import { formatDate, formatMoneyInput } from "@/lib/utils";
 import { PageHeader } from "@/app/(member)/_components/PageHeader";
+import Link from "next/link";
+import { getAlreadyApplied } from "@/app/data/job/get-already-applied";
+import { AlreadyAppliedBanner } from "@/components/AlreadyAppliedBanner";
+import { JobClosedBanner } from "@/components/JobClosedBanner";
+import { getUserDetails } from "@/app/data/user/get-user-details";
+import { IsOwnerJobBanner } from "@/components/IsOwnerJobBanner";
 
 type Params = Promise<{
   slug: string;
@@ -19,17 +22,28 @@ type Params = Promise<{
 const page = async ({ params }: { params: Params }) => {
   const { slug } = await params;
 
-  const job: GetJobDetailsType = await getJobDetails(slug);
+  const job = await getJobDetails(slug);
+  const user = await getUserDetails();
+  const alreadyApplied = await getAlreadyApplied(job.id);
+
+  const applicantLeft = Number(job.noOfWorkers) - job._count.applicants;
+  const isOwner = job.User.id === user.id;
 
   return (
-    <div className="py-16 md:py-32 container">
+    <div className="py-16 md:py-32 container space-y-6">
       <PageHeader title="Job Details" />
+      {!job.jobOpen && <JobClosedBanner />}
+      {isOwner && <IsOwnerJobBanner />}
       <div className="space-y-4 mt-4">
         <p className="text-base">
           Job title: <span className="text-muted-foreground">{job.title}</span>
         </p>
         <p className="text-base">
-          Job ID: <span className="text-muted-foreground">{job.id}</span>
+          Job ID:{" "}
+          <span className="text-muted-foreground">
+            {job.jobID}
+            <CopyToClipboard text={job.jobID!} />
+          </span>
         </p>
         <p className="text-base">
           Job Description:
@@ -49,9 +63,12 @@ const page = async ({ params }: { params: Params }) => {
         </p>
         <p className="text-base">
           Job Poster:{" "}
-          <span className="text-blue-400 underline hover:text-primary">
-            {job.User.name}
-          </span>
+          <Link
+            href={`/${job.User.username}`}
+            className="text-blue-400 underline hover:text-primary"
+          >
+            {job.User.username}
+          </Link>
         </p>
         <p className="text-base">
           Job Link:{" "}
@@ -73,41 +90,48 @@ const page = async ({ params }: { params: Params }) => {
           </span>
         </p>
         <p className="text-base">
-          Time Estimate:{" "}
+          Available Slots:{" "}
           <span className="text-muted-foreground">
-            {job.estimatedTime} {job.estimatedTimeUnit}
-            {job.estimatedTime !== "1" && "s"}
+            {applicantLeft} remaining
           </span>
         </p>
         <p className="text-base">
-          Available Slots:{" "}
-          <span className="text-muted-foreground">49 remaining</span>
+          Job status:{" "}
+          <span className="text-primary">
+            {job.jobOpen ? "Open" : "Closed"}
+          </span>
         </p>
-        <p className="text-base">
-          Status: <span className="text-primary">Open</span>
-        </p>
-        <p className="text-base">
-          Submission Deadline: {formatDate(job.deadline)}
-        </p>
-      </div>
-      <div className="mt-6">
-        <p className="text-base text-muted-foreground">
-          Clicking on Start Job indicates your interest in the task and you will
-          be counted in as an applicant.{" "}
-        </p>
-        <JobCTAs />
       </div>
       <div className="mt-6">
         <h2 className="font-semibold text-xl md:text-2xl">Instructions</h2>
         <RenderDescription json={job.instructions} />
       </div>
       <div className="mt-6">
+        {!alreadyApplied && (
+          <p className="text-base text-muted-foreground">
+            Clicking on Start Job indicates your interest in the task and you
+            will be counted in as an applicant.{" "}
+          </p>
+        )}
+        {alreadyApplied && <AlreadyAppliedBanner id={alreadyApplied.id} />}
+        <JobCTAs
+          isOwner={isOwner}
+          jobLink={job.jobLink!}
+          alreadyApplied={alreadyApplied}
+        />
+      </div>
+      <div className="mt-6">
         <h2 className="font-semibold text-xl md:text-2xl">
           Proof of Completion
         </h2>
-        <p className="text-base text-muted-foreground">You must upload:</p>
         <RenderDescription json={job.proofOfCompletion} />
-        <ProofForm />
+        {applicantLeft > 1 && !alreadyApplied && !isOwner && (
+          <ProofForm
+            submissionType={job.submissionType!}
+            id={job.id}
+            slug={job.slug!}
+          />
+        )}
       </div>
       <div className="mt-10 space-y-2.5 text-base">
         <p>Please follow instructions exactly as stated.</p>

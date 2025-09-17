@@ -13,19 +13,39 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { tryCatch } from "@/hooks/use-try-catch";
 import { useTransition } from "react";
-import { createJob } from "../actions";
+import { createJob, verifyJobPayment } from "../actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { NewJobFormSchemaType } from "@/lib/zodSchemas";
+import { NairaIcon } from "@/components/NairaIcon";
+import { formatMoneyInput } from "@/lib/utils";
+import { env } from "@/lib/env";
+import { EARNSPHERE_LOGO } from "@/constants";
+import { useFlutterwavePayment } from "@/hooks/use-flutterwave-payment";
 
 interface Props {
   open: boolean;
   closeModal: () => void;
-  data: any;
+  data: NewJobFormSchemaType;
+  name: string;
+  email: string;
+  phoneNumber: string | null;
 }
 
-export function ConfirmPostingModal({ open, closeModal, data }: Props) {
+export function ConfirmPostingModal({
+  open,
+  closeModal,
+  data,
+  name,
+  email,
+  phoneNumber,
+}: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const { initiatePayment } = useFlutterwavePayment();
+
+  const baseTotal = Number(data.reward) * Number(data.noOfWorkers);
+  const totalWithFee = (baseTotal * 1.1).toFixed(); // Add 10%
 
   const handleSubmit = () => {
     startTransition(async () => {
@@ -38,7 +58,43 @@ export function ConfirmPostingModal({ open, closeModal, data }: Props) {
 
       if (result?.status === "success") {
         toast.success(result.message);
-        router.push(`/new-job/success?slug=${result.slug}`);
+
+        const config = {
+          public_key: env.NEXT_PUBLIC_FW_PUBLIC_KEY,
+          tx_ref: `${Date.now()}`,
+          amount: totalWithFee, // dynamic price
+          currency: "NGN",
+          payment_options: "card,mobilemoney,ussd",
+          customer: {
+            email,
+            phone_number: phoneNumber,
+            name,
+          },
+          customizations: {
+            title: `Earnsphere - ${data.title}`,
+            description: `Payment for ${totalWithFee} (${data.title})`,
+            logo: EARNSPHERE_LOGO,
+          },
+        };
+
+        initiatePayment(config, async (response) => {
+          const { data: paymentResult, error } = await tryCatch(
+            verifyJobPayment(result.id!, totalWithFee, response)
+          );
+          if (error) {
+            toast.error(error.message || "Oops! Internal server error");
+            return;
+          }
+
+          if (paymentResult?.status === "success") {
+            toast.success(paymentResult.message);
+            router.push(`/new-job/success?slug=${result?.slug}`);
+          } else {
+            toast.error(paymentResult.message);
+          }
+          // });
+        });
+
         localStorage.removeItem("jobPreview");
       } else {
         toast.error(result.message);
@@ -55,10 +111,27 @@ export function ConfirmPostingModal({ open, closeModal, data }: Props) {
           <div className="overflow-y-auto">
             <DialogDescription asChild>
               <div className="px-6 py-4 text-base text-muted-foreground">
-                <p>Posting a new job requires 5 credits.</p>
                 <p>
-                  You currently have <span className="text-primary">25</span>{" "}
-                  credits available.
+                  You need{" "}
+                  <span className="font-medium text-primary">
+                    {data.noOfWorkers}
+                  </span>{" "}
+                  for{" "}
+                  <span className="font-medium text-primary">{data.title}</span>{" "}
+                  and are willing to pay{" "}
+                  <span className="font-medium text-primary">
+                    <NairaIcon />
+                    {formatMoneyInput(data.reward)}
+                  </span>{" "}
+                  per worker.
+                </p>
+                <p>
+                  You have to pay{" "}
+                  <span className="text-primary">
+                    <NairaIcon />
+                    {formatMoneyInput(totalWithFee)}
+                  </span>{" "}
+                  in total
                 </p>
                 <Separator className="my-6" />
                 <p>Do you want to continue?</p>
@@ -82,7 +155,7 @@ export function ConfirmPostingModal({ open, closeModal, data }: Props) {
               onClick={handleSubmit}
               size="md"
             >
-              {pending ? <Loader text="Posting..." /> : "Post Job"}
+              {pending ? <Loader text="Posting..." /> : "Post Job & Pay"}
             </Button>
           </DialogFooter>
         </DialogHeader>

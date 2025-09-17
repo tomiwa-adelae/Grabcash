@@ -22,6 +22,8 @@ import { GetSubscriptionPlansType } from "@/app/data/user/subscription/get-subsc
 import { activateSubscription } from "../actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { formatMoneyInput } from "@/lib/utils";
+import { NairaIcon } from "@/components/NairaIcon";
 
 interface Props {
   name: string;
@@ -92,7 +94,7 @@ export const PricingPlans = ({ email, name, phoneNumber, plans }: Props) => {
         <Button
           onClick={() => setIsAnnual(true)}
           size="md"
-          variant={isAnnual ? "default" : "ghost"}
+          variant={isAnnual ? "default" : "secondary"}
         >
           Yearly
         </Button>
@@ -114,7 +116,8 @@ export const PricingPlans = ({ email, name, phoneNumber, plans }: Props) => {
             <CardHeader>
               <CardTitle className="font-medium">{plan.name}</CardTitle>
               <span className="my-3 block text-2xl md:text-3xl font-semibold">
-                {plan.price}
+                <NairaIcon />
+                {formatMoneyInput(plan.price)}
                 {plan.billingCycle === "ANNUALLY" ? "/year" : "/month"}
               </span>
               <CardDescription className="text-sm">

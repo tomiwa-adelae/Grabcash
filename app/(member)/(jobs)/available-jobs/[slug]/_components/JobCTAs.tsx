@@ -1,17 +1,35 @@
 import { Button } from "@/components/ui/button";
 import { BookmarkCheck, Flag, Share } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
-export const JobCTAs = () => {
+interface Props {
+  jobLink: string;
+  isOwner: boolean;
+  alreadyApplied: any;
+}
+
+export const JobCTAs = ({ jobLink, alreadyApplied, isOwner }: Props) => {
   return (
     <div className="flex items-center justify-start gap-4 flex-wrap flex-col sm:flex-row mt-4">
-      <Button size="md" className="w-full sm:w-auto">
-        Start Job
-      </Button>
-      <Button size="md" variant={"outline"} className="w-full sm:w-auto">
-        <BookmarkCheck />
-        Save for later
-      </Button>
+      {alreadyApplied && (
+        <Button size="md" disabled>
+          Start Job
+        </Button>
+      )}
+      {!alreadyApplied && !isOwner && (
+        <Button asChild size="md" className="w-full sm:w-auto">
+          <a target="_blank" href={jobLink}>
+            Start Job
+          </a>
+        </Button>
+      )}
+      {!alreadyApplied && (
+        <Button size="md" variant={"outline"} className="w-full sm:w-auto">
+          <BookmarkCheck />
+          Save for later
+        </Button>
+      )}
       <Button
         size="md"
         variant={"outline"}

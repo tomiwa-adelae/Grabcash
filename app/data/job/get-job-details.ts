@@ -8,6 +8,7 @@ export const getJobDetails = async (slug: string) => {
   const job = await prisma.job.findUnique({
     where: {
       slug,
+      paymentVerified: true,
     },
     select: {
       id: true,
@@ -15,16 +16,25 @@ export const getJobDetails = async (slug: string) => {
       slug: true,
       category: true,
       reward: true,
-      deadline: true,
       description: true,
       type: true,
-      estimatedTime: true,
-      estimatedTimeUnit: true,
       instructions: true,
       proofOfCompletion: true,
+      jobLink: true,
+      submissionType: true,
+      jobID: true,
+      noOfWorkers: true,
+      jobOpen: true,
       User: {
         select: {
           name: true,
+          username: true,
+          id: true,
+        },
+      },
+      _count: {
+        select: {
+          applicants: true,
         },
       },
     },
