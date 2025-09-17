@@ -1,6 +1,6 @@
+import "server-only";
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
-import "server-only";
 import { requireUser } from "../user/require-user";
 
 export const isFollowing = async (id: string) => {

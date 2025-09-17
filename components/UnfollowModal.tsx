@@ -68,12 +68,20 @@ export function UnfollowModal({
               size="md"
               variant={"outline"}
               className="w-full text-destructive hover:text-destructive/90 border-destructive hover:bg-destructive/5"
-              onClick={handleUnfollow}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleUnfollow();
+              }}
             >
               {pending ? <Loader text="Unfollowing..." /> : "Unfollow"}
             </Button>
             <Button
-              onClick={closeModal}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                closeModal();
+              }}
               size="md"
               variant="ghost"
               className="w-full"

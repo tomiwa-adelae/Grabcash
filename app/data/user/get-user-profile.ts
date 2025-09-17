@@ -3,12 +3,10 @@ import { requireUser } from "./require-user";
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 
-export const getUserDetails = async (username?: string) => {
+export const getUserProfile = async (username: string) => {
   const session = await requireUser();
-  const user = await prisma.user.findFirst({
-    where: {
-      OR: [{ username }, { id: session.user.id }],
-    },
+  const user = await prisma.user.findUnique({
+    where: { username },
     select: {
       id: true,
       name: true,
@@ -53,6 +51,18 @@ export const getUserDetails = async (username?: string) => {
           following: true,
         },
       },
+      followers: {
+        select: {
+          follower: {
+            select: {
+              image: true,
+              name: true,
+              id: true,
+              username: true,
+            },
+          },
+        },
+      },
     },
   });
 
@@ -61,4 +71,4 @@ export const getUserDetails = async (username?: string) => {
   return user;
 };
 
-export type GetUserDetailsType = Awaited<ReturnType<typeof getUserDetails>>;
+export type GetUserDetailsType = Awaited<ReturnType<typeof getUserProfile>>;

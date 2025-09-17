@@ -1,75 +1,97 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { LoaderCircleIcon, SearchIcon, SquareArrowRight } from "lucide-react";
+import { LoaderCircleIcon, SearchIcon, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { filters } from "@/constants";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
-export const SearchBar = () => {
-  const [inputValue, setInputValue] = useState("");
+interface Props {
+  placeholder?: string;
+  search?: string;
+}
+
+export const SearchBar = ({ placeholder = "Search...", search }: Props) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const [query, setQuery] = useState(search || "");
+
   useEffect(() => {
-    if (inputValue) {
+    const urlQuery = searchParams.get("query") || "";
+    setQuery(urlQuery);
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (query) {
       setIsLoading(true);
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 500);
+      }, 1000);
       return () => clearTimeout(timer);
     }
     setIsLoading(false);
-  }, [inputValue]);
+  }, [query]);
+
+  // Keep query state in sync with URL param
+  useEffect(() => {
+    const urlQuery = searchParams.get("query") || "";
+    setQuery(urlQuery);
+  }, [searchParams]);
+
+  // Debounced update to URL when query changes
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (query) {
+        params.set("query", query);
+      } else {
+        params.delete("query");
+      }
+
+      params.delete("page");
+
+      // Build a clean URL with pathname + query string
+      const newUrl = `${pathname}?${params.toString()}`;
+      router.push(newUrl, { scroll: false });
+    }, 50);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [query]);
+
   return (
-    <div className="mt-2.5 flex items-center justify-between">
-      <div className="*:not-first:mt-2 w-full">
-        <div className="relative">
-          <Input
-            className="peer ps-9 pe-9"
-            placeholder="Search..."
-            type="search"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+    <div className="flex items-center relative justify-between">
+      <Input
+        className="peer ps-9 pe-9"
+        placeholder={placeholder}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+      <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
+        {isLoading ? (
+          <LoaderCircleIcon
+            className="animate-spin"
+            size={16}
+            role="status"
+            aria-label="Loading..."
           />
-          <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
-            {isLoading ? (
-              <LoaderCircleIcon
-                className="animate-spin"
-                size={16}
-                role="status"
-                aria-label="Loading..."
-              />
-            ) : (
-              <SearchIcon size={16} aria-hidden="true" />
-            )}
-          </div>
-          <button
-            className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label="Press to speak"
-            type="submit"
-          >
-            <SquareArrowRight size={16} aria-hidden="true" />
-          </button>
-        </div>
+        ) : (
+          <SearchIcon size={16} aria-hidden="true" />
+        )}
       </div>
-      <Select>
-        <SelectTrigger className="flex-1 lg:min-w-62">
-          <SelectValue placeholder="Filter" />
-        </SelectTrigger>
-        <SelectContent>
-          {filters.map((filter, index) => (
-            <SelectItem key={index} value={filter.value}>
-              {filter.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      {query && (
+        <Button
+          size="icon"
+          variant={"ghost"}
+          className="absolute right-1"
+          onClick={() => setQuery("")}
+        >
+          <X />
+        </Button>
+      )}
     </div>
   );
 };

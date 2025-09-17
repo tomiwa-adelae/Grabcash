@@ -1,4 +1,3 @@
-import { getUserDetails } from "@/app/data/user/get-user-details";
 import { ShareButton } from "@/components/ShareButton";
 import { formatDate } from "@/lib/utils";
 import { RenderDescription } from "@/components/text-editor/RenderDescription";
@@ -13,20 +12,49 @@ import Link from "next/link";
 import { IconMessage } from "@tabler/icons-react";
 import { FollowButton } from "@/components/FollowButton";
 import { isFollowing } from "@/app/data/follow/is-following";
+import { getUserProfile } from "@/app/data/user/get-user-profile";
+import { FollowingDetails } from "../_components/FollowingDetails";
+import { followers } from "@/app/data/follow/followers";
+import { followings } from "@/app/data/follow/followings";
 
 type Params = Promise<{
   username: string;
 }>;
 
-const page = async ({ params }: { params: Params }) => {
+const page = async ({
+  params,
+  searchParams,
+}: {
+  params: Params;
+  searchParams: any;
+}) => {
   const { username } = await params;
+  const { query } = await searchParams;
 
   const session = await auth.api.getSession({
     headers: await headers(),
   });
 
-  const user = await getUserDetails(username);
+  const user = await getUserProfile(username);
+
   const jobs = await getAvailableJobs();
+
+  // Updated to get pagination data
+  const userFollowersData = await followers({
+    id: user.id,
+    query,
+    page: 1,
+    limit: 1,
+  });
+
+  // Updated to get pagination data
+  const userFollowingsData = await followings({
+    id: user.id,
+    query,
+    page: 1,
+    limit: 1,
+  });
+
   const following = await isFollowing(user.id);
 
   const myProfile = username === session?.user.username;
@@ -74,6 +102,18 @@ const page = async ({ params }: { params: Params }) => {
             </div>
           )}
           <div className="mt-6 text-sm md:text-base text-muted-foreground space-y-2.5">
+            <FollowingDetails
+              followers={user._count.followers}
+              following={user._count.following}
+              userFollowers={userFollowersData.followers}
+              userFollowings={userFollowingsData.followings}
+              userId={user.id}
+              hasNext={
+                userFollowersData.pagination.hasNext ||
+                userFollowingsData.pagination.hasNext
+              }
+              query={query}
+            />
             <p>
               <span className="text-black">Joined:</span>{" "}
               {formatDate(user.createdAt)}
