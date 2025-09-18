@@ -169,10 +169,10 @@ export function EditSocialMediaForm({ user }: Props) {
             <Plus className="w-4 h-4 mr-1" />
             Add Link
           </Button>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Button
               disabled={pending}
-              className="w-full"
+              className="w-full order-1 md:order-0"
               size="md"
               variant={"outline"}
               type="button"

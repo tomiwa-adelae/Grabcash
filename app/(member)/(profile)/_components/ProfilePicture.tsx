@@ -83,8 +83,8 @@ export const ProfilePicture = ({ image, name, myProfile }: Props) => {
       </div>
       {openModal && (
         <ResponsiveModal open={openModal}>
-          <div>
-            <div className="py-4 container bg-white flex items-center justify-center dark:bg-black">
+          <div className="overflow-hidden flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] [&>button:last-child]:top-3.5">
+            <div className="py-4 container flex items-center justify-center">
               <Button
                 disabled={uploading || pending}
                 onClick={() => setOpenModal(false)}
@@ -97,7 +97,7 @@ export const ProfilePicture = ({ image, name, myProfile }: Props) => {
                 Change picture
               </h5>
             </div>
-            <div className="bg-muted py-8">
+            <div className="bg-muted py-8 overflow-y-auto max-h-96">
               <div className="container">
                 <Uploader
                   ref={uploaderRef}
@@ -114,43 +114,40 @@ export const ProfilePicture = ({ image, name, myProfile }: Props) => {
                 />
               </div>
             </div>
-            <footer
-              className={cn(
-                "container py-4 bg-white dark:bg-dark flex items-center justify-end",
-                showChange && "justify-between"
-              )}
-            >
-              {showChange && (
-                <Button
-                  onClick={() => {
-                    uploaderRef.current?.triggerChangePhoto();
-                    setShowChange(!!image);
-                  }}
-                  variant={"ghost"}
-                  size="md"
-                  disabled={pending || uploading}
-                >
-                  Change
-                </Button>
-              )}
-              <Button
-                size={"md"}
-                disabled={pending || uploading}
-                onClick={() => {
-                  if (!hasNewPhoto) {
-                    setOpenModal(false);
-                    return;
-                  }
-
-                  uploaderRef.current?.uploadPhoto();
-                }}
-              >
-                {pending || uploading ? (
-                  <Loader text="Saving..." />
-                ) : (
-                  "Use this photo"
+            <footer className={cn("py-4")}>
+              <div className="container flex items-center justify-end">
+                {showChange && (
+                  <Button
+                    onClick={() => {
+                      uploaderRef.current?.triggerChangePhoto();
+                      setShowChange(!!image);
+                    }}
+                    variant={"ghost"}
+                    size="md"
+                    disabled={pending || uploading}
+                  >
+                    Change
+                  </Button>
                 )}
-              </Button>
+                <Button
+                  size={"md"}
+                  disabled={pending || uploading}
+                  onClick={() => {
+                    if (!hasNewPhoto) {
+                      setOpenModal(false);
+                      return;
+                    }
+
+                    uploaderRef.current?.uploadPhoto();
+                  }}
+                >
+                  {pending || uploading ? (
+                    <Loader text="Saving..." />
+                  ) : (
+                    "Use this photo"
+                  )}
+                </Button>
+              </div>
             </footer>
           </div>
         </ResponsiveModal>

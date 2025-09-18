@@ -35,13 +35,15 @@ export const FollowingDetails = ({
           onClick={() => setOpenFollowers(true)}
           className="cursor-pointer hover:text-primary"
         >
-          <span className="text-black">Followers:</span> {followers}
+          <span className="text-black dark:text-primary">Followers:</span>{" "}
+          {followers}
         </p>
         <p
           onClick={() => setOpenFollowings(true)}
           className="cursor-pointer hover:text-primary"
         >
-          <span className="text-black">Following:</span> {following}
+          <span className="text-black dark:text-primary">Following:</span>{" "}
+          {following}
         </p>
       </div>
       {openFollowers && (

@@ -483,7 +483,7 @@ export function NewJobForm({ name, email, phoneNumber }: Props) {
                         className={`flex items-center justify-between p-4 border rounded-lg transition-all cursor-pointer hover:bg-primary/10 ${
                           field.value === option.value
                             ? "border-primary bg-primary/10"
-                            : "border-gray-200 hover:border-gray-300"
+                            : "border-input hover:border-primary"
                         }`}
                         onClick={() => field.onChange(option.value)}
                       >

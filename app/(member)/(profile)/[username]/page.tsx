@@ -87,7 +87,7 @@ const page = async ({
               <ShareButton
                 profileName={user.name}
                 profileUrl={`${env.NEXT_PUBLIC_BETTER_AUTH_URL}/${user.username}`}
-                className="rounded-lg bg-secondary text-black"
+                className="rounded-lg bg-secondary text-black dark:text-primary"
               />
               <FollowButton
                 image={user.image}
@@ -116,12 +116,13 @@ const page = async ({
               query={query}
             />
             <p>
-              <span className="text-black">Joined:</span>{" "}
+              <span className="text-black dark:text-primary">Joined:</span>{" "}
               {formatDate(user.createdAt)}
             </p>
             {user.country && (
               <p>
-                <span className="text-black">Country:</span> {user.country}
+                <span className="text-black dark:text-primary">Country:</span>{" "}
+                {user.country}
               </p>
             )}
             {user.bio && (

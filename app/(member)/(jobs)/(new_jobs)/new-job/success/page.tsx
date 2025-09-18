@@ -39,10 +39,11 @@ const page = async ({ searchParams }: { searchParams: any }) => {
       <div className="grid grid-cols-2 gap-4 mt-4">
         <Button
           size={"md"}
+          asChild
           variant={"outline"}
           className="border-primary hover:bg-primary/10 w-full"
         >
-          Track Applicants
+          <Link href={`/jobs/${job.slug}/submissions`}>Track Applicants</Link>
         </Button>
         <Button size="md" asChild className="w-full">
           <Link href={`/jobs/${job.slug}`}>View Job Listing</Link>

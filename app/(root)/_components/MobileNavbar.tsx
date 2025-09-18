@@ -1,14 +1,13 @@
 "use client";
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
 import {
   Bell,
-  ChevronDownIcon,
   EllipsisVertical,
   LogOutIcon,
   Menu,
   Settings,
+  User,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePathname, useRouter } from "next/navigation";
@@ -41,6 +40,7 @@ interface Props {
       name: string;
       email: string;
       image?: string | null | undefined;
+      username?: string | null | undefined;
     };
   } | null;
 }
@@ -240,6 +240,12 @@ export const MobileNavUser = ({ session }: Props) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
+            <DropdownMenuItem className="cursor-pointer" asChild>
+              <Link href={`${session.user.username}`}>
+                <User size={16} className="opacity-60" aria-hidden="true" />
+                <span>My profile</span>
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer" asChild>
               <Link href={"/settings"}>
                 <Settings size={16} className="opacity-60" aria-hidden="true" />

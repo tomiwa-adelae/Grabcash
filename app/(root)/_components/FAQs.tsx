@@ -47,14 +47,14 @@ export const FAQs = ({ showTitle }: Props) => {
     <div className="bg-[#F3F7FA] py-16 md:py-20">
       <div className="container">
         {showTitle && (
-          <h2 className="font-semibold text-3xl md:text-4xl text-center">
+          <h2 className="dark:text-black mb-8 font-semibold text-3xl md:text-4xl text-center">
             <span className={`${lobster.className} text-primary font-normal`}>
               earnsphere
             </span>{" "}
             FAQs
           </h2>
         )}
-        <div className="mt-8">
+        <div>
           <Accordion
             type="single"
             collapsible
@@ -63,7 +63,7 @@ export const FAQs = ({ showTitle }: Props) => {
           >
             {items.map((item) => (
               <AccordionItem value={item.id} key={item.id} className="py-2">
-                <AccordionTrigger className="leading-6 hover:no-underline">
+                <AccordionTrigger className="hover:no-underline">
                   {item.title}
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground pb-2">

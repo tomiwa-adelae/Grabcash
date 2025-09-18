@@ -8,6 +8,7 @@ import Link from "next/link";
 import { loadMoreAvailableJobs } from "@/app/data/job/load-more-available-jobs";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Loader } from "@/components/Loader";
+import { Progress } from "@/components/ui/progress";
 
 interface Props {
   initialJobs: GetAvailableJobsType[];
@@ -135,18 +136,15 @@ export const JobsCard = ({
 
                 {/* Progress indicator */}
                 <div className="mt-2 mb-3">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Progress: {job._count.applicants}/{job.noOfWorkers}{" "}
-                    applicants
+                  <p className="text-sm text-muted-foreground mb-2">
+                    {job._count.applicants}/{job.noOfWorkers} applicants
                   </p>
-                  <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
-                    <div
-                      className="bg-primary h-2 rounded-full transition-all duration-300"
-                      style={{
-                        width: `${Math.min((job._count.applicants / Number(job.noOfWorkers)) * 100, 100)}%`,
-                      }}
-                    ></div>
-                  </div>
+                  <Progress
+                    value={Math.min(
+                      (job._count.applicants / Number(job.noOfWorkers)) * 100,
+                      100
+                    )}
+                  />
                 </div>
 
                 <h4 className="font-medium text-lg mt-1.5 mb-2">

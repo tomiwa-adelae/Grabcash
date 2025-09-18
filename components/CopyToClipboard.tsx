@@ -25,7 +25,7 @@ export const CopyToClipboard = ({ text }: { text: string }) => {
           className="size-4 ml-2 inline-block cursor-pointer"
         />
       </TooltipTrigger>
-      <TooltipContent>
+      <TooltipContent className="dark:text-white">
         <p>Click to copy</p>
       </TooltipContent>
     </Tooltip>

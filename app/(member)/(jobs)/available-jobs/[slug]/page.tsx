@@ -65,14 +65,14 @@ const page = async ({ params }: { params: Params }) => {
           Job Poster:{" "}
           <Link
             href={`/${job.User.username}`}
-            className="text-blue-400 underline hover:text-primary"
+            className="text-primary underline hover:text-primary"
           >
-            {job.User.username}
+            {job.User.name}
           </Link>
         </p>
         <p className="text-base">
           Job Link:{" "}
-          <span className="text-blue-400 hover:underline hover:text-primary">
+          <span className="text-primary hover:underline hover:text-primary">
             <a
               href={`${env.BETTER_AUTH_URL}/available-jobs/${job.slug}`}
               target={"_blank"}

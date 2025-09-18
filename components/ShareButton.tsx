@@ -205,7 +205,7 @@ export function ShareButton({
       </motion.div>
 
       <motion.div
-        className="absolute top-0 -left-2 flex overflow-hidden"
+        className="absolute top-0 -left-2 flex overflow-hidden z-50"
         style={{ height: buttonDimensions.height }}
         animate={{ width: isVisible ? "auto" : 0 }}
         transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
@@ -218,17 +218,17 @@ export function ShareButton({
             onClick={() => handleShare(button, i)}
             disabled={button.disabled}
             className={cn(
-              "flex items-center justify-center",
-              "bg-muted dark:bg-white",
+              "flex items-center justify-center z-50",
+              "bg-muted dark:bg-muted dark:hover:bg-muted/20 dark:hover:text-primary",
               "text-black dark:text-white",
               i === 0 && "rounded-l-full",
               i === shareButtons.length - 1 && "rounded-r-full",
-              "border-r border-white/10 dark:border-black/10 last:border-r-0",
-              "outline-none relative overflow-hidden transition-colors duration-200",
+              "border-r border-white/10 dark:border-black/10 last:border-r-0 z-50",
+              "outline-none relative overflow-hidden transition-colors duration-200 z-50",
               // Conditional styles based on disabled state
               button.disabled
-                ? "opacity-40 cursor-not-allowed"
-                : "hover:bg-primary hover:text-white cursor-pointer"
+                ? " cursor-not-allowed"
+                : "hover:bg-primary hover:text-white cursor-pointer z-50"
             )}
             style={{
               width: buttonDimensions.height,

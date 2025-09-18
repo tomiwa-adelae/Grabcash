@@ -21,12 +21,15 @@ const page = async ({ params }: { params: Params }) => {
   const details = await getSubmittedJobDetails(id);
   return (
     <div className="py-16 md:py-32 container space-y-6">
-      <PageHeader
-        title={`${details.Job.title} - ₦${formatMoneyInput(details.Job.reward)}`}
-      />
-      <p className="text-base text-muted-foreground mt-1.5">
-        Kindly review the work {details.User.name} did and approve or reject it.
-      </p>
+      <div>
+        <PageHeader
+          title={`${details.Job.title} - ₦${formatMoneyInput(details.Job.reward)}`}
+        />
+        <p className="text-base text-muted-foreground mt-1.5">
+          Kindly review the work {details.User.name} did and approve or reject
+          it.
+        </p>
+      </div>
       {details.status === "APPROVED" && <SubmissionApprovedBanner />}
       {details.status === "REJECTED" && <SubmissionRejectedBanner />}
       {details.status === "PENDING" && <SubmissionPendingBanner />}
@@ -36,13 +39,16 @@ const page = async ({ params }: { params: Params }) => {
           Application ID: {details.applicationID}
           <CopyToClipboard text={details.applicationID!} />
         </p>
-        <Link
-          href={`/${details.User.username}`}
-          className="inline-block hover:underline hover:text-primary"
-        >
-          Applicant Name: {details.User.name}
+        <p>
+          Applicant Name:{" "}
+          <Link
+            href={`/${details.User.username}`}
+            className="inline-block hover:underline hover:text-primary"
+          >
+            {details.User.name}
+          </Link>
           <CopyToClipboard text={details.applicationID!} />
-        </Link>
+        </p>
         <p>Job title: {details.Job.title}</p>
         <p>
           Job ID: {details.Job.jobID}

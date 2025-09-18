@@ -16,7 +16,7 @@ const lobster = Lobster_Two({
 
 export const ContactInformation = () => {
   return (
-    <div className="py-16 md:py-20 bg-[#F3F7FA]">
+    <div className="py-16 md:py-20 bg-[#F3F7FA] text-black">
       <div className="container">
         <h2
           className={`font-medium text-primary text-3xl md:text-4xl ${lobster.className}`}
@@ -26,11 +26,21 @@ export const ContactInformation = () => {
         <div className="mt-8 grid gap-4 text-base font-medium">
           <p>
             <span className="uppercase italic">Email address:</span>{" "}
-            {EMAIL_ADDRESS}
+            <a
+              className="hover:underline hover:text-primary"
+              href={`mailto:${EMAIL_ADDRESS}`}
+            >
+              {EMAIL_ADDRESS}
+            </a>
           </p>
           <p>
             <span className="uppercase italic">Contact number: </span>
-            {PHONE_NUMBER}
+            <a
+              href={`tel:${PHONE_NUMBER}`}
+              className="hover:underline hover:text-primary"
+            >
+              {PHONE_NUMBER}
+            </a>
           </p>
           <div className="flex items-start justify-start gap-2">
             <span className="uppercase italic">Social media:</span>{" "}

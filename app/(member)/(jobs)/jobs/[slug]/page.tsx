@@ -52,14 +52,14 @@ const page = async ({ params }: { params: Params }) => {
           Job Poster:{" "}
           <Link
             href={`/${job.User.username}`}
-            className="text-blue-400 underline hover:text-primary"
+            className="text-primary underline hover:text-primary"
           >
             {job.User.name}
           </Link>
         </p>
         <p className="text-base">
           Job Link:{" "}
-          <span className="text-blue-400 hover:underline hover:text-primary">
+          <span className="text-primary hover:underline hover:text-primary">
             <a
               href={`${env.BETTER_AUTH_URL}/available-jobs/${job.slug}`}
               target={"_blank"}
@@ -99,19 +99,14 @@ const page = async ({ params }: { params: Params }) => {
         <p className="text-base text-muted-foreground">
           Some editing is closed because there are applicants on the job already
         </p>
-        <div className="flex items-center justify-start gap-4 flex-wrap flex-col sm:flex-row mt-4">
-          <Button asChild size="md" className="w-full sm:w-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <Button asChild size="md" className="w-full">
             <Link href={`/job/${job.slug}/edit`}>
               <Pen />
               Edit Job
             </Link>
           </Button>
-          <Button
-            asChild
-            size="md"
-            variant={"outline"}
-            className="w-full sm:w-auto"
-          >
+          <Button asChild size="md" variant={"outline"} className="w-full">
             <Link href={`/jobs/${job.slug}/submissions`}>
               <FileUser />
               View submissions

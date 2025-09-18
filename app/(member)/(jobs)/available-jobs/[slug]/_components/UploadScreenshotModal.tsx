@@ -65,8 +65,8 @@ export const UploadScreenshotModal = ({ id, slug }: Props) => {
       </Button>
       {openModal && (
         <ResponsiveModal open={openModal}>
-          <div>
-            <div className="py-4 container bg-white flex items-center justify-center dark:bg-black">
+          <div className="overflow-hidden flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] [&>button:last-child]:top-3.5">
+            <div className="py-4 container flex items-center justify-center">
               <Button
                 disabled={pending}
                 onClick={() => setOpenModal(false)}
@@ -79,7 +79,7 @@ export const UploadScreenshotModal = ({ id, slug }: Props) => {
                 Upload screenshots
               </h5>
             </div>
-            <div className="bg-muted py-8">
+            <div className="bg-muted py-8 overflow-y-auto max-h-96">
               <div className="container">
                 <Uploader
                   ref={uploaderRef}
@@ -90,33 +90,30 @@ export const UploadScreenshotModal = ({ id, slug }: Props) => {
                 />
               </div>
             </div>
-            <footer
-              className={cn(
-                "container py-4 bg-white dark:bg-dark flex items-center justify-end",
-                "justify-between"
-              )}
-            >
-              <Button
-                size={"md"}
-                variant={"ghost"}
-                onClick={() => setOpenModal(false)}
-                disabled={pending || uploading}
-              >
-                Close
-              </Button>
-              <Button
-                onClick={() => {
-                  uploaderRef.current?.uploadPhoto();
-                }}
-                size={"md"}
-                disabled={pending || uploading}
-              >
-                {pending || uploading ? (
-                  <Loader text="Submitting..." />
-                ) : (
-                  "Submit"
-                )}
-              </Button>
+            <footer className={cn("py-4")}>
+              <div className="container flex items-center justify-between">
+                <Button
+                  size={"md"}
+                  variant={"ghost"}
+                  onClick={() => setOpenModal(false)}
+                  disabled={pending || uploading}
+                >
+                  Close
+                </Button>
+                <Button
+                  onClick={() => {
+                    uploaderRef.current?.uploadPhoto();
+                  }}
+                  size={"md"}
+                  disabled={pending || uploading}
+                >
+                  {pending || uploading ? (
+                    <Loader text="Submitting..." />
+                  ) : (
+                    "Submit"
+                  )}
+                </Button>
+              </div>
             </footer>
           </div>
         </ResponsiveModal>

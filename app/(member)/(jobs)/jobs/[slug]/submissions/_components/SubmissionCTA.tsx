@@ -49,7 +49,7 @@ export const SubmissionCTA = ({
   return (
     <>
       {status === "PENDING" && (
-        <div className="grid grid-cols-2 gap-4 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <Button
             onClick={handleApproveSubmission}
             size="md"
