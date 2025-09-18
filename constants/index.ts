@@ -26,7 +26,7 @@ export const EARNSPHERE_LOGO =
 
 export const CREDIT_TO_POST_NEW_JOB = 6;
 
-export const DEFAULT_LIMIT = 2;
+export const DEFAULT_LIMIT = 10;
 
 export const rootNavLinks = [
   {

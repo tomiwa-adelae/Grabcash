@@ -7,6 +7,9 @@ import { formatMoneyInput } from "@/lib/utils";
 import Link from "next/link";
 import { SubmissionCTA } from "../_components/SubmissionCTA";
 import { Screenshots } from "@/components/Screenshots";
+import { SubmissionApprovedBanner } from "@/components/SubmissionApprovedBanner";
+import { SubmissionRejectedBanner } from "@/components/SubmissionRejectedBanner";
+import { SubmissionPendingBanner } from "@/components/SubmissionPendingBanner";
 
 type Params = Promise<{
   id: string;
@@ -17,13 +20,16 @@ const page = async ({ params }: { params: Params }) => {
 
   const details = await getSubmittedJobDetails(id);
   return (
-    <div className="py-16 md:py-32 container">
+    <div className="py-16 md:py-32 container space-y-6">
       <PageHeader
         title={`${details.Job.title} - ₦${formatMoneyInput(details.Job.reward)}`}
       />
       <p className="text-base text-muted-foreground mt-1.5">
         Kindly review the work {details.User.name} did and approve or reject it.
       </p>
+      {details.status === "APPROVED" && <SubmissionApprovedBanner />}
+      {details.status === "REJECTED" && <SubmissionRejectedBanner />}
+      {details.status === "PENDING" && <SubmissionPendingBanner />}
       <Separator className="my-6" />
       <div className="space-y-4 mt-6 text-base">
         <p>
@@ -53,7 +59,13 @@ const page = async ({ params }: { params: Params }) => {
         <Screenshots screenshots={details.screenshots} />
       </div>
       <div className="mt-6">
-        <SubmissionCTA />
+        <SubmissionCTA
+          status={details.status}
+          slug={details.Job.slug!}
+          id={details.id}
+          JobTitle={details.Job.title}
+          applicantName={details.User.name}
+        />
       </div>
     </div>
   );

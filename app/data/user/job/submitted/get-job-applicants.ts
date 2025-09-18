@@ -3,14 +3,6 @@ import { requireUser } from "../../require-user";
 import { prisma } from "@/lib/db";
 import { DEFAULT_LIMIT } from "@/constants";
 
-interface Params {
-  id?: string;
-  query?: string;
-  limit?: number;
-  page?: number;
-  slug: string;
-}
-
 export const getJobApplicants = async ({
   slug,
   query,
@@ -98,6 +90,65 @@ export const getJobApplicants = async ({
       hasPrev: page > 1,
     },
   };
+};
+
+export const getTotalApplicantsCount = async (slug: string) => {
+  const { user } = await requireUser();
+  const applicants = await prisma.applicant.count({
+    where: {
+      Job: {
+        slug,
+        userId: user.id,
+      },
+    },
+  });
+
+  return applicants;
+};
+
+export const getRejectedApplicantsCount = async (slug: string) => {
+  const { user } = await requireUser();
+  const applicants = await prisma.applicant.count({
+    where: {
+      Job: {
+        slug,
+        userId: user.id,
+      },
+      status: "REJECTED",
+    },
+  });
+
+  return applicants;
+};
+
+export const getApprovedApplicantsCount = async (slug: string) => {
+  const { user } = await requireUser();
+  const applicants = await prisma.applicant.count({
+    where: {
+      Job: {
+        slug,
+        userId: user.id,
+      },
+      status: "APPROVED",
+    },
+  });
+
+  return applicants;
+};
+
+export const getPendingApplicantsCount = async (slug: string) => {
+  const { user } = await requireUser();
+  const applicants = await prisma.applicant.count({
+    where: {
+      Job: {
+        slug,
+        userId: user.id,
+      },
+      status: "PENDING",
+    },
+  });
+
+  return applicants;
 };
 
 export type GetJobApplicantsResponse = Awaited<

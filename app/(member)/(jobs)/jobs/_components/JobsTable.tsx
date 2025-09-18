@@ -52,8 +52,6 @@ export function JobsTable({
   const sentinelRef = useRef<HTMLTableRowElement>(null);
 
   const loadMore = useCallback(async () => {
-    console.log("🔶 LOAD MORE TRIGGERED:", { currentPage, hasNext, isLoading });
-
     if (isLoading || !hasNext) {
       return;
     }
@@ -66,8 +64,6 @@ export function JobsTable({
       const result = await loadMoreMyJobs(nextPage, query);
 
       if (result.success && result.data) {
-        console.log("🔶 ADDING NEW JOBS:", result.data.jobs.length);
-
         setJobs((prevJobs) => [...prevJobs, ...result.data.jobs]);
         setCurrentPage(nextPage);
         setHasNext(result.data.pagination.hasNext);
@@ -75,7 +71,6 @@ export function JobsTable({
         setError(result.error || "Failed to load more jobs");
       }
     } catch (err) {
-      console.error("🔶 LOAD MORE ERROR:", err);
       setError("Failed to load more jobs");
     } finally {
       setIsLoading(false);
@@ -94,19 +89,10 @@ export function JobsTable({
       return;
     }
 
-    console.log("🔍 SETTING UP OBSERVER");
-
     observerRef.current = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        console.log("👁️ OBSERVER EVENT:", {
-          isIntersecting: entry.isIntersecting,
-          hasNext,
-          isLoading,
-        });
-
         if (entry.isIntersecting && hasNext && !isLoading) {
-          console.log("🚀 OBSERVER TRIGGERED LOAD MORE");
           loadMore();
         }
       },

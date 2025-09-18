@@ -11,9 +11,9 @@ export const Jobs = ({ jobs }: Props) => {
   return (
     <div className="bg-muted py-8 rounded-lg">
       <div className="container">
-        <JobsTable jobs={jobs} />
+        {/* <JobsTable jobs={jobs} />
         <JobsCard jobs={jobs} />
-        <PaginationComponent totalPages={10} />
+        <PaginationComponent totalPages={10} /> */}
       </div>
     </div>
   );

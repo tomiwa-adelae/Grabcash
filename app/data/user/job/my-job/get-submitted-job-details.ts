@@ -17,6 +17,7 @@ export const getSubmittedJobDetails = async (id: string) => {
       id: true,
       screenshots: true,
       applicationID: true,
+      status: true,
       User: {
         select: {
           name: true,
@@ -28,6 +29,7 @@ export const getSubmittedJobDetails = async (id: string) => {
           jobID: true,
           title: true,
           reward: true,
+          slug: true,
         },
       },
     },

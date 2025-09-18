@@ -14,6 +14,8 @@ import Link from "next/link";
 import { GetJobApplicantsType } from "@/app/data/user/job/submitted/get-job-applicants";
 import { loadMoreApplicants } from "@/app/data/user/job/submitted/load-more-applicants";
 import { useRef, useState, useEffect, useCallback } from "react";
+import { SubmissionActions } from "./SubmissionActions";
+import { RejectSubmissionModal } from "./RejectSubmissionModal";
 
 interface Props {
   applicants: GetJobApplicantsType[];
@@ -37,6 +39,10 @@ export function SubmissionsCard({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [selectedApplicant, setSelectedApplicant] =
+    useState<GetJobApplicantsType>();
+  const [openRejectModal, setOpenRejectModal] = useState(false);
+
   const observerRef = useRef<HTMLDivElement>(null);
 
   const loadMore = useCallback(async () => {
@@ -58,7 +64,6 @@ export function SubmissionsCard({
       }
     } catch (err) {
       setError("Failed to load more applicants");
-      console.error("Error loading applicants:", err);
     } finally {
       setIsLoading(false);
     }
@@ -141,29 +146,14 @@ export function SubmissionsCard({
                       @{applicant.User.username}
                     </Link>
                   </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="rounded-full shadow-none"
-                        aria-label="Open edit menu"
-                      >
-                        <EllipsisIcon size={16} aria-hidden="true" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem asChild>
-                        <Link
-                          href={`/jobs/${slug}/submissions/${applicant.id}`}
-                        >
-                          View Submission
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>Approve submission</DropdownMenuItem>
-                      <DropdownMenuItem>Reject submission</DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <SubmissionActions
+                    slug={slug}
+                    applicant={applicant}
+                    onReject={() => {
+                      setSelectedApplicant(applicant);
+                      setOpenRejectModal(true);
+                    }}
+                  />
                 </div>
 
                 {/* Status and date */}
@@ -273,6 +263,17 @@ export function SubmissionsCard({
             </div>
           </div>
         </div>
+      )}
+      {/* Modal rendered outside the table */}
+      {openRejectModal && selectedApplicant && (
+        <RejectSubmissionModal
+          open={openRejectModal}
+          closeModal={() => setOpenRejectModal(false)}
+          applicantName={selectedApplicant.User.name}
+          jobTitle={selectedApplicant.Job.title}
+          slug={slug}
+          applicantId={selectedApplicant.id}
+        />
       )}
     </div>
   );

@@ -17,7 +17,6 @@ export async function loadMoreSubmittedJobs(page: number, query?: string) {
       data: result,
     };
   } catch (error) {
-    console.error("Error loading more submitted jobs:", error);
     return {
       success: false,
       error: "Failed to load more submissions",

@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import "server-only";
 import { requireSubscription } from "../user/subscription/require-subscription";
 import { DEFAULT_LIMIT } from "@/constants";
+import { requireUser } from "../user/require-user";
 
 interface GetAvailableJobsParams {
   query?: string;
@@ -10,6 +11,7 @@ interface GetAvailableJobsParams {
 }
 
 export const getAvailableJobs = async (params: GetAvailableJobsParams = {}) => {
+  const { user } = await requireUser();
   const { query, page = 1, limit = DEFAULT_LIMIT } = params;
 
   await requireSubscription();
@@ -21,6 +23,11 @@ export const getAvailableJobs = async (params: GetAvailableJobsParams = {}) => {
     status: "PUBLISHED",
     paymentVerified: true,
     jobOpen: true,
+    applicants: {
+      none: {
+        userId: user.id,
+      },
+    },
   };
 
   // Add search if provided

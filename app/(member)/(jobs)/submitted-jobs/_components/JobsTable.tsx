@@ -1,103 +1,3 @@
-// import { GetMySubmittedJobsType } from "@/app/data/user/job/submitted/get-my-submitted-jobs";
-// import { NairaIcon } from "@/components/NairaIcon";
-// import { Badge } from "@/components/ui/badge";
-// import { Button } from "@/components/ui/button";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "@/components/ui/table";
-// import { formatMoneyInput, formattedStatus } from "@/lib/utils";
-// import { EllipsisIcon } from "lucide-react";
-// import Link from "next/link";
-
-// interface Props {
-//   jobs: GetMySubmittedJobsType[];
-// }
-
-// export function JobsTable({ jobs }: Props) {
-//   return (
-//     <div className="[&>div]:max-h-screen hidden sm:block">
-//       <Table className="[&_td]:border-border [&_th]:border-border border-separate border-spacing-0 [&_tfoot_td]:border-t [&_th]:border-b [&_tr]:border-none [&_tr:not(:last-child)_td]:border-b">
-//         <TableHeader className="bg-background/90 sticky top-0 z-10 backdrop-blur-xs">
-//           <TableRow className="hover:bg-transparent">
-//             <TableHead>Job Title</TableHead>
-//             <TableHead>Category</TableHead>
-//             <TableHead>Status</TableHead>
-//             <TableHead>Rewards</TableHead>
-//             <TableHead className="text-right"></TableHead>
-//           </TableRow>
-//         </TableHeader>
-//         <TableBody>
-//           {jobs.map((job) => (
-//             <TableRow key={job.id}>
-//               <TableCell className="font-medium">
-//                 <Link
-//                   href={`/available-jobs/${job.Job.slug}`}
-//                   className="hover:underline hover:text-primary transition-all"
-//                 >
-//                   {job.Job.title}
-//                 </Link>
-//               </TableCell>
-//               <TableCell>{job.Job.category}</TableCell>
-//               <TableCell>
-//                 <Badge
-//                   variant={
-//                     job.status === "PENDING"
-//                       ? "pending"
-//                       : job.status === "APPROVED"
-//                         ? "default"
-//                         : job.status === "REJECTED"
-//                           ? "destructive"
-//                           : "default"
-//                   }
-//                 >
-//                   {formattedStatus[job.status]}
-//                 </Badge>
-//               </TableCell>
-//               <TableCell>
-//                 <NairaIcon />
-//                 {formatMoneyInput(job.Job.reward)}
-//               </TableCell>
-//               <TableCell className="text-right">
-//                 <DropdownMenu>
-//                   <DropdownMenuTrigger asChild>
-//                     <Button
-//                       size="icon"
-//                       variant="outline"
-//                       className="rounded-full shadow-none"
-//                       aria-label="Open edit menu"
-//                     >
-//                       <EllipsisIcon size={16} aria-hidden="true" />
-//                     </Button>
-//                   </DropdownMenuTrigger>
-//                   <DropdownMenuContent align="end">
-//                     <DropdownMenuItem asChild>
-//                       <Link href={`/submitted-jobs/${job.id}`}>
-//                         View details
-//                       </Link>
-//                     </DropdownMenuItem>
-//                     <DropdownMenuItem>Cancel submission</DropdownMenuItem>
-//                   </DropdownMenuContent>
-//                 </DropdownMenu>
-//               </TableCell>
-//             </TableRow>
-//           ))}
-//         </TableBody>
-//       </Table>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import { GetMySubmittedJobsType } from "@/app/data/user/job/submitted/get-my-submitted-jobs";
@@ -124,6 +24,7 @@ import Link from "next/link";
 import { loadMoreSubmittedJobs } from "@/app/data/user/job/submitted/load-more-submitted-jobs";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Loader } from "@/components/Loader";
+import { useRouter } from "next/navigation";
 
 interface Props {
   initialJobs: GetMySubmittedJobsType[];
@@ -138,6 +39,7 @@ export function JobsTable({
   initialTotal,
   query,
 }: Props) {
+  const router = useRouter();
   const [jobs, setJobs] = useState<GetMySubmittedJobsType[]>(initialJobs);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNext, setHasNext] = useState(initialHasNext);
@@ -168,7 +70,6 @@ export function JobsTable({
         setError(result.error || "Failed to load more submissions");
       }
     } catch (err) {
-      console.error("Load more error:", err);
       setError("Failed to load more submissions");
     } finally {
       setIsLoading(false);
@@ -235,7 +136,10 @@ export function JobsTable({
         </TableHeader>
         <TableBody>
           {jobs.map((job, index) => (
-            <TableRow key={`${job.id}-${index}`}>
+            <TableRow
+              onClick={() => router.push(`/submitted-jobs/${job.id}`)}
+              key={`${job.id}-${index}`}
+            >
               <TableCell className="font-medium">
                 <Link
                   href={`/available-jobs/${job.Job.slug}`}
@@ -282,7 +186,6 @@ export function JobsTable({
                         View details
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>Cancel submission</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>

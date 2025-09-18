@@ -1,7 +1,13 @@
 import { PageHeader } from "@/app/(member)/_components/PageHeader";
 import { getJobDetails } from "@/app/data/user/job/get-job-details";
 import { SubmissionCards } from "./_components/SubmissionCards";
-import { getJobApplicants } from "@/app/data/user/job/submitted/get-job-applicants";
+import {
+  getApprovedApplicantsCount,
+  getJobApplicants,
+  getPendingApplicantsCount,
+  getRejectedApplicantsCount,
+  getTotalApplicantsCount,
+} from "@/app/data/user/job/submitted/get-job-applicants";
 import { SubmissionsTable } from "./_components/SubmissionsTable";
 import { EmptyState } from "@/components/EmptyState";
 import { SearchBar } from "@/app/(member)/_components/SearchBar";
@@ -28,12 +34,23 @@ const page = async ({
     page: 1,
     limit: DEFAULT_LIMIT,
   });
+  const totalApplicantsCount = await getTotalApplicantsCount(slug);
+  const rejectedApplicantsCount = await getRejectedApplicantsCount(slug);
+  const approvedApplicantsCount = await getApprovedApplicantsCount(slug);
+  const pendingApplicantsCount = await getPendingApplicantsCount(slug);
   const job = await getJobDetails(slug);
 
   return (
     <div className="py-16 md:py-32 container space-y-6">
       <PageHeader title={`Submission for ${job.title}`} />
-      <SubmissionCards total={applicants.pagination.total} />
+      {!query && (
+        <SubmissionCards
+          total={totalApplicantsCount}
+          rejected={rejectedApplicantsCount}
+          approved={approvedApplicantsCount}
+          pending={pendingApplicantsCount}
+        />
+      )}
       <SearchBar />
       {applicants.applicantsData.length !== 0 && (
         <>

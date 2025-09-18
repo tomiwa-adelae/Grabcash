@@ -33,12 +33,6 @@ export const JobsCard = ({
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   const loadMore = useCallback(async () => {
-    console.log("📱 MOBILE LOAD MORE TRIGGERED:", {
-      currentPage,
-      hasNext,
-      isLoading,
-    });
-
     if (isLoading || !hasNext) {
       return;
     }
@@ -51,8 +45,6 @@ export const JobsCard = ({
       const result = await loadMoreMyJobs(nextPage, query);
 
       if (result.success && result.data) {
-        console.log("📱 MOBILE ADDING NEW JOBS:", result.data.jobs.length);
-
         setJobs((prevJobs) => [...prevJobs, ...result.data.jobs]);
         setCurrentPage(nextPage);
         setHasNext(result.data.pagination.hasNext);
@@ -60,7 +52,6 @@ export const JobsCard = ({
         setError(result.error || "Failed to load more jobs");
       }
     } catch (err) {
-      console.error("📱 MOBILE LOAD MORE ERROR:", err);
       setError("Failed to load more jobs");
     } finally {
       setIsLoading(false);
@@ -79,19 +70,10 @@ export const JobsCard = ({
       return;
     }
 
-    console.log("📱 MOBILE SETTING UP OBSERVER");
-
     observerRef.current = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        console.log("📱 MOBILE OBSERVER EVENT:", {
-          isIntersecting: entry.isIntersecting,
-          hasNext,
-          isLoading,
-        });
-
         if (entry.isIntersecting && hasNext && !isLoading) {
-          console.log("📱 MOBILE OBSERVER TRIGGERED LOAD MORE");
           loadMore();
         }
       },

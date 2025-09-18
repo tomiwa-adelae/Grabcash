@@ -3,6 +3,9 @@ import { getMySubmittedJob } from "@/app/data/user/job/submitted/get-my-submitte
 import { Confetti } from "@/components/Confetti";
 import { CopyToClipboard } from "@/components/CopyToClipboard";
 import { NairaIcon } from "@/components/NairaIcon";
+import { SubmissionApprovedBanner } from "@/components/SubmissionApprovedBanner";
+import { SubmissionPendingBanner } from "@/components/SubmissionPendingBanner";
+import { SubmissionRejectedBanner } from "@/components/SubmissionRejectedBanner";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { formatMoneyInput, formattedStatus } from "@/lib/utils";
@@ -18,14 +21,17 @@ const page = async ({ params }: { params: Params }) => {
   const job = await getMySubmittedJob(id);
 
   return (
-    <div className="py-16 md:py-32 container">
+    <div className="py-16 md:py-32 container space-y-6">
       <PageHeader
-        title={`Application ${job.status === "PENDING" ? "Pending" : job.status == "APPROVED" ? "Approved" : "Rejected"}`}
+        title={`${job.Job.title} - ₦${formatMoneyInput(job.Job.reward)}`}
       />
       <p className="text-base text-muted-foreground mt-1.5">
         The job poster will review your submission. You’ll be notified when your
         task is approved, rejected, or needs resubmission.
       </p>
+      {job.status === "APPROVED" && <SubmissionApprovedBanner />}
+      {job.status === "REJECTED" && <SubmissionRejectedBanner />}
+      {job.status === "PENDING" && <SubmissionPendingBanner />}
       <Separator className="my-6" />
       <div className="space-y-4 mt-6 text-base">
         <p>
@@ -57,14 +63,7 @@ const page = async ({ params }: { params: Params }) => {
           </ul>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-        <Button
-          variant={"outline"}
-          className="border-destructive text-destructive hover:bg-destructive/10"
-          size="md"
-        >
-          Cancel Submission
-        </Button>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
         <Button
           size={"md"}
           variant={"outline"}

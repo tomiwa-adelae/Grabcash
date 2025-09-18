@@ -27,6 +27,7 @@ export const getUserDetails = async (username?: string) => {
       onboardingCompleted: true,
       emailVerified: true,
       createdAt: true,
+      earnings: true,
       socials: {
         select: {
           id: true,

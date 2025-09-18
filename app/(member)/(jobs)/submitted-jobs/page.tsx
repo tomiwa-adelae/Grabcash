@@ -29,6 +29,8 @@ import { JobsCard } from "./_components/JobsCard";
 import { getMySubmittedJobs } from "@/app/data/user/job/submitted/get-my-submitted-jobs";
 import { EmptyState } from "@/components/EmptyState";
 import { DEFAULT_LIMIT } from "@/constants";
+import { formatMoneyInput } from "@/lib/utils";
+import { getUserDetails } from "@/app/data/user/get-user-details";
 
 type SearchParams = Promise<{
   query?: string;
@@ -36,6 +38,8 @@ type SearchParams = Promise<{
 
 const page = async ({ searchParams }: { searchParams: SearchParams }) => {
   const { query } = await searchParams;
+
+  const user = await getUserDetails();
 
   // Get initial data with pagination
   const jobsData = await getMySubmittedJobs({
@@ -46,7 +50,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
 
   return (
     <div className="py-16 md:py-32 container space-y-6">
-      <PageHeader title="Submitted Jobs" />
+      <PageHeader title={`Submitted Jobs`} />
       <SearchBar />
       {jobsData.jobs.length !== 0 && (
         <>

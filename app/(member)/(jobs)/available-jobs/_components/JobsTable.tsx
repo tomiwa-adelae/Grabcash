@@ -64,7 +64,6 @@ export function JobsTable({
         setError(result.error || "Failed to load more jobs");
       }
     } catch (err) {
-      console.error("Load more error:", err);
       setError("Failed to load more jobs");
     } finally {
       setIsLoading(false);

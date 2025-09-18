@@ -16,7 +16,6 @@ export async function loadMoreMyJobs(page: number, query?: string) {
       data: result,
     };
   } catch (error) {
-    console.error("Error loading more jobs:", error);
     return {
       success: false,
       error: "Failed to load more jobs",

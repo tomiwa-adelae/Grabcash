@@ -29,6 +29,8 @@ model User {
 
   credits Int @default(20)
 
+  earnings Int @default(0)
+
   subscription Subscription?
 
   createdAt DateTime @default(now())
@@ -223,6 +225,8 @@ model Applicant {
   paragraph   String?
 
   applicationID String
+
+  rejectionReason String?
 
   status JobApplicationStatus @default(PENDING)
 
