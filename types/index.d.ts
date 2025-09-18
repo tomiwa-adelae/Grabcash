@@ -14,4 +14,5 @@ declare interface Params {
   page?: number;
   limit?: number;
   id?: string;
+  slug?: string;
 }

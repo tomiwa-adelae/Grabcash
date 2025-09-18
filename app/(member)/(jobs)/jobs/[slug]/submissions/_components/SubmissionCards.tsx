@@ -7,7 +7,7 @@ interface Props {
 
 export const SubmissionCards = ({ total }: Props) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       <Card className="gap-0 bg-[#38485C] text-white">
         <CardContent className="flex flex-col items-center text-center justify-center gap-0.5">
           <h2 className="font-medium text-2xl md:text-3xl">{total}</h2>

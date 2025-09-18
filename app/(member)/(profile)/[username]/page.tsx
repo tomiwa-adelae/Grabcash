@@ -16,6 +16,7 @@ import { getUserProfile } from "@/app/data/user/get-user-profile";
 import { FollowingDetails } from "../_components/FollowingDetails";
 import { followers } from "@/app/data/follow/followers";
 import { followings } from "@/app/data/follow/followings";
+import { DEFAULT_LIMIT } from "@/constants";
 
 type Params = Promise<{
   username: string;
@@ -44,7 +45,7 @@ const page = async ({
     id: user.id,
     query,
     page: 1,
-    limit: 1,
+    limit: DEFAULT_LIMIT,
   });
 
   // Updated to get pagination data
@@ -52,7 +53,7 @@ const page = async ({
     id: user.id,
     query,
     page: 1,
-    limit: 1,
+    limit: DEFAULT_LIMIT,
   });
 
   const following = await isFollowing(user.id);
@@ -130,7 +131,7 @@ const page = async ({
             )}
           </div>
         </div>
-        <ProfileTabs myProfile={myProfile} user={user} jobs={jobs} />
+        <ProfileTabs myProfile={myProfile} user={user} jobs={jobs.jobs} />
       </div>
     </div>
   );

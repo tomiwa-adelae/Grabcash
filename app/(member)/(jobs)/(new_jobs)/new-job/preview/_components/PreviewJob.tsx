@@ -100,7 +100,7 @@ export const PreviewJob = ({ name, email, phoneNumber }: Props) => {
           Clicking on Start Job indicates your interest in the task and you will
           be counted in as an applicant.{" "}
         </p>
-        <JobCTAs />
+        <JobCTAs alreadyApplied={true} isOwner={true} jobLink="" />
       </div>
       <div className="mt-6">
         <h2 className="font-semibold text-xl md:text-2xl">Instructions</h2>
@@ -112,7 +112,7 @@ export const PreviewJob = ({ name, email, phoneNumber }: Props) => {
         </h2>
         <p className="text-base text-muted-foreground">You must upload:</p>
         <RenderDescription json={job.proofOfCompletion} />
-        <ProofForm />
+        <ProofForm id="" slug="" submissionType="" />
       </div>
       <div className="mt-10 space-y-2.5 text-base">
         <p>Please follow instructions exactly as stated.</p>

@@ -1,6 +1,7 @@
 // app/data/follow/load-more-followers.ts
 "use server";
 
+import { DEFAULT_LIMIT } from "@/constants";
 import { followers } from "./followers";
 
 export async function loadMoreFollowers(
@@ -13,7 +14,7 @@ export async function loadMoreFollowers(
       id: userId,
       query,
       page,
-      limit: 1,
+      limit: DEFAULT_LIMIT,
     });
 
     return {

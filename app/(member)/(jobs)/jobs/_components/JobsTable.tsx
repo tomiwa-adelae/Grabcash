@@ -1,5 +1,5 @@
 "use client";
-import { GetMyJobsType } from "@/app/data/user/job/get-my-jobs";
+
 import { NairaIcon } from "@/components/NairaIcon";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -21,13 +21,120 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { GetMyJobsType } from "@/app/data/user/job/my-job/get-my-jobs";
+import { loadMoreMyJobs } from "@/app/data/user/job/my-job/load-more-my-jobs";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Loader } from "@/components/Loader";
 
 interface Props {
-  jobs: GetMyJobsType[];
+  initialJobs: GetMyJobsType[];
+  initialHasNext: boolean;
+  initialTotal: number;
+  query?: string;
 }
 
-export function JobsTable({ jobs }: Props) {
+export function JobsTable({
+  initialJobs,
+  initialHasNext,
+  initialTotal,
+  query,
+}: Props) {
   const router = useRouter();
+
+  const [jobs, setJobs] = useState<GetMyJobsType[]>(initialJobs);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasNext, setHasNext] = useState(initialHasNext);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Observer refs
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const sentinelRef = useRef<HTMLTableRowElement>(null);
+
+  const loadMore = useCallback(async () => {
+    console.log("🔶 LOAD MORE TRIGGERED:", { currentPage, hasNext, isLoading });
+
+    if (isLoading || !hasNext) {
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const nextPage = currentPage + 1;
+      const result = await loadMoreMyJobs(nextPage, query);
+
+      if (result.success && result.data) {
+        console.log("🔶 ADDING NEW JOBS:", result.data.jobs.length);
+
+        setJobs((prevJobs) => [...prevJobs, ...result.data.jobs]);
+        setCurrentPage(nextPage);
+        setHasNext(result.data.pagination.hasNext);
+      } else {
+        setError(result.error || "Failed to load more jobs");
+      }
+    } catch (err) {
+      console.error("🔶 LOAD MORE ERROR:", err);
+      setError("Failed to load more jobs");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage, hasNext, isLoading, query]);
+
+  // Set up intersection observer
+  useEffect(() => {
+    // Clean up existing observer
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    // Only set up observer if there are more items to load
+    if (!hasNext || !sentinelRef.current) {
+      return;
+    }
+
+    console.log("🔍 SETTING UP OBSERVER");
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        console.log("👁️ OBSERVER EVENT:", {
+          isIntersecting: entry.isIntersecting,
+          hasNext,
+          isLoading,
+        });
+
+        if (entry.isIntersecting && hasNext && !isLoading) {
+          console.log("🚀 OBSERVER TRIGGERED LOAD MORE");
+          loadMore();
+        }
+      },
+      {
+        root: null, // Use viewport
+        rootMargin: "200px", // Start loading 200px before element comes into view
+        threshold: 0, // Trigger as soon as element is visible
+      }
+    );
+
+    observerRef.current.observe(sentinelRef.current);
+
+    // Cleanup function
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [loadMore, hasNext, isLoading]);
+
+  // Reset when query changes
+  useEffect(() => {
+    setJobs(initialJobs);
+    setCurrentPage(1);
+    setHasNext(initialHasNext);
+    setError(null);
+    setIsLoading(false);
+  }, [query, initialJobs, initialHasNext]);
 
   return (
     <div className="[&>div]:max-h-screen hidden sm:block">
@@ -42,8 +149,8 @@ export function JobsTable({ jobs }: Props) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {jobs.map((job) => (
-            <TableRow className="cursor-pointer" key={job.id}>
+          {jobs.map((job, index) => (
+            <TableRow className="cursor-pointer" key={`${job.id}-${index}`}>
               <TableCell className="font-medium">
                 <Link
                   href={`/available-jobs/${job.slug}`}
@@ -94,6 +201,54 @@ export function JobsTable({ jobs }: Props) {
               </TableCell>
             </TableRow>
           ))}
+
+          {/* Observer sentinel row - this is what gets watched */}
+          {hasNext && (
+            <TableRow ref={sentinelRef}>
+              <TableCell colSpan={5} className="text-center py-6">
+                {isLoading ? (
+                  <div className="flex items-center justify-center space-x-2">
+                    <Loader text="" />
+                    <span className="text-sm text-muted-foreground">
+                      Loading more jobs...
+                    </span>
+                  </div>
+                ) : error ? (
+                  <div>
+                    <p className="text-red-600 text-sm mb-2">{error}</p>
+                    <Button
+                      size={"md"}
+                      variant={"destructive"}
+                      onClick={loadMore}
+                    >
+                      Try Again
+                    </Button>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-muted-foreground text-sm mb-2">
+                      Scroll to load more jobs
+                    </p>
+                    <Button size={"md"} onClick={loadMore}>
+                      Load More ({jobs.length} of {initialTotal})
+                    </Button>
+                  </div>
+                )}
+              </TableCell>
+            </TableRow>
+          )}
+
+          {/* End state */}
+          {!hasNext && jobs.length > 0 && (
+            <TableRow>
+              <TableCell
+                colSpan={5}
+                className="text-center py-4 text-sm text-muted-foreground"
+              >
+                All jobs loaded ({jobs.length} total)
+              </TableCell>
+            </TableRow>
+          )}
         </TableBody>
       </Table>
     </div>

@@ -1,5 +1,6 @@
 "use server";
 
+import { DEFAULT_LIMIT } from "@/constants";
 import { followings } from "./followings";
 
 export async function loadMoreFollowings(
@@ -12,7 +13,7 @@ export async function loadMoreFollowings(
       id: userId,
       query,
       page,
-      limit: 1,
+      limit: DEFAULT_LIMIT,
     });
 
     return {

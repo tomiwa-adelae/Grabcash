@@ -1,26 +1,25 @@
-import { prisma } from "@/lib/db";
 import "server-only";
-import { requireSubscription } from "../user/subscription/require-subscription";
+import { prisma } from "@/lib/db";
+import { requireUser } from "../../require-user";
 import { DEFAULT_LIMIT } from "@/constants";
 
-interface GetAvailableJobsParams {
+interface GetMyJobsParams {
   query?: string;
   page?: number;
   limit?: number;
 }
 
-export const getAvailableJobs = async (params: GetAvailableJobsParams = {}) => {
-  const { query, page = 1, limit = DEFAULT_LIMIT } = params;
-
-  await requireSubscription();
-
+export const getMyJobs = async ({
+  query,
+  page = 1,
+  limit = DEFAULT_LIMIT,
+}: GetMyJobsParams = {}) => {
+  const { user } = await requireUser();
   const skip = (page - 1) * limit;
 
   // Base query conditions
   const whereConditions: any = {
-    status: "PUBLISHED",
-    paymentVerified: true,
-    jobOpen: true,
+    userId: user.id,
   };
 
   // Add search if provided
@@ -41,12 +40,12 @@ export const getAvailableJobs = async (params: GetAvailableJobsParams = {}) => {
         slug: true,
         title: true,
         category: true,
-        noOfWorkers: true,
         reward: true,
+        noOfWorkers: true,
+        status: true,
+        createdAt: true,
         _count: {
-          select: {
-            applicants: true,
-          },
+          select: { applicants: true },
         },
       },
       orderBy: { createdAt: "desc" },
@@ -75,7 +74,5 @@ export const getAvailableJobs = async (params: GetAvailableJobsParams = {}) => {
   };
 };
 
-export type GetAvailableJobsResponse = Awaited<
-  ReturnType<typeof getAvailableJobs>
->;
-export type GetAvailableJobsType = GetAvailableJobsResponse["jobs"][0];
+export type GetMyJobsResponse = Awaited<ReturnType<typeof getMyJobs>>;
+export type GetMyJobsType = GetMyJobsResponse["jobs"][0];

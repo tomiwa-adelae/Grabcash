@@ -1,11 +1,12 @@
 import "server-only";
 import { prisma } from "@/lib/db";
 import { requireUser } from "../user/require-user";
+import { DEFAULT_LIMIT } from "@/constants";
 
 export const followings = async ({
   id,
   query,
-  limit = 1,
+  limit = DEFAULT_LIMIT,
   page = 1,
 }: Params) => {
   const { user } = await requireUser();
