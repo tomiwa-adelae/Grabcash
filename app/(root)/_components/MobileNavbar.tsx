@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Logo } from "@/components/Logo";
-import { rootNavLinks, userDropdownLinks } from "@/constants";
+import { rootNavLinks, userDropdownLinks, memberNavLinks } from "@/constants";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useConstructUrl } from "@/hooks/use-construct-url";
@@ -127,6 +127,45 @@ export function MobileNavbar({ session }: Props) {
                 )}
                 {session && (
                   <div>
+                    <Separator className="my-4" />
+                    <div className="grid gap-1">
+                      {memberNavLinks.map((link, idx) =>
+                        link.submenu ? (
+                          <div key={idx} className="flex flex-col">
+                            <div className="px-4 py-2 text-sm font-semibold text-muted-foreground">
+                              {link.label}
+                            </div>
+                            <div className="grid gap-1">
+                              {link.items.map((item, subIdx) => (
+                                <Link
+                                  key={subIdx}
+                                  href={item.slug}
+                                  className={`group flex items-center justify-start gap-2 group/sidebar ${
+                                    isActive(item.slug) && "bg-secondary"
+                                  } hover:bg-secondary p-4 rounded-lg`}
+                                  onClick={handleClick}
+                                >
+                                  <span className="text-sm">{item.label}</span>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          <Link
+                            key={idx}
+                            href={link.slug!}
+                            className={`group flex items-center justify-start gap-2 group/sidebar ${
+                              isActive(link.slug!) && "bg-secondary"
+                            } hover:bg-secondary p-4 rounded-lg`}
+                            onClick={handleClick}
+                          >
+                            <span className="text-sm font-medium">
+                              {link.label}
+                            </span>
+                          </Link>
+                        )
+                      )}
+                    </div>
                     <Separator className="my-4" />
                     <div className="grid gap-1">
                       {userDropdownLinks.map(({ label, slug }, idx) => (
