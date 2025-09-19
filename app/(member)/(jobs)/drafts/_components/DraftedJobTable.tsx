@@ -1,5 +1,6 @@
 "use client";
 
+import { GetAvailableJobsType } from "@/app/data/job/get-available-jobs";
 import { NairaIcon } from "@/components/NairaIcon";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -11,30 +12,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn, formatMoneyInput, formattedStatus } from "@/lib/utils";
+import { cn, formatDate, formatMoneyInput } from "@/lib/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { EllipsisIcon } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { GetMyJobsType } from "@/app/data/user/job/my-job/get-my-jobs";
-import { loadMoreMyJobs } from "@/app/data/user/job/my-job/load-more-my-jobs";
+import { loadMoreAvailableJobs } from "@/app/data/job/load-more-available-jobs";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Loader } from "@/components/Loader";
-import { Badge } from "@/components/ui/badge";
+import { DraftedJobActions } from "./DraftedJobActions";
+import { GetDraftedJobsType } from "@/app/data/user/job/draft/get-drafted-jobs";
+import { loadMoreDraftedJobs } from "@/app/data/user/job/draft/load-more-drafted-jobs";
+import { DeleteJobModal } from "./DeleteJobModal";
 
 interface Props {
-  initialJobs: GetMyJobsType[];
+  initialJobs: GetDraftedJobsType[];
   initialHasNext: boolean;
   initialTotal: number;
   query?: string;
 }
 
-export function JobsTable({
+export function DraftedJobsTable({
   initialJobs,
   initialHasNext,
   initialTotal,
@@ -42,11 +38,15 @@ export function JobsTable({
 }: Props) {
   const router = useRouter();
 
-  const [jobs, setJobs] = useState<GetMyJobsType[]>(initialJobs);
+  const [jobs, setJobs] = useState<GetDraftedJobsType[]>(initialJobs);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNext, setHasNext] = useState(initialHasNext);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Modal state at table level
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<GetDraftedJobsType>();
 
   // Observer refs
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -62,7 +62,7 @@ export function JobsTable({
 
     try {
       const nextPage = currentPage + 1;
-      const result = await loadMoreMyJobs(nextPage, query);
+      const result = await loadMoreDraftedJobs(nextPage, query);
 
       if (result.success && result.data) {
         setJobs((prevJobs) => [...prevJobs, ...result.data.jobs]);
@@ -93,6 +93,7 @@ export function JobsTable({
     observerRef.current = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
+
         if (entry.isIntersecting && hasNext && !isLoading) {
           loadMore();
         }
@@ -128,69 +129,45 @@ export function JobsTable({
       <Table className="[&_td]:border-border [&_th]:border-border border-separate border-spacing-0 [&_tfoot_td]:border-t [&_th]:border-b [&_tr]:border-none [&_tr:not(:last-child)_td]:border-b">
         <TableHeader className="bg-background/90 sticky top-0 z-10 backdrop-blur-xs">
           <TableRow className="hover:bg-transparent">
+            <TableHead>Job ID</TableHead>
             <TableHead>Job Title</TableHead>
-            <TableHead>Category</TableHead>
-            <TableHead>Progress</TableHead>
-            <TableHead>Rewards</TableHead>
-            <TableHead>Status</TableHead>
+            <TableHead>Last updated</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {jobs.map((job, index) => (
-            <TableRow className="cursor-pointer" key={`${job.id}-${index}`}>
+            <TableRow
+              onClick={() => router.push(`/jobs/${job.slug}/edit`)}
+              className="cursor-pointer"
+              key={`${job.id}-${index}`}
+            >
               <TableCell className="font-medium">
                 <Link
-                  href={`/available-jobs/${job.slug}`}
+                  href={`/jobs/${job.slug}/edit`}
+                  className="hover:underline hover:text-primary transition-all"
+                >
+                  {job.jobID}
+                </Link>
+              </TableCell>
+              <TableCell className="font-medium">
+                <Link
+                  href={`/jobs/${job.slug}/edit`}
                   className="hover:underline hover:text-primary transition-all"
                 >
                   {job.title}
                 </Link>
               </TableCell>
-              <TableCell>{job.category}</TableCell>
-              <TableCell>
-                <div className="flex flex-col items-start justify-center gap-1">
-                  {job._count.applicants}/{job.noOfWorkers}
-                  <Progress
-                    value={
-                      (job._count.applicants / Number(job.noOfWorkers)) * 100
-                    }
-                    className={cn("h-1")}
-                  />
-                </div>
-              </TableCell>
-              <TableCell>
-                <NairaIcon />
-                {formatMoneyInput(job.reward)}
-              </TableCell>
-              <TableCell>
-                <Badge variant={job.jobOpen ? "default" : "pending"}>
-                  {job.jobOpen ? "Active" : "Closed"}
-                </Badge>
-              </TableCell>
+              <TableCell>{formatDate(job.updatedAt)}</TableCell>
               <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="rounded-full shadow-none"
-                      aria-label="Open edit menu"
-                    >
-                      <EllipsisIcon size={16} aria-hidden="true" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link href={`/jobs/${job.slug}`}>View job</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href={`/jobs/${job.slug}/submissions`}>
-                        View submissions
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <DraftedJobActions
+                  slug={job.slug!}
+                  status={job.status}
+                  onDelete={() => {
+                    setSelectedJob(job);
+                    setOpenDeleteModal(true);
+                  }}
+                />
               </TableCell>
             </TableRow>
           ))}
@@ -213,6 +190,7 @@ export function JobsTable({
                       size={"md"}
                       variant={"destructive"}
                       onClick={loadMore}
+                      className="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
                     >
                       Try Again
                     </Button>
@@ -222,7 +200,7 @@ export function JobsTable({
                     <p className="text-muted-foreground text-sm mb-2">
                       Scroll to load more jobs
                     </p>
-                    <Button size={"md"} onClick={loadMore}>
+                    <Button size="md" onClick={loadMore}>
                       Load More ({jobs.length} of {initialTotal})
                     </Button>
                   </div>
@@ -244,6 +222,16 @@ export function JobsTable({
           )}
         </TableBody>
       </Table>
+
+      {/* Modal rendered outside the table */}
+      {openDeleteModal && selectedJob && (
+        <DeleteJobModal
+          open={openDeleteModal}
+          closeModal={() => setOpenDeleteModal(false)}
+          jobTitle={selectedJob.title}
+          id={selectedJob.id}
+        />
+      )}
     </div>
   );
 }

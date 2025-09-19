@@ -68,6 +68,10 @@ export const memberNavLinks = [
         slug: "/new-job",
         label: "Post new job",
       },
+      {
+        slug: "/drafts",
+        label: "My Drafts",
+      },
     ],
   },
   {
@@ -904,3 +908,5 @@ export const userDropdownLinks = [
     label: "Settings",
   },
 ];
+
+export const DEFAULT_COMMISSION = 10;

@@ -59,7 +59,6 @@ export const rejectApplication = async (
   const { user } = await requireUser();
 
   try {
-    console.log(id, slug, reason, user.id);
     if (!reason) return { status: "error", message: "Please leave a reason" };
 
     await prisma.applicant.update({
@@ -76,7 +75,6 @@ export const rejectApplication = async (
 
     return { status: "success", message: "Submission rejected" };
   } catch (error) {
-    console.log(error);
     return { status: "error", message: "Failed to reject submission" };
   }
 };

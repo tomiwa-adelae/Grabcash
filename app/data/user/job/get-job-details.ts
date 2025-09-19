@@ -2,9 +2,12 @@ import "server-only";
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 import { requireUser } from "../require-user";
+import { requireSubscription } from "../subscription/require-subscription";
 
 export const getJobDetails = async (slug: string) => {
   const { user } = await requireUser();
+  await requireSubscription();
+
   const job = await prisma.job.findUnique({
     where: {
       slug,
@@ -19,6 +22,7 @@ export const getJobDetails = async (slug: string) => {
       description: true,
       type: true,
       instructions: true,
+      noOfWorkers: true,
       proofOfCompletion: true,
       jobID: true,
       jobOpen: true,

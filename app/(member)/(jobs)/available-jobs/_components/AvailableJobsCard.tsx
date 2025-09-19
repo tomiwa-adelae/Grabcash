@@ -17,7 +17,7 @@ interface Props {
   query?: string;
 }
 
-export const JobsCard = ({
+export const AvailableJobsCard = ({
   initialJobs,
   initialHasNext,
   initialTotal,

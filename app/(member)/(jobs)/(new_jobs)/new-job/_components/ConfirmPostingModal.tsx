@@ -20,7 +20,7 @@ import { NewJobFormSchemaType } from "@/lib/zodSchemas";
 import { NairaIcon } from "@/components/NairaIcon";
 import { formatMoneyInput } from "@/lib/utils";
 import { env } from "@/lib/env";
-import { EARNSPHERE_LOGO } from "@/constants";
+import { DEFAULT_COMMISSION, EARNSPHERE_LOGO } from "@/constants";
 import { useFlutterwavePayment } from "@/hooks/use-flutterwave-payment";
 
 interface Props {
@@ -45,7 +45,10 @@ export function ConfirmPostingModal({
   const { initiatePayment } = useFlutterwavePayment();
 
   const baseTotal = Number(data.reward) * Number(data.noOfWorkers);
-  const totalWithFee = (baseTotal * 1.1).toFixed(); // Add 10%
+  const totalWithFee = (
+    baseTotal +
+    (baseTotal * DEFAULT_COMMISSION) / 100
+  ).toFixed(); // Add 10%
 
   const handleSubmit = () => {
     startTransition(async () => {
@@ -77,22 +80,32 @@ export function ConfirmPostingModal({
           },
         };
 
-        initiatePayment(config, async (response) => {
-          const { data: paymentResult, error } = await tryCatch(
-            verifyJobPayment(result.id!, totalWithFee, response)
-          );
-          if (error) {
-            toast.error(error.message || "Oops! Internal server error");
-            return;
-          }
+        initiatePayment({
+          config,
+          onSuccess: async (response) => {
+            const { data: paymentResult, error } = await tryCatch(
+              verifyJobPayment(result.id!, totalWithFee, response)
+            );
+            if (error) {
+              toast.error(error.message || "Oops! Internal server error");
+              return;
+            }
 
-          if (paymentResult?.status === "success") {
-            toast.success(paymentResult.message);
-            router.push(`/new-job/success?slug=${result?.slug}`);
-          } else {
-            toast.error(paymentResult.message);
-          }
-          // });
+            if (paymentResult?.status === "success") {
+              toast.success(paymentResult.message);
+              router.push(`/new-job/success?slug=${result?.slug}`);
+            } else {
+              toast.error(paymentResult.message);
+            }
+          },
+          onClose: async () => {
+            toast.info("Payment cancelled");
+            router.push(`/new-job/error?slug=${result?.slug}`);
+          },
+          onError: async (error) => {
+            toast.error("Payment failed: " + error.message);
+            router.push(`/new-job/error?slug=${result?.slug}`);
+          },
         });
 
         localStorage.removeItem("jobPreview");

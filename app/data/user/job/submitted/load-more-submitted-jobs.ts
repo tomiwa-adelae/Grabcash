@@ -3,8 +3,11 @@
 
 import { DEFAULT_LIMIT } from "@/constants";
 import { getMySubmittedJobs } from "./get-my-submitted-jobs";
+import { requireSubscription } from "../../subscription/require-subscription";
 
 export async function loadMoreSubmittedJobs(page: number, query?: string) {
+  await requireSubscription();
+
   try {
     const result = await getMySubmittedJobs({
       page,

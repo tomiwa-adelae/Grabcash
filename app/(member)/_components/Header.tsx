@@ -35,7 +35,7 @@ export const Header = () => {
               <NavigationMenuItem key={index}>
                 {link.submenu ? (
                   <>
-                    <NavigationMenuTrigger className="cursor-pointer h-12 px-4 text-muted-foreground hover:text-primary bg-transparent py-1.5 font-medium *:[svg]:-me-0.5 *:[svg]:size-3.5">
+                    <NavigationMenuTrigger className="cursor-pointer h-12 px-3 text-muted-foreground hover:text-primary bg-transparent py-1.5 font-medium *:[svg]:-me-0.5 *:[svg]:size-3.5">
                       {link.label}
                     </NavigationMenuTrigger>
                     <NavigationMenuContent className="data-[motion=from-end]:slide-in-from-right-16! data-[motion=from-start]:slide-in-from-left-16! data-[motion=to-end]:slide-out-to-right-16! data-[motion=to-start]:slide-out-to-left-16! z-50 p-1">
@@ -62,7 +62,7 @@ export const Header = () => {
                     variant={"ghost"}
                     size="md"
                     asChild
-                    className="text-muted-foreground"
+                    className="text-muted-foreground px-3"
                   >
                     <Link href={link.slug!}>{link.label}</Link>
                   </Button>

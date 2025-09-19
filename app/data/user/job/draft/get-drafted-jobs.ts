@@ -4,17 +4,11 @@ import { requireUser } from "../../require-user";
 import { DEFAULT_LIMIT } from "@/constants";
 import { requireSubscription } from "../../subscription/require-subscription";
 
-interface GetMyJobsParams {
-  query?: string;
-  page?: number;
-  limit?: number;
-}
-
-export const getMyJobs = async ({
+export const getDraftedJobs = async ({
   query,
   page = 1,
   limit = DEFAULT_LIMIT,
-}: GetMyJobsParams = {}) => {
+}: Params = {}) => {
   const { user } = await requireUser();
   await requireSubscription();
 
@@ -23,9 +17,7 @@ export const getMyJobs = async ({
   // Base query conditions
   const whereConditions: any = {
     userId: user.id,
-    status: {
-      in: ["ARCHIVED", "PUBLISHED"],
-    },
+    status: "DRAFT",
   };
 
   // Add search if provided
@@ -45,15 +37,14 @@ export const getMyJobs = async ({
         id: true,
         slug: true,
         title: true,
+        jobID: true,
         category: true,
         reward: true,
         noOfWorkers: true,
         status: true,
         jobOpen: true,
         createdAt: true,
-        _count: {
-          select: { applicants: true },
-        },
+        updatedAt: true,
       },
       orderBy: { createdAt: "desc" },
       skip,
@@ -81,5 +72,5 @@ export const getMyJobs = async ({
   };
 };
 
-export type GetMyJobsResponse = Awaited<ReturnType<typeof getMyJobs>>;
-export type GetMyJobsType = GetMyJobsResponse["jobs"][0];
+export type GetDraftedJobsResponse = Awaited<ReturnType<typeof getDraftedJobs>>;
+export type GetDraftedJobsType = GetDraftedJobsResponse["jobs"][0];

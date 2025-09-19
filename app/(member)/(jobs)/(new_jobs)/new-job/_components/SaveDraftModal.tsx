@@ -39,7 +39,7 @@ export function SaveDraftModal({ open, closeModal, description, data }: Props) {
         toast.success(
           `Your job has been saved as a draft. You can find it anytime in your Drafts folder to review, edit, and post when you’re ready.`
         );
-        router.push("/my-drafts");
+        router.push("/drafts");
       } else {
         toast.error(result.message);
       }

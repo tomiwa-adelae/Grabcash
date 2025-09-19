@@ -43,7 +43,7 @@ const page = async ({
   return (
     <div className="py-16 md:py-32 container space-y-6">
       <PageHeader title={`Submission for ${job.title}`} />
-      {!query && (
+      {applicants.applicantsData.length !== 0 && !query && (
         <SubmissionCards
           total={totalApplicantsCount}
           rejected={rejectedApplicantsCount}
@@ -51,7 +51,7 @@ const page = async ({
           pending={pendingApplicantsCount}
         />
       )}
-      <SearchBar />
+      {applicants.applicantsData.length !== 0 && <SearchBar />}
       {applicants.applicantsData.length !== 0 && (
         <>
           <SubmissionsTable

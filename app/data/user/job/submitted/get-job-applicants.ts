@@ -2,6 +2,7 @@ import "server-only";
 import { requireUser } from "../../require-user";
 import { prisma } from "@/lib/db";
 import { DEFAULT_LIMIT } from "@/constants";
+import { requireSubscription } from "../../subscription/require-subscription";
 
 export const getJobApplicants = async ({
   slug,
@@ -10,6 +11,7 @@ export const getJobApplicants = async ({
   page = 1,
 }: Params) => {
   const { user } = await requireUser();
+  await requireSubscription();
 
   const skip = (page - 1) * limit;
 
@@ -94,6 +96,8 @@ export const getJobApplicants = async ({
 
 export const getTotalApplicantsCount = async (slug: string) => {
   const { user } = await requireUser();
+  await requireSubscription();
+
   const applicants = await prisma.applicant.count({
     where: {
       Job: {
@@ -108,6 +112,8 @@ export const getTotalApplicantsCount = async (slug: string) => {
 
 export const getRejectedApplicantsCount = async (slug: string) => {
   const { user } = await requireUser();
+  await requireSubscription();
+
   const applicants = await prisma.applicant.count({
     where: {
       Job: {
@@ -123,6 +129,8 @@ export const getRejectedApplicantsCount = async (slug: string) => {
 
 export const getApprovedApplicantsCount = async (slug: string) => {
   const { user } = await requireUser();
+  await requireSubscription();
+
   const applicants = await prisma.applicant.count({
     where: {
       Job: {
@@ -138,6 +146,8 @@ export const getApprovedApplicantsCount = async (slug: string) => {
 
 export const getPendingApplicantsCount = async (slug: string) => {
   const { user } = await requireUser();
+  await requireSubscription();
+
   const applicants = await prisma.applicant.count({
     where: {
       Job: {

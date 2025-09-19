@@ -35,6 +35,7 @@ import "server-only";
 import { prisma } from "@/lib/db";
 import { requireUser } from "../../require-user";
 import { DEFAULT_LIMIT } from "@/constants";
+import { requireSubscription } from "../../subscription/require-subscription";
 
 interface GetMySubmittedJobsParams {
   query?: string;
@@ -48,6 +49,8 @@ export const getMySubmittedJobs = async (
   const { query, page = 1, limit = DEFAULT_LIMIT } = params;
 
   const { user } = await requireUser();
+  await requireSubscription();
+
   const skip = (page - 1) * limit;
 
   // Base query conditions

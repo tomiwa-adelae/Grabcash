@@ -5,6 +5,7 @@ import { JobsTable } from "./_components/JobsTable";
 import { JobsCard } from "./_components/JobsCard";
 import { getMyJobs } from "@/app/data/user/job/my-job/get-my-jobs";
 import { DEFAULT_LIMIT } from "@/constants";
+import { EmptyState } from "@/components/EmptyState";
 
 type SearchParams = Promise<{
   query?: string;
@@ -24,7 +25,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
     <div className="py-16 md:py-32 container space-y-6">
       <PageHeader title="My Jobs and Campaigns" />
       <SearchBar />
-      {jobsData.jobs.length > 0 ? (
+      {jobsData.jobs.length === 0 && (
         <>
           <JobsTable
             initialJobs={jobsData.jobs}
@@ -39,17 +40,12 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
             query={query}
           />
         </>
-      ) : (
-        <div className="text-center py-12">
-          <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-            No jobs found
-          </h3>
-          <p className="mt-2 text-sm text-gray-500">
-            {query
-              ? `No jobs match "${query}"`
-              : "You haven't created any jobs yet."}
-          </p>
-        </div>
+      )}
+      {jobsData.jobs.length === 0 && (
+        <EmptyState
+          title="No jobs found"
+          description="Once you've created a job, they would appear here"
+        />
       )}
     </div>
   );

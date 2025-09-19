@@ -12,9 +12,8 @@ interface GetAvailableJobsParams {
 
 export const getAvailableJobs = async (params: GetAvailableJobsParams = {}) => {
   const { user } = await requireUser();
-  const { query, page = 1, limit = DEFAULT_LIMIT } = params;
-
   await requireSubscription();
+  const { query, page = 1, limit = DEFAULT_LIMIT } = params;
 
   const skip = (page - 1) * limit;
 
@@ -27,6 +26,9 @@ export const getAvailableJobs = async (params: GetAvailableJobsParams = {}) => {
       none: {
         userId: user.id,
       },
+    },
+    userId: {
+      not: user.id,
     },
   };
 

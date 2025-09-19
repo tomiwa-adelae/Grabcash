@@ -1,14 +1,14 @@
 "use server";
 
 import { DEFAULT_LIMIT } from "@/constants";
-import { getMyJobs } from "./get-my-jobs";
 import { requireSubscription } from "../../subscription/require-subscription";
+import { getDraftedJobs } from "./get-drafted-jobs";
 
-export async function loadMoreMyJobs(page: number, query?: string) {
+export async function loadMoreDraftedJobs(page: number, query?: string) {
   await requireSubscription();
 
   try {
-    const result = await getMyJobs({
+    const result = await getDraftedJobs({
       page,
       query,
       limit: DEFAULT_LIMIT, // Match your initial page limit

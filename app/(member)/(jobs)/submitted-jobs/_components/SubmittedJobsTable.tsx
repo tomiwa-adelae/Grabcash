@@ -1,9 +1,15 @@
 "use client";
 
-import { GetAvailableJobsType } from "@/app/data/job/get-available-jobs";
+import { GetMySubmittedJobsType } from "@/app/data/user/job/submitted/get-my-submitted-jobs";
 import { NairaIcon } from "@/components/NairaIcon";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -12,29 +18,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn, formatMoneyInput } from "@/lib/utils";
+import { formatMoneyInput, formattedStatus } from "@/lib/utils";
+import { EllipsisIcon } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { loadMoreAvailableJobs } from "@/app/data/job/load-more-available-jobs";
+import { loadMoreSubmittedJobs } from "@/app/data/user/job/submitted/load-more-submitted-jobs";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Loader } from "@/components/Loader";
+import { useRouter } from "next/navigation";
 
 interface Props {
-  initialJobs: GetAvailableJobsType[];
+  initialJobs: GetMySubmittedJobsType[];
   initialHasNext: boolean;
   initialTotal: number;
   query?: string;
 }
 
-export function JobsTable({
+export function SubmittedJobsTable({
   initialJobs,
   initialHasNext,
   initialTotal,
   query,
 }: Props) {
   const router = useRouter();
-
-  const [jobs, setJobs] = useState<GetAvailableJobsType[]>(initialJobs);
+  const [jobs, setJobs] = useState<GetMySubmittedJobsType[]>(initialJobs);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasNext, setHasNext] = useState(initialHasNext);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,17 +60,17 @@ export function JobsTable({
 
     try {
       const nextPage = currentPage + 1;
-      const result = await loadMoreAvailableJobs(nextPage, query);
+      const result = await loadMoreSubmittedJobs(nextPage, query);
 
       if (result.success && result.data) {
         setJobs((prevJobs) => [...prevJobs, ...result.data.jobs]);
         setCurrentPage(nextPage);
         setHasNext(result.data.pagination.hasNext);
       } else {
-        setError(result.error || "Failed to load more jobs");
+        setError(result.error || "Failed to load more submissions");
       }
     } catch (err) {
-      setError("Failed to load more jobs");
+      setError("Failed to load more submissions");
     } finally {
       setIsLoading(false);
     }
@@ -123,7 +129,7 @@ export function JobsTable({
           <TableRow className="hover:bg-transparent">
             <TableHead>Job Title</TableHead>
             <TableHead>Category</TableHead>
-            <TableHead>Progress</TableHead>
+            <TableHead>Status</TableHead>
             <TableHead>Rewards</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
@@ -131,38 +137,57 @@ export function JobsTable({
         <TableBody>
           {jobs.map((job, index) => (
             <TableRow
-              onClick={() => router.push(`/available-jobs/${job.slug}`)}
-              className="cursor-pointer"
+              onClick={() => router.push(`/submitted-jobs/${job.id}`)}
               key={`${job.id}-${index}`}
             >
               <TableCell className="font-medium">
                 <Link
-                  href={`/available-jobs/${job.slug}`}
+                  href={`/available-jobs/${job.Job.slug}`}
                   className="hover:underline hover:text-primary transition-all"
                 >
-                  {job.title}
+                  {job.Job.title}
                 </Link>
               </TableCell>
-              <TableCell>{job.category}</TableCell>
+              <TableCell>{job.Job.category}</TableCell>
               <TableCell>
-                <div className="flex flex-col items-start justify-center gap-1">
-                  {job._count.applicants}/{job.noOfWorkers}
-                  <Progress
-                    value={
-                      (job._count.applicants / Number(job.noOfWorkers)) * 100
-                    }
-                    className={cn("h-1")}
-                  />
-                </div>
+                <Badge
+                  variant={
+                    job.status === "PENDING"
+                      ? "pending"
+                      : job.status === "APPROVED"
+                        ? "default"
+                        : job.status === "REJECTED"
+                          ? "destructive"
+                          : "default"
+                  }
+                >
+                  {formattedStatus[job.status]}
+                </Badge>
               </TableCell>
               <TableCell>
                 <NairaIcon />
-                {formatMoneyInput(job.reward)}
+                {formatMoneyInput(job.Job.reward)}
               </TableCell>
               <TableCell className="text-right">
-                <Button asChild size="md" variant={"link"}>
-                  <Link href={`/available-jobs/${job.slug}`}>View job</Link>
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="rounded-full shadow-none"
+                      aria-label="Open edit menu"
+                    >
+                      <EllipsisIcon size={16} aria-hidden="true" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <Link href={`/submitted-jobs/${job.id}`}>
+                        View details
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </TableCell>
             </TableRow>
           ))}
@@ -175,17 +200,16 @@ export function JobsTable({
                   <div className="flex items-center justify-center space-x-2">
                     <Loader text="" />
                     <span className="text-sm text-muted-foreground">
-                      Loading more jobs...
+                      Loading more submissions...
                     </span>
                   </div>
                 ) : error ? (
                   <div>
                     <p className="text-red-600 text-sm mb-2">{error}</p>
                     <Button
-                      size={"md"}
+                      size="md"
                       variant={"destructive"}
                       onClick={loadMore}
-                      className="px-3 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600"
                     >
                       Try Again
                     </Button>
@@ -193,7 +217,7 @@ export function JobsTable({
                 ) : (
                   <div>
                     <p className="text-muted-foreground text-sm mb-2">
-                      Scroll to load more jobs
+                      Scroll to load more submissions
                     </p>
                     <Button size="md" onClick={loadMore}>
                       Load More ({jobs.length} of {initialTotal})
@@ -211,7 +235,7 @@ export function JobsTable({
                 colSpan={5}
                 className="text-center py-4 text-sm text-muted-foreground"
               >
-                All jobs loaded ({jobs.length} total)
+                All submissions loaded ({jobs.length} total)
               </TableCell>
             </TableRow>
           )}

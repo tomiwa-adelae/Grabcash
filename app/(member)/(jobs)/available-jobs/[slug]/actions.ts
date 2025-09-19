@@ -1,6 +1,7 @@
 "use server";
 
 import { requireUser } from "@/app/data/user/require-user";
+import { requireSubscription } from "@/app/data/user/subscription/require-subscription";
 import { prisma } from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
 import { generateSuffix } from "@/lib/utils";
@@ -10,6 +11,7 @@ export const saveApplicantScreenshot = async (
   screenshots: string[]
 ) => {
   const { user } = await requireUser();
+  await requireSubscription();
 
   try {
     if (screenshots.length === 0 || !screenshots)

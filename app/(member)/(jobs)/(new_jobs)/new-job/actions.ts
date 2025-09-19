@@ -6,6 +6,7 @@ import { prisma } from "@/lib/db";
 import { ApiResponse } from "@/lib/types";
 import { generateSuffix } from "@/lib/utils";
 import { newJobFormSchema, NewJobFormSchemaType } from "@/lib/zodSchemas";
+import { revalidatePath } from "next/cache";
 
 import slugify from "slugify";
 
@@ -73,10 +74,31 @@ export const saveDraft = async (
 
     const slug = slugify(data.title);
 
+    const year = new Date().getFullYear();
+    let suffix = generateSuffix();
+    let jobID = `JOB-${year}-${suffix}`;
+
+    let existing = await prisma.job.findUnique({
+      where: {
+        jobID,
+      },
+    });
+
+    while (existing) {
+      suffix = generateSuffix();
+      jobID = `JOB-${year}-${suffix}`;
+      existing = await prisma.job.findUnique({
+        where: {
+          jobID,
+        },
+      });
+    }
+
     await prisma.job.create({
       data: {
         userId: user.id,
         ...data,
+        jobID,
         slug,
         status: "DRAFT",
       },
@@ -122,8 +144,20 @@ export const verifyJobPayment = async (
         txRef: response.tx_ref,
         jobId: job.id,
         userId: user.id,
+        status:
+          response.status === "successful"
+            ? "SUCCESS"
+            : response.status === "approved"
+              ? "SUCCESS"
+              : response.status === "failed"
+                ? "FAILED"
+                : response.status === "pending"
+                  ? "PENDING"
+                  : "PENDING",
       },
     });
+
+    revalidatePath("/");
 
     return { status: "success", message: "Payment successful" };
   } catch (error) {

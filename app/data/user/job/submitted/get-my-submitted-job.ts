@@ -2,9 +2,11 @@ import "server-only";
 import { requireUser } from "../../require-user";
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
+import { requireSubscription } from "../../subscription/require-subscription";
 
 export const getMySubmittedJob = async (id: string) => {
   const { user } = await requireUser();
+  await requireSubscription();
 
   const job = await prisma.applicant.findUnique({
     where: {

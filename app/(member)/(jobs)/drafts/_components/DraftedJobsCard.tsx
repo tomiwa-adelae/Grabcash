@@ -4,37 +4,33 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDate, formattedStatus } from "@/lib/utils";
 import Link from "next/link";
-import { GetJobApplicantsType } from "@/app/data/user/job/submitted/get-job-applicants";
-import { loadMoreApplicants } from "@/app/data/user/job/submitted/load-more-applicants";
 import { useRef, useState, useEffect, useCallback } from "react";
-import { SubmissionActions } from "./SubmissionActions";
-import { RejectSubmissionModal } from "./RejectSubmissionModal";
+import { DeleteJobModal } from "./DeleteJobModal";
+import { DraftedJobActions } from "./DraftedJobActions";
+import { GetDraftedJobsType } from "@/app/data/user/job/draft/get-drafted-jobs";
+import { loadMoreDraftedJobs } from "@/app/data/user/job/draft/load-more-drafted-jobs";
 
 interface Props {
-  applicants: GetJobApplicantsType[];
-  slug: string;
+  jobs: GetDraftedJobsType[];
   hasNext: boolean;
   query?: string;
   initialPage?: number;
 }
 
-export function SubmissionsCard({
-  applicants: initialApplicants,
-  slug,
+export function DraftedJobsCard({
+  jobs: initialJobs,
   hasNext: initialHasNext,
   query,
   initialPage = 1,
 }: Props) {
-  const [applicants, setApplicants] =
-    useState<GetJobApplicantsType[]>(initialApplicants);
+  const [jobs, setJobs] = useState<GetDraftedJobsType[]>(initialJobs);
   const [page, setPage] = useState(initialPage);
   const [hasNext, setHasNext] = useState(initialHasNext);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [selectedApplicant, setSelectedApplicant] =
-    useState<GetJobApplicantsType>();
-  const [openRejectModal, setOpenRejectModal] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<GetDraftedJobsType>();
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   const observerRef = useRef<HTMLDivElement>(null);
 
@@ -46,21 +42,21 @@ export function SubmissionsCard({
 
     try {
       const nextPage = page + 1;
-      const result = await loadMoreApplicants(slug, nextPage, query, 2);
+      const result = await loadMoreDraftedJobs(nextPage, query);
 
       if (result.success && result.data) {
-        setApplicants((prev) => [...prev, ...result.data.applicantsData]);
+        setJobs((prev) => [...prev, ...result.data.jobs]);
         setPage(nextPage);
         setHasNext(result.data.pagination.hasNext);
       } else {
-        setError(result.error || "Failed to load more applicants");
+        setError(result.error || "Failed to load more jobs");
       }
     } catch (err) {
-      setError("Failed to load more applicants");
+      setError("Failed to load more jobs");
     } finally {
       setIsLoading(false);
     }
-  }, [slug, page, query, hasNext, isLoading]);
+  }, [page, query, hasNext, isLoading]);
 
   useEffect(() => {
     if (!hasNext) return;
@@ -92,22 +88,22 @@ export function SubmissionsCard({
   }, [loadMore, hasNext, isLoading]);
 
   useEffect(() => {
-    setApplicants(initialApplicants);
+    setJobs(initialJobs);
     setPage(initialPage);
     setHasNext(initialHasNext);
     setError(null);
     setIsLoading(false);
-  }, [query, initialApplicants, initialHasNext, initialPage]);
+  }, [query, initialJobs, initialHasNext, initialPage]);
 
-  if (applicants.length === 0 && !isLoading) {
+  if (jobs.length === 0 && !isLoading) {
     return null;
   }
 
   return (
     <div className="sm:hidden grid gap-4">
-      {applicants.map((applicant, index) => (
+      {jobs.map((job, index) => (
         <div
-          key={`${applicant.id}-${index}`}
+          key={`${job.id}-${index}`}
           className="relative mx-auto w-full rounded-lg border border-dashed border-zinc-300 px-4 sm:px-6 md:px-8 dark:border-zinc-800"
         >
           <div className="absolute top-4 left-0 -z-0 h-px w-full bg-zinc-400 sm:top-6 md:top-8 dark:bg-zinc-700" />
@@ -127,58 +123,39 @@ export function SubmissionsCard({
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <Link
-                      href={`/${applicant.User.username}`}
+                      href={`/jobs/${job.slug}/edit`}
                       className="text-lg font-semibold block hover:underline hover:text-primary transition-all"
                     >
-                      {applicant.User.name}
+                      {job.title}
                     </Link>
                     <Link
-                      href={`/${applicant.User.username}`}
+                      href={`/jobs/${job.slug}/edit`}
                       className="hover:underline inline-block hover:text-primary transition-all text-muted-foreground text-sm"
                     >
-                      @{applicant.User.username}
+                      {job.jobID}
                     </Link>
                   </div>
-                  <SubmissionActions
-                    slug={slug}
-                    applicant={applicant}
-                    onReject={() => {
-                      setSelectedApplicant(applicant);
-                      setOpenRejectModal(true);
+                  <DraftedJobActions
+                    slug={job.slug!}
+                    status={job.status}
+                    onDelete={() => {
+                      setSelectedJob(job);
+                      setOpenDeleteModal(true);
                     }}
                   />
                 </div>
 
                 {/* Status and date */}
                 <div className="flex items-center justify-between mb-4">
-                  <Badge
-                    variant={
-                      applicant.status === "PENDING"
-                        ? "pending"
-                        : applicant.status === "APPROVED"
-                          ? "default"
-                          : applicant.status === "REJECTED"
-                            ? "destructive"
-                            : "default"
-                    }
-                  >
-                    {formattedStatus[applicant.status]}
-                  </Badge>
+                  <p className="text-sm text-muted-foreground">Last updated</p>
                   <span className="text-sm text-gray-600 dark:text-gray-400">
-                    {formatDate(applicant.createdAt)}
+                    {formatDate(job.updatedAt)}
                   </span>
                 </div>
 
-                {/* Application ID */}
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                  ID: {applicant.applicationID}
-                </p>
-
                 {/* Action button */}
                 <Button className="w-full" asChild size="md">
-                  <Link href={`/jobs/${slug}/submissions/${applicant.id}`}>
-                    View Submission
-                  </Link>
+                  <Link href={`/jobs/${job.slug}/edit`}>Continue Editing</Link>
                 </Button>
               </div>
             </div>
@@ -242,7 +219,7 @@ export function SubmissionsCard({
       )}
 
       {/* End message card */}
-      {!hasNext && applicants.length > 0 && (
+      {!hasNext && jobs.length > 0 && (
         <div className="relative mx-auto w-full rounded-lg border border-dashed border-gray-300 px-4 sm:px-6 md:px-8 dark:border-gray-700">
           <div className="absolute top-4 left-0 -z-0 h-px w-full bg-gray-400 sm:top-6 md:top-8 dark:bg-gray-600" />
           <div className="absolute bottom-4 left-0 z-0 h-px w-full bg-gray-400 sm:bottom-6 md:bottom-8 dark:bg-gray-600" />
@@ -250,7 +227,7 @@ export function SubmissionsCard({
             <div className="relative z-20 mx-auto py-8">
               <div className="px-6 text-center">
                 <span className="text-sm text-muted-foreground">
-                  You've reached the end ({applicants.length} submissions)
+                  You've reached the end ({jobs.length} submissions)
                 </span>
               </div>
             </div>
@@ -258,14 +235,12 @@ export function SubmissionsCard({
         </div>
       )}
       {/* Modal rendered outside the table */}
-      {openRejectModal && selectedApplicant && (
-        <RejectSubmissionModal
-          open={openRejectModal}
-          closeModal={() => setOpenRejectModal(false)}
-          applicantName={selectedApplicant.User.name}
-          jobTitle={selectedApplicant.Job.title}
-          slug={slug}
-          applicantId={selectedApplicant.id}
+      {openDeleteModal && selectedJob && (
+        <DeleteJobModal
+          open={openDeleteModal}
+          closeModal={() => setOpenDeleteModal(false)}
+          jobTitle={selectedJob.title}
+          id={selectedJob.id}
         />
       )}
     </div>
