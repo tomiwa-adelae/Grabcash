@@ -182,11 +182,14 @@ export function JobsTable({
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
-                      <Link href={`/jobs/${job.slug}`}>View job</Link>
+                      <Link href={`/jobs/${job.slug}`}>View Job</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href={`/jobs/${job.slug}/edit`}>Edit Job</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href={`/jobs/${job.slug}/submissions`}>
-                        View submissions
+                        View Submissions
                       </Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>

@@ -25,7 +25,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
     <div className="py-16 md:py-32 container space-y-6">
       <PageHeader title="My Jobs and Campaigns" />
       <SearchBar />
-      {jobsData.jobs.length === 0 && (
+      {jobsData.jobs.length !== 0 && (
         <>
           <JobsTable
             initialJobs={jobsData.jobs}

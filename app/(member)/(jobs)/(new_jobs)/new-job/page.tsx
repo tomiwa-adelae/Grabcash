@@ -9,9 +9,6 @@ const page = async () => {
   return (
     <div>
       <PageHeader title="Post a New Job" />
-      <p className="text-base text-muted-foreground mt-1.5">
-        Posting a new job requires 5 credits.
-      </p>
       <NewJobForm
         name={user.name}
         email={user.email}

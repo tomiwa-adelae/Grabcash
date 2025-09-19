@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -66,7 +67,7 @@ export function SaveDraftModal({ open, closeModal, description, data }: Props) {
               type="button"
               size={"md"}
               variant="outline"
-              onClick={() => router.back()}
+              onClick={() => closeModal()}
             >
               Discard
             </Button>
@@ -76,7 +77,7 @@ export function SaveDraftModal({ open, closeModal, description, data }: Props) {
               type="submit"
               size="md"
             >
-              {pending ? <Loader text="Saving..." /> : "Save Draft"}
+              {pending ? <Loader text="Saving..." /> : "Save to Draft"}
             </Button>
           </DialogFooter>
         </DialogHeader>

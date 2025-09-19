@@ -78,7 +78,9 @@ const page = async ({ params }: { params: Params }) => {
         </p>
         <p className="text-base">
           Available Slots:{" "}
-          <span className="text-muted-foreground">49 remaining</span>
+          <span className="text-muted-foreground">
+            {Number(job.noOfWorkers) - job._count.applicants} remaining
+          </span>
         </p>
         <p className="text-base">
           Status: <span className="text-primary">Open</span>
@@ -101,7 +103,7 @@ const page = async ({ params }: { params: Params }) => {
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <Button asChild size="md" className="w-full">
-            <Link href={`/job/${job.slug}/edit`}>
+            <Link href={`/jobs/${job.slug}/edit`}>
               <Pen />
               Edit Job
             </Link>
@@ -109,7 +111,7 @@ const page = async ({ params }: { params: Params }) => {
           <Button asChild size="md" variant={"outline"} className="w-full">
             <Link href={`/jobs/${job.slug}/submissions`}>
               <FileUser />
-              View submissions
+              View submissions ({job._count.applicants})
             </Link>
           </Button>
         </div>

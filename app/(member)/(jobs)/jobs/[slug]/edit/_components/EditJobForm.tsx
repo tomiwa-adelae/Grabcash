@@ -33,73 +33,55 @@ import {
 } from "@/components/ui/select";
 import { RichTextEditor } from "@/components/text-editor/Editor";
 import { DateSelector } from "@/components/ui/DateSelector";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { formatMoneyInput } from "@/lib/utils";
 import { NairaIcon } from "@/components/NairaIcon";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { ConfirmPostingModal } from "./ConfirmPostingModal";
-import { SaveDraftModal } from "./SaveDraftModal";
 import { useJob } from "@/context/JobContext";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 import slugify from "slugify";
+import { ConfirmPostingModal } from "@/app/(member)/(jobs)/(new_jobs)/new-job/_components/ConfirmPostingModal";
+import { SaveDraftModal } from "@/app/(member)/(jobs)/(new_jobs)/new-job/_components/SaveDraftModal";
+import { GetUserDetailsType } from "@/app/data/user/get-user-details";
+import { GetJobDetailsType } from "@/app/data/user/job/get-job-details";
+import { tryCatch } from "@/hooks/use-try-catch";
+import { saveJob } from "@/app/(member)/(jobs)/(new_jobs)/new-job/actions";
 
 interface Props {
   name: string;
   email: string;
   phoneNumber: string | null;
+  job: GetJobDetailsType;
 }
 
-export function NewJobForm({ name, email, phoneNumber }: Props) {
+export function EditJobForm({ name, email, phoneNumber, job }: Props) {
+  const router = useRouter();
   const [openModal, setOpenModal] = useState(false);
   const [reward, setReward] = useState("15");
   const [openDraft, setOpenDraft] = useState(false);
 
   const [jobData, setJobData] = useState<any>();
 
-  const { jobPreview, setJobPreview } = useJob();
+  const [pending, startTransition] = useTransition();
 
   const form = useForm<NewJobFormSchemaType>({
     resolver: zodResolver(newJobFormSchema),
     defaultValues: {
       type: "micro",
-      title: "",
-      category: "",
-      description: "",
-      jobLink: "",
-      // deadline: "",
-      reward: "15",
-      noOfWorkers: "",
-      // estimatedTime: "",
-      // estimatedTimeUnit: "",
-      instructions: "",
-      proofOfCompletion: "",
+      title: job.title || "",
+      category: job.category || "",
+      description: job.description || "",
+      jobLink: job.jobLink || "",
+      reward: job.reward || "15",
+      noOfWorkers: job.noOfWorkers || "",
+      instructions: job.instructions || "",
+      proofOfCompletion: job.proofOfCompletion || "",
       submissionType: "screenshots",
       finalNotes: "",
     },
   });
-
-  useEffect(() => {
-    if (jobPreview) {
-      form.reset({
-        type: jobPreview.type || "micro",
-        title: jobPreview.title || "",
-        category: jobPreview.category || "",
-        description: jobPreview.description || "",
-        jobLink: jobPreview.jobLink || "",
-        // deadline: jobPreview.deadline || "",
-        reward: jobPreview.reward || "15",
-        noOfWorkers: jobPreview.noOfWorkers || "",
-        // estimatedTime: jobPreview.estimatedTime || "",
-        // estimatedTimeUnit: jobPreview.estimatedTimeUnit || "",
-        instructions: jobPreview.instructions || "",
-        proofOfCompletion: jobPreview.proofOfCompletion || "",
-        submissionType: jobPreview.submissionType || "screenshots",
-        finalNotes: jobPreview.finalNotes || "",
-      });
-    }
-  }, [jobPreview]);
 
   const handleRewardChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -189,7 +171,7 @@ export function NewJobForm({ name, email, phoneNumber }: Props) {
     };
 
     localStorage.setItem("jobPreview", JSON.stringify(previewData));
-    setJobPreview(previewData);
+    // setJobPreview(previewData);
     window.open(
       `/new-job/preview?slug=${previewData.slug}`,
       "_blank",
@@ -204,8 +186,25 @@ export function NewJobForm({ name, email, phoneNumber }: Props) {
   };
 
   function onSubmit(data: NewJobFormSchemaType) {
-    setOpenModal(true);
-    setJobData(data);
+    if (job.paymentVerified) {
+      startTransition(async () => {
+        const { data: result, error } = await tryCatch(saveJob(data, job.id));
+        if (error) {
+          toast.error(error.message || "Oops! Internal server error");
+          return;
+        }
+
+        if (result?.status === "success") {
+          toast.success(result.message);
+          router.push(`/jobs/${result.slug}`);
+        } else {
+          toast.error(result.message);
+        }
+      });
+    } else {
+      setOpenModal(true);
+      setJobData(data);
+    }
   }
 
   return (
@@ -304,7 +303,6 @@ export function NewJobForm({ name, email, phoneNumber }: Props) {
               </FormItem>
             )}
           />
-          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> */}
           <FormField
             control={form.control}
             name="jobLink"
@@ -322,7 +320,6 @@ export function NewJobForm({ name, email, phoneNumber }: Props) {
               </FormItem>
             )}
           />
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <FormField
               control={form.control}
@@ -336,6 +333,8 @@ export function NewJobForm({ name, email, phoneNumber }: Props) {
                         <NairaIcon />
                       </div>
                       <Input
+                        readOnly={job.paymentVerified}
+                        disabled={job.paymentVerified}
                         value={reward}
                         onChange={(e) => handleRewardChange(e, field)}
                         placeholder="15"
@@ -356,6 +355,8 @@ export function NewJobForm({ name, email, phoneNumber }: Props) {
                   <FormControl>
                     <Input
                       {...field}
+                      readOnly={job.paymentVerified}
+                      disabled={job.paymentVerified}
                       onChange={(e) => handleWorkerNumberChange(e, field)}
                       placeholder="0"
                     />
@@ -518,13 +519,22 @@ export function NewJobForm({ name, email, phoneNumber }: Props) {
             >
               Preview job
             </Button>
-            <Button size="md" className="w-full sm:w-auto" type="submit">
-              Post New Job
+            <Button
+              disabled={pending}
+              size="md"
+              className="w-full sm:w-auto"
+              type="submit"
+            >
+              {job.paymentVerified
+                ? pending
+                  ? "Updaing..."
+                  : "Save Job"
+                : "Post new Job"}
             </Button>
           </div>
         </form>
       </Form>
-      {openModal && (
+      {!job.paymentVerified && openModal && (
         <ConfirmPostingModal
           open={openModal}
           closeModal={() => {

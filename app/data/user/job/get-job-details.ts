@@ -21,11 +21,16 @@ export const getJobDetails = async (slug: string) => {
       reward: true,
       description: true,
       type: true,
+      jobLink: true,
+      submissionType: true,
+      submissionRequired: true,
+      status: true,
       instructions: true,
       noOfWorkers: true,
       proofOfCompletion: true,
       jobID: true,
       jobOpen: true,
+      paymentVerified: true,
       User: {
         select: {
           name: true,

@@ -42,8 +42,18 @@ export const createJob = async (data: NewJobFormSchemaType) => {
       });
     }
 
-    const job = await prisma.job.create({
-      data: {
+    const job = await prisma.job.upsert({
+      where: {
+        slug,
+      },
+      update: {
+        userId: user.id,
+        ...validation.data,
+        slug,
+        status: "PUBLISHED",
+        jobID,
+      },
+      create: {
         userId: user.id,
         ...validation.data,
         slug,
@@ -94,8 +104,18 @@ export const saveDraft = async (
       });
     }
 
-    await prisma.job.create({
-      data: {
+    await prisma.job.upsert({
+      where: {
+        slug,
+      },
+      update: {
+        userId: user.id,
+        ...data,
+        jobID,
+        slug,
+        status: "DRAFT",
+      },
+      create: {
         userId: user.id,
         ...data,
         jobID,
@@ -125,6 +145,7 @@ export const verifyJobPayment = async (
   }
 ): Promise<ApiResponse> => {
   const { user } = await requireUser();
+  await requireSubscription();
   try {
     if (!id) return { status: "error", message: "Oops! An error occurred!" };
 
@@ -162,5 +183,40 @@ export const verifyJobPayment = async (
     return { status: "success", message: "Payment successful" };
   } catch (error) {
     return { status: "error", message: "Failed to save payment" };
+  }
+};
+
+export const saveJob = async (data: NewJobFormSchemaType, id: string) => {
+  const { user } = await requireUser();
+  await requireSubscription();
+  try {
+    if (!id) return { status: "error", message: "Oops! Job not found" };
+
+    const validation = newJobFormSchema.safeParse(data);
+
+    if (!validation.success)
+      return { status: "error", message: "Invalid form data" };
+
+    const slug = slugify(validation.data.title);
+
+    const job = await prisma.job.update({
+      where: {
+        id,
+      },
+      data: {
+        userId: user.id,
+        ...validation.data,
+        slug,
+        status: "PUBLISHED",
+      },
+    });
+
+    return {
+      status: "success",
+      message: "Job successfully updated.",
+      slug: job.slug,
+    };
+  } catch (error) {
+    return { status: "error", message: "Failed to save the job update" };
   }
 };
