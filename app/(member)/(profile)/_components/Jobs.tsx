@@ -1,6 +1,4 @@
 import { GetAvailableJobsType } from "@/app/data/job/get-available-jobs";
-import { JobsTable } from "../../(jobs)/available-jobs/_components/AvailableJobsTable";
-import { JobsCard } from "../../(jobs)/available-jobs/_components/AvailableJobsCard";
 import { PaginationComponent } from "@/components/Pagination";
 
 interface Props {
