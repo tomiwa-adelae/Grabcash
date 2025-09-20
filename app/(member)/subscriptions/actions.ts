@@ -1,8 +1,16 @@
 "use server";
 
 import { requireUser } from "@/app/data/user/require-user";
+import { ProSubscriptionEmail } from "@/emails/pro-subscription-email";
 import { prisma } from "@/lib/db";
+import { env } from "@/lib/env";
 import { ApiResponse } from "@/lib/types";
+
+import Mailjet from "node-mailjet";
+const mailjet = Mailjet.apiConnect(
+  env.MAILJET_API_PUBLIC_KEY,
+  env.MAILJET_API_PRIVATE_KEY
+);
 
 export const activateSubscription = async (planId: string, response: any) => {
   const { user } = await requireUser();
@@ -47,6 +55,20 @@ export const activateSubscription = async (planId: string, response: any) => {
         ),
         status: "ACTIVE",
       },
+    });
+
+    await mailjet.post("send", { version: "v3.1" }).request({
+      Messages: [
+        {
+          From: {
+            Email: env.SENDER_EMAIL_ADDRESS,
+            Name: "Earnsphere",
+          },
+          To: [{ Email: user.email, Name: user.name }],
+          Subject: `Welcome to Earnsphere Pro, ${user.name}`,
+          HTMLPart: ProSubscriptionEmail({ name: user.name, plan: plan.name }),
+        },
+      ],
     });
 
     return {

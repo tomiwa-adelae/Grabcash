@@ -60,9 +60,9 @@ export const PricingPlans = ({ email, name, phoneNumber, plans }: Props) => {
         logo: EARNSPHERE_LOGO,
       },
     };
-
-    initiatePayment(config, (response) => {
-      startTransition(async () => {
+    initiatePayment({
+      config,
+      onSuccess: async (response) => {
         const { data: result, error } = await tryCatch(
           activateSubscription(plan.id, response)
         );
@@ -77,7 +77,13 @@ export const PricingPlans = ({ email, name, phoneNumber, plans }: Props) => {
         } else {
           toast.error(result.message);
         }
-      });
+      },
+      onClose: async () => {
+        toast.info("Payment cancelled");
+      },
+      onError: async (error) => {
+        toast.error("Payment failed: " + error.message);
+      },
     });
   };
 

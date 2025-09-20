@@ -135,9 +135,10 @@ model Job {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  User    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  String
-  jobOpen Boolean @default(true) // <-- NEW FIELD
+  User        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+  jobOpen     Boolean @default(true) // <-- NEW FIELD
+  filledSlots Int     @default(0) // ✅ new field to track approved submissions
 
   jobPayments JobPayment[]
   applicants  Applicant[]

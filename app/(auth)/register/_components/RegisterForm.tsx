@@ -30,6 +30,8 @@ import Image from "next/image";
 import { Loader } from "@/components/Loader";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { tryCatch } from "@/hooks/use-try-catch";
+import { sendRegistrationEmail } from "../../actions";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -48,9 +50,10 @@ export function RegisterForm() {
   });
 
   const password = form.watch("password");
-  const username = form.watch("username");
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isConfirmVisible, setConfirmIsVisible] = useState<boolean>(false);
+
+  const username = form.watch("username");
   const [usernameStatus, setUsernameStatus] = useState<{
     checking: boolean;
     available: boolean | null;
@@ -60,13 +63,6 @@ export function RegisterForm() {
     available: null,
     message: "",
   });
-
-  const [pending, startTransition] = useTransition();
-  const [pendingGoogle, startGoogleTransition] = useTransition();
-
-  const toggleVisibility = () => setIsVisible((prevState) => !prevState);
-  const toggleConfirmVisibility = () =>
-    setConfirmIsVisible((prevState) => !prevState);
 
   useEffect(() => {
     if (username && username.length >= 3) {
@@ -82,18 +78,37 @@ export function RegisterForm() {
             username,
             fetchOptions: {
               onSuccess: (res) => {
+                const isAvailable = res.data?.available;
+
                 setUsernameStatus({
                   checking: false,
-                  available: true,
-                  message: `${username} is available`,
+                  available: isAvailable,
+                  message: isAvailable
+                    ? `${username} is available`
+                    : `${username} is already taken`,
                 });
               },
               onError: (error) => {
-                setUsernameStatus({
-                  checking: false,
-                  available: false,
-                  message: `${username} is already taken`,
-                });
+                // Handle different types of errors
+                // If it's a 409 or conflict error, username is taken
+                if (
+                  error?.error?.status === 409 ||
+                  error?.error?.message?.includes("taken") ||
+                  error?.error?.message?.includes("exists")
+                ) {
+                  setUsernameStatus({
+                    checking: false,
+                    available: false,
+                    message: `${username} is already taken`,
+                  });
+                } else {
+                  // For other errors, show generic error
+                  setUsernameStatus({
+                    checking: false,
+                    available: null,
+                    message: "Failed to check username availability",
+                  });
+                }
               },
             },
           });
@@ -115,6 +130,13 @@ export function RegisterForm() {
       });
     }
   }, [username]);
+
+  const [pending, startTransition] = useTransition();
+  const [pendingGoogle, startGoogleTransition] = useTransition();
+
+  const toggleVisibility = () => setIsVisible((prevState) => !prevState);
+  const toggleConfirmVisibility = () =>
+    setConfirmIsVisible((prevState) => !prevState);
 
   const checkStrength = (pass: string) => {
     const requirements = [
@@ -179,6 +201,8 @@ export function RegisterForm() {
         callbackURL: "/verify-email",
         fetchOptions: {
           onSuccess: async () => {
+            await tryCatch(sendRegistrationEmail(data.email, data.firstName));
+
             await authClient.emailOtp.sendVerificationOtp({
               email: data.email,
               type: "email-verification",

@@ -2,11 +2,20 @@
 
 import { requireUser } from "@/app/data/user/require-user";
 import { requireSubscription } from "@/app/data/user/subscription/require-subscription";
+import { JobPostedEmail } from "@/emails/job-posted-email";
+import { NewJobBroadcastEmail } from "@/emails/new-job-broadcast-email";
 import { prisma } from "@/lib/db";
+import { env } from "@/lib/env";
 import { ApiResponse } from "@/lib/types";
-import { generateSuffix } from "@/lib/utils";
+import { formattedStatus, generateSuffix } from "@/lib/utils";
 import { newJobFormSchema, NewJobFormSchemaType } from "@/lib/zodSchemas";
 import { revalidatePath } from "next/cache";
+
+import Mailjet from "node-mailjet";
+const mailjet = Mailjet.apiConnect(
+  env.MAILJET_API_PUBLIC_KEY,
+  env.MAILJET_API_PRIVATE_KEY
+);
 
 import slugify from "slugify";
 
@@ -177,6 +186,61 @@ export const verifyJobPayment = async (
                   : "PENDING",
       },
     });
+
+    const users = await prisma.user.findMany({
+      where: {
+        id: {
+          not: user.id,
+        },
+      },
+      select: {
+        email: true,
+        name: true,
+      },
+    });
+
+    await mailjet.post("send", { version: "v3.1" }).request({
+      Messages: [
+        {
+          From: {
+            Email: env.SENDER_EMAIL_ADDRESS,
+            Name: "Earnsphere",
+          },
+          To: [{ Email: user.email, Name: user.name }],
+          Subject: `Your Job is Live`,
+          HTMLPart: JobPostedEmail({
+            name: user.name,
+            jobTitle: job.title,
+            category: job.category!,
+            reward: job.reward!,
+            noOfWorkers: job.noOfWorkers!,
+            status: formattedStatus[job.status],
+            manageJobUrl: `${env.NEXT_PUBLIC_BETTER_AUTH_URL}/job/${job.slug}`,
+          }),
+        },
+      ],
+    });
+
+    // ✅ Send broadcast email to all other users
+    if (users.length > 0) {
+      await mailjet.post("send", { version: "v3.1" }).request({
+        Messages: users.map((u) => ({
+          From: {
+            Email: env.SENDER_EMAIL_ADDRESS,
+            Name: "Earnsphere",
+          },
+          To: [{ Email: u.email, Name: u.name || "Earnsphere User" }],
+          Subject: `New Job Posted: ${job.title}`,
+          HTMLPart: NewJobBroadcastEmail({
+            jobTitle: job.title,
+            category: job.category!,
+            reward: job.reward!,
+            noOfWorkers: job.noOfWorkers!,
+            slug: job.slug!,
+          }),
+        })),
+      });
+    }
 
     revalidatePath("/");
 

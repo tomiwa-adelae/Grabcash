@@ -34,7 +34,11 @@ export const getJobDetails = async (slug: string) => {
       },
       _count: {
         select: {
-          applicants: true,
+          applicants: {
+            where: {
+              status: { in: ["APPROVED", "PENDING"] },
+            },
+          },
         },
       },
     },

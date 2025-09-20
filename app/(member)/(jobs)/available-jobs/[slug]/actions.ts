@@ -2,9 +2,17 @@
 
 import { requireUser } from "@/app/data/user/require-user";
 import { requireSubscription } from "@/app/data/user/subscription/require-subscription";
+import { JobClosedEmail } from "@/emails/job.closed-email";
 import { prisma } from "@/lib/db";
+import { env } from "@/lib/env";
 import { ApiResponse } from "@/lib/types";
 import { generateSuffix } from "@/lib/utils";
+
+import Mailjet from "node-mailjet";
+const mailjet = Mailjet.apiConnect(
+  env.MAILJET_API_PUBLIC_KEY,
+  env.MAILJET_API_PRIVATE_KEY
+);
 
 export const saveApplicantScreenshot = async (
   jobId: string,
@@ -21,7 +29,29 @@ export const saveApplicantScreenshot = async (
       where: {
         id: jobId,
       },
-      include: { applicants: true, User: true },
+      select: {
+        jobOpen: true,
+        noOfWorkers: true,
+        title: true,
+        slug: true,
+        id: true,
+        User: {
+          select: {
+            email: true,
+            name: true,
+            id: true,
+          },
+        },
+        _count: {
+          select: {
+            applicants: {
+              where: {
+                status: { in: ["PENDING", "APPROVED"] },
+              },
+            },
+          },
+        },
+      },
     });
 
     if (!job) return { status: "error", message: "Oops! An error occurred!" };
@@ -48,7 +78,7 @@ export const saveApplicantScreenshot = async (
         message: "You can not submit an application for this job again.",
       };
 
-    if (job.applicants.length >= Number(job.noOfWorkers)) {
+    if (job._count.applicants >= Number(job.noOfWorkers)) {
       await prisma.job.update({
         where: {
           id: jobId,
@@ -92,7 +122,12 @@ export const saveApplicantScreenshot = async (
       },
     });
 
-    if (job.applicants.length + 1 >= Number(job.noOfWorkers)) {
+    await prisma.job.update({
+      where: { id: job.id },
+      data: { filledSlots: { increment: 1 } },
+    });
+
+    if (job._count.applicants + 1 >= Number(job.noOfWorkers)) {
       await prisma.job.update({
         where: {
           id: jobId,
@@ -100,6 +135,25 @@ export const saveApplicantScreenshot = async (
         data: {
           jobOpen: false,
         },
+      });
+
+      await mailjet.post("send", { version: "v3.1" }).request({
+        Messages: [
+          {
+            From: {
+              Email: env.SENDER_EMAIL_ADDRESS,
+              Name: "Earnsphere",
+            },
+            To: [{ Email: job.User.email, Name: job.User.name }],
+            Subject: `Job closed - ${job.title}`,
+            HTMLPart: JobClosedEmail({
+              ownerName: job.User.name,
+              jobTitle: job.title,
+              noOfWorkers: job.noOfWorkers!,
+              slug: job.slug!,
+            }),
+          },
+        ],
       });
     }
 

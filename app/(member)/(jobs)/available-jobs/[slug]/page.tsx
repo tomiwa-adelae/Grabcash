@@ -27,6 +27,7 @@ const page = async ({ params }: { params: Params }) => {
   const alreadyApplied = await getAlreadyApplied(job.id);
 
   const applicantLeft = Number(job.noOfWorkers) - job._count.applicants;
+  const jobOpen = applicantLeft > 0 && job.jobOpen; // job.isOpen = manual flag
   const isOwner = job.User.id === user.id;
 
   return (
@@ -125,7 +126,7 @@ const page = async ({ params }: { params: Params }) => {
           Proof of Completion
         </h2>
         <RenderDescription json={job.proofOfCompletion} />
-        {applicantLeft > 1 && !alreadyApplied && !isOwner && (
+        {applicantLeft >= 1 && !alreadyApplied && !isOwner && (
           <ProofForm
             submissionType={job.submissionType!}
             id={job.id}

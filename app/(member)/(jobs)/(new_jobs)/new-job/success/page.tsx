@@ -43,7 +43,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
           variant={"outline"}
           className="border-primary hover:bg-primary/10 w-full"
         >
-          <Link href={`/jobs/${job.slug}/submissions`}>Track Applicants</Link>
+          <Link href={`/jobs/${job.slug}/submissions`}>Track Submissions</Link>
         </Button>
         <Button size="md" asChild className="w-full">
           <Link href={`/jobs/${job.slug}`}>View Job Listing</Link>
