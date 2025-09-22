@@ -94,6 +94,7 @@ const page = async ({
                 following={following}
                 id={user.id}
                 username={user.username}
+                name={user.name}
               />
               <Button asChild size="md" variant={"secondary"}>
                 <Link href={`mailto:${user.email}`}>

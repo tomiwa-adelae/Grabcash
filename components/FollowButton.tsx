@@ -14,9 +14,16 @@ interface Props {
   following: boolean;
   image: string | null;
   username: string | null;
+  name: string;
 }
 
-export const FollowButton = ({ id, following, image, username }: Props) => {
+export const FollowButton = ({
+  id,
+  following,
+  image,
+  username,
+  name,
+}: Props) => {
   const [pending, startTransition] = useTransition();
   const [openModal, setOpenModal] = useState(false);
 
@@ -69,6 +76,7 @@ export const FollowButton = ({ id, following, image, username }: Props) => {
           image={image}
           username={username}
           id={id}
+          name={name}
         />
       )}
     </>
