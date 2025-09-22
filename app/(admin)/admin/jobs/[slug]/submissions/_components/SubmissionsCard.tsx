@@ -141,7 +141,7 @@ export function SubmissionsCard({
                   </div>
                   <SubmissionActions
                     slug={slug}
-                    applicant={applicant}
+                    id={applicant.id}
                     onReject={() => {
                       setSelectedApplicant(applicant);
                       setOpenRejectModal(true);
