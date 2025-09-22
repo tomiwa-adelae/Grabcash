@@ -113,7 +113,6 @@ export function ClosedJobsList({
           name={job.User.name}
           noOfWorkers={job.noOfWorkers!}
           slug={job.slug!}
-          status={job.jobPayments[0].status}
           title={job.title}
           username={job.User.username!}
           key={job.id}
