@@ -6,7 +6,6 @@ import { SubmittedJobsCard } from "./_components/SubmittedJobsCard";
 import { getMySubmittedJobs } from "@/app/data/user/job/submitted/get-my-submitted-jobs";
 import { EmptyState } from "@/components/EmptyState";
 import { DEFAULT_LIMIT } from "@/constants";
-import { getUserDetails } from "@/app/data/user/get-user-details";
 
 type SearchParams = Promise<{
   query?: string;

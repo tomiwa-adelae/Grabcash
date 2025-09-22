@@ -1,14 +1,13 @@
 import { PageHeader } from "@/app/(member)/_components/PageHeader";
 import { getMySubmittedJob } from "@/app/data/user/job/submitted/get-my-submitted-job";
+import { Banner } from "@/components/Banner";
 import { Confetti } from "@/components/Confetti";
 import { CopyToClipboard } from "@/components/CopyToClipboard";
 import { NairaIcon } from "@/components/NairaIcon";
-import { SubmissionApprovedBanner } from "@/components/SubmissionApprovedBanner";
-import { SubmissionPendingBanner } from "@/components/SubmissionPendingBanner";
-import { SubmissionRejectedBanner } from "@/components/SubmissionRejectedBanner";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { formatMoneyInput, formattedStatus } from "@/lib/utils";
+import { IconBan, IconClock, IconFolderCheck } from "@tabler/icons-react";
 import Link from "next/link";
 
 type Params = Promise<{
@@ -29,9 +28,27 @@ const page = async ({ params }: { params: Params }) => {
         The job poster will review your submission. You’ll be notified when your
         task is approved, rejected, or needs resubmission.
       </p>
-      {job.status === "APPROVED" && <SubmissionApprovedBanner />}
-      {job.status === "REJECTED" && <SubmissionRejectedBanner />}
-      {job.status === "PENDING" && <SubmissionPendingBanner />}
+      {job.status === "APPROVED" && (
+        <Banner
+          text="Submission has been approved"
+          variant="primary"
+          icon={IconFolderCheck}
+        />
+      )}
+      {job.status === "REJECTED" && (
+        <Banner
+          text="Submission has been rejected"
+          variant="destructive"
+          icon={IconBan}
+        />
+      )}
+      {job.status === "PENDING" && (
+        <Banner
+          text="Submission is under review"
+          variant="pending"
+          icon={IconClock}
+        />
+      )}
       <Separator className="my-6" />
       <div className="space-y-4 mt-6 text-base">
         <p>
