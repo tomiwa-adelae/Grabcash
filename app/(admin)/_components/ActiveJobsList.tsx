@@ -104,21 +104,6 @@ export function ActiveJobsList({
   return (
     <div>
       {jobs.map((job, index) => (
-        // <UserBox
-        //   index={index}
-        //   country={user.country}
-        //   createdAt={user.createdAt}
-        //   email={user.email}
-        //   name={user.name}
-        //   image={user.image}
-        //   isAdmin={user.isAdmin}
-        //   status={user.status}
-        //   key={user.id}
-        //   username={user.username!}
-        //   id={user.id}
-        //   jobs={user._count.jobs}
-        //   applicants={user._count.applicants}
-        // />
         <JobBox
           applicants={job._count.applicants}
           createdAt={job.createdAt}
@@ -128,7 +113,6 @@ export function ActiveJobsList({
           name={job.User.name}
           noOfWorkers={job.noOfWorkers!}
           slug={job.slug!}
-          status={job.jobPayments[0].status}
           title={job.title}
           username={job.User.username!}
           key={job.id}
