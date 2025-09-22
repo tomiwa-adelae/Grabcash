@@ -169,7 +169,7 @@ export const formattedStatus: Record<string, string> = {
   EXPIRED: "Expired",
   CANCELED: "Canceled",
   MONTHLY: "Monthly",
-  ANNUALLY: "Annually",
+  ANNUALLY: "Yearly",
   DRAFT: "Draft",
   PUBLISHED: "Published",
   DELETED: "Deleted",

@@ -971,7 +971,7 @@ export const adminNavLinks = [
     group: true,
     items: [
       {
-        title: "All Payments",
+        title: "Job Payments",
         slug: "/admin/payments",
         icon: IconCreditCardPay,
       },
