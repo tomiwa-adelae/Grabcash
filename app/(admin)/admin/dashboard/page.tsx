@@ -86,7 +86,7 @@ export default async function page() {
 
         {/* Sidebar Section */}
         <div className="space-y-4 sm:space-y-6">
-          <QuickActions />
+          {/* <QuickActions /> */}
           <SystemStatus />
           <RecentActivity />
         </div>
