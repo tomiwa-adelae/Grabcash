@@ -2,13 +2,18 @@ import React from "react";
 import { PreviewJob } from "./_components/PreviewJob";
 import { Banner } from "@/components/Banner";
 import { getUserDetails } from "@/app/data/user/get-user-details";
+import { IconEye } from "@tabler/icons-react";
 
 const page = async () => {
   const user = await getUserDetails();
 
   return (
     <div>
-      <Banner text="Here’s how your job will appear to potential applicants. Review all details before posting to ensure accuracy." />
+      <Banner
+        text="Here’s how your job will appear to potential applicants. Review all details before posting to ensure accuracy."
+        variant="default"
+        icon={IconEye}
+      />
       <PreviewJob
         name={user.name}
         email={user.email}
