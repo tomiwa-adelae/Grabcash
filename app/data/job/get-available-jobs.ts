@@ -54,7 +54,11 @@ export const getAvailableJobs = async (params: GetAvailableJobsParams = {}) => {
         reward: true,
         _count: {
           select: {
-            applicants: true,
+            applicants: {
+              where: {
+                status: { not: "REJECTED" },
+              },
+            },
           },
         },
       },

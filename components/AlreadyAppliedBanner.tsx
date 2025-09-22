@@ -17,7 +17,7 @@ export function AlreadyAppliedBanner({ id }: Props) {
               You have already submitted an application.
             </p>
             <Link
-              href={`/submitted-job/${id}`}
+              href={`/submitted-jobs/${id}`}
               className="text-sm underline hover:text-primary"
             >
               View Application

@@ -60,7 +60,7 @@ export const ProfilePicture = ({ image, name, myProfile }: Props) => {
 
   return (
     <div>
-      <div className="bg-primary/20 rounded-full relative flex items-center justify-center w-full">
+      <div className="bg-primary/20 rounded-full relative flex items-center justify-center w-fit mx-auto">
         <Image
           src={profilePicture}
           alt={`${name}'s profile`}

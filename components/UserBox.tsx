@@ -130,6 +130,7 @@ export const UserBox = ({
           image={image}
           username={username}
           id={id}
+          name={name}
         />
       )}
     </div>

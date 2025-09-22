@@ -8,7 +8,7 @@ const page = async () => {
 
   return (
     <div>
-      <Banner />
+      <Banner text="Here’s how your job will appear to potential applicants. Review all details before posting to ensure accuracy." />
       <PreviewJob
         name={user.name}
         email={user.email}

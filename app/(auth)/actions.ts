@@ -33,7 +33,6 @@ export const sendRegistrationEmail = async (
 
     return { status: "success", message: "Welcome email sent successfully" };
   } catch (error) {
-    console.error(error);
     return { status: "error", message: "Registration email was not sent!" };
   }
 };

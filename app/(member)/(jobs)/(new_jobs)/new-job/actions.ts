@@ -266,6 +266,7 @@ export const saveJob = async (data: NewJobFormSchemaType, id: string) => {
     const job = await prisma.job.update({
       where: {
         id,
+        userId: user.id,
       },
       data: {
         userId: user.id,

@@ -94,7 +94,6 @@ const page = async ({ params }: { params: Params }) => {
         <h2 className="font-semibold text-xl md:text-2xl">
           Proof of Completion
         </h2>
-        <p className="text-base text-muted-foreground">You must upload:</p>
         <RenderDescription json={job.proofOfCompletion} />
       </div>
       <div className="mt-6">

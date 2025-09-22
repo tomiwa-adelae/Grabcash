@@ -110,7 +110,6 @@ export const PreviewJob = ({ name, email, phoneNumber }: Props) => {
         <h2 className="font-semibold text-xl md:text-2xl">
           Proof of Completion
         </h2>
-        <p className="text-base text-muted-foreground">You must upload:</p>
         <RenderDescription json={job.proofOfCompletion} />
         <ProofForm id="" slug="" submissionType="" />
       </div>

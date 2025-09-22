@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
 
 export const getUserProfile = async (username: string) => {
-  const session = await requireUser();
+  await requireUser();
   const user = await prisma.user.findUnique({
     where: { username },
     select: {
@@ -26,6 +26,8 @@ export const getUserProfile = async (username: string) => {
       emailVerified: true,
       createdAt: true,
       earnings: true,
+      isAdmin: true,
+      status: true,
       socials: {
         select: {
           id: true,

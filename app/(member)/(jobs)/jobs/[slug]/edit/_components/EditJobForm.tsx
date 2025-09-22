@@ -527,7 +527,7 @@ export function EditJobForm({ name, email, phoneNumber, job }: Props) {
             >
               {job.paymentVerified
                 ? pending
-                  ? "Updaing..."
+                  ? "Updating..."
                   : "Save Job"
                 : "Post new Job"}
             </Button>

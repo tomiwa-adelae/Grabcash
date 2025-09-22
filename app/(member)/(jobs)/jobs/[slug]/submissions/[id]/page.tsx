@@ -7,9 +7,8 @@ import { formatMoneyInput } from "@/lib/utils";
 import Link from "next/link";
 import { SubmissionCTA } from "../_components/SubmissionCTA";
 import { Screenshots } from "@/components/Screenshots";
-import { SubmissionApprovedBanner } from "@/components/SubmissionApprovedBanner";
-import { SubmissionRejectedBanner } from "@/components/SubmissionRejectedBanner";
-import { SubmissionPendingBanner } from "@/components/SubmissionPendingBanner";
+import { Banner } from "@/components/Banner";
+import { IconBan, IconClock, IconFolderCheck } from "@tabler/icons-react";
 
 type Params = Promise<{
   id: string;
@@ -30,9 +29,27 @@ const page = async ({ params }: { params: Params }) => {
           it.
         </p>
       </div>
-      {details.status === "APPROVED" && <SubmissionApprovedBanner />}
-      {details.status === "REJECTED" && <SubmissionRejectedBanner />}
-      {details.status === "PENDING" && <SubmissionPendingBanner />}
+      {details.status === "APPROVED" && (
+        <Banner
+          text="Submission has been approved"
+          variant="primary"
+          icon={IconFolderCheck}
+        />
+      )}
+      {details.status === "REJECTED" && (
+        <Banner
+          text="Submission has been rejected"
+          variant="destructive"
+          icon={IconBan}
+        />
+      )}
+      {details.status === "PENDING" && (
+        <Banner
+          text="Submission is under review"
+          variant="pending"
+          icon={IconClock}
+        />
+      )}
       <Separator className="my-6" />
       <div className="space-y-4 mt-6 text-base">
         <p>

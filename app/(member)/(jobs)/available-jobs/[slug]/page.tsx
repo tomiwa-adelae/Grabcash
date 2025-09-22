@@ -6,14 +6,14 @@ import { EMAIL_ADDRESS } from "@/constants";
 import { getJobDetails } from "@/app/data/job/get-job-details";
 import { RenderDescription } from "@/components/text-editor/RenderDescription";
 import { env } from "@/lib/env";
-import { formatDate, formatMoneyInput } from "@/lib/utils";
+import { formatMoneyInput } from "@/lib/utils";
 import { PageHeader } from "@/app/(member)/_components/PageHeader";
 import Link from "next/link";
 import { getAlreadyApplied } from "@/app/data/job/get-already-applied";
 import { AlreadyAppliedBanner } from "@/components/AlreadyAppliedBanner";
-import { JobClosedBanner } from "@/components/JobClosedBanner";
 import { getUserDetails } from "@/app/data/user/get-user-details";
-import { IsOwnerJobBanner } from "@/components/IsOwnerJobBanner";
+import { Banner } from "@/components/Banner";
+import { IconMoodX, IconUserSquareRounded } from "@tabler/icons-react";
 
 type Params = Promise<{
   slug: string;
@@ -33,8 +33,20 @@ const page = async ({ params }: { params: Params }) => {
   return (
     <div className="py-16 md:py-32 container space-y-6">
       <PageHeader title="Job Details" />
-      {!job.jobOpen && <JobClosedBanner />}
-      {isOwner && <IsOwnerJobBanner />}
+      {!job.jobOpen && (
+        <Banner
+          text="This job is already closed"
+          variant="destructive"
+          icon={IconMoodX}
+        />
+      )}
+      {isOwner && (
+        <Banner
+          text="This is your job"
+          variant="primary"
+          icon={IconUserSquareRounded}
+        />
+      )}
       <div className="space-y-4 mt-4">
         <p className="text-base">
           Job title: <span className="text-muted-foreground">{job.title}</span>

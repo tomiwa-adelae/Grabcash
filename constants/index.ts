@@ -1,4 +1,20 @@
 import {
+  IconAccessible,
+  IconActivityHeartbeat,
+  IconBasketMinus,
+  IconBriefcase,
+  IconClipboardText,
+  IconClock,
+  IconCreditCardPay,
+  IconCreditCardRefund,
+  IconEyeClosed,
+  IconFileDislike,
+  IconFileLike,
+  IconFlagExclamation,
+  IconLayoutDashboard,
+  IconUsersGroup,
+} from "@tabler/icons-react";
+import {
   Banknote,
   BriefcaseBusiness,
   Crown,
@@ -910,3 +926,70 @@ export const userDropdownLinks = [
 ];
 
 export const DEFAULT_COMMISSION = 10;
+
+export const adminNavLinks = [
+  {
+    title: "Dashboard",
+    slug: "/admin/dashboard",
+    icon: IconLayoutDashboard,
+  },
+  {
+    title: "Users",
+    slug: "/admin/users",
+    icon: IconUsersGroup,
+  },
+  {
+    title: "Jobs",
+    icon: IconBriefcase,
+    group: true,
+    items: [
+      {
+        title: "All Jobs",
+        slug: "/admin/jobs",
+        icon: IconBriefcase,
+      },
+      {
+        title: "Active Jobs",
+        slug: "/admin/jobs/active",
+        icon: IconActivityHeartbeat,
+      },
+      {
+        title: "Closed Jobs",
+        slug: "/admin/jobs/closed",
+        icon: IconEyeClosed,
+      },
+    ],
+  },
+  {
+    title: "Submissions",
+    slug: "/admin/submissions",
+    icon: IconClipboardText,
+  },
+  {
+    title: "Transactions",
+    icon: IconCreditCardPay,
+    group: true,
+    items: [
+      {
+        title: "All Payments",
+        slug: "/admin/payments",
+        icon: IconCreditCardPay,
+      },
+      {
+        title: "Withdrawals",
+        slug: "/admin/withdrawals",
+        icon: IconBasketMinus,
+      },
+      {
+        title: "Subscriptions",
+        slug: "/admin/subscriptions",
+        icon: IconAccessible,
+      },
+      {
+        title: "Refunds / Disputes",
+        slug: "/admin/refunds",
+        icon: IconCreditCardRefund,
+      },
+    ],
+  },
+];

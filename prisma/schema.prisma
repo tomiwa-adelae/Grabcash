@@ -27,6 +27,10 @@ model User {
   identificationNumber String?
   onboardingCompleted  Boolean? @default(false)
 
+  isAdmin Boolean @default(false)
+
+  status UserStatus @default(ACTIVE)
+
   credits Int @default(20)
 
   earnings Int @default(0)
@@ -289,4 +293,11 @@ enum JobApplicationStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+  UNVERIFIED
 }

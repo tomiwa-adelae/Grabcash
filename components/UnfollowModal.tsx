@@ -18,6 +18,7 @@ interface Props {
   image: string | null;
   username: string | null;
   id: string;
+  name: string;
 }
 
 export function UnfollowModal({
@@ -26,6 +27,7 @@ export function UnfollowModal({
   image,
   username,
   id,
+  name,
 }: Props) {
   const [pending, startTransition] = useTransition();
 
@@ -62,7 +64,12 @@ export function UnfollowModal({
               className="rounded-full size-32 object-cover"
             />
           </div>
-          <p className="text-sm md:text-base">Unfollow @{username}</p>
+          <div className="space-y-1 text-center">
+            <h2 className="font-semibold text-lg">{name}</h2>
+            <p className="text-sm md:text-base text-muted-foreground">
+              Unfollow @{username}
+            </p>
+          </div>
           <div className="grid gap-1.5 w-full">
             <Button
               size="md"
@@ -73,6 +80,7 @@ export function UnfollowModal({
                 e.stopPropagation();
                 handleUnfollow();
               }}
+              disabled={pending}
             >
               {pending ? <Loader text="Unfollowing..." /> : "Unfollow"}
             </Button>
@@ -85,6 +93,7 @@ export function UnfollowModal({
               size="md"
               variant="ghost"
               className="w-full"
+              disabled={pending}
             >
               Cancel
             </Button>

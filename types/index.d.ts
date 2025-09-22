@@ -15,4 +15,5 @@ declare interface Params {
   limit?: number;
   id?: string;
   slug?: string;
+  status?: string;
 }
