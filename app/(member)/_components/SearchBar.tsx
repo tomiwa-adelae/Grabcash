@@ -19,9 +19,21 @@ export const SearchBar = ({ placeholder = "Search...", search }: Props) => {
 
   const [query, setQuery] = useState(search || "");
 
+  // Format numbers with commas for display
+  const formatWithCommas = (value: string) => {
+    if (!/^\d+$/.test(value.replace(/,/g, ""))) return value; // leave text untouched
+    return Number(value.replace(/,/g, "")).toLocaleString();
+  };
+
+  // Keep query in sync with URL param
   useEffect(() => {
     const urlQuery = searchParams.get("query") || "";
-    setQuery(urlQuery);
+    if (urlQuery) {
+      // Format numeric values with commas on load
+      setQuery(formatWithCommas(urlQuery));
+    } else {
+      setQuery("");
+    }
   }, [searchParams]);
 
   useEffect(() => {
@@ -35,32 +47,36 @@ export const SearchBar = ({ placeholder = "Search...", search }: Props) => {
     setIsLoading(false);
   }, [query]);
 
-  // Keep query state in sync with URL param
-  useEffect(() => {
-    const urlQuery = searchParams.get("query") || "";
-    setQuery(urlQuery);
-  }, [searchParams]);
-
   // Debounced update to URL when query changes
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString());
 
       if (query) {
-        params.set("query", query);
+        const sanitized = query.replace(/,/g, ""); // strip commas
+        params.set("query", sanitized);
       } else {
         params.delete("query");
       }
 
       params.delete("page");
 
-      // Build a clean URL with pathname + query string
       const newUrl = `${pathname}?${params.toString()}`;
       router.push(newUrl, { scroll: false });
-    }, 50);
+    }, 300);
 
     return () => clearTimeout(delayDebounceFn);
   }, [query]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value;
+    // Keep commas for numbers, leave strings alone
+    if (/^\d{1,3}(,\d{3})*$/.test(raw) || /^\d+$/.test(raw)) {
+      setQuery(formatWithCommas(raw));
+    } else {
+      setQuery(raw);
+    }
+  };
 
   return (
     <div className="flex items-center relative justify-between">
@@ -68,7 +84,7 @@ export const SearchBar = ({ placeholder = "Search...", search }: Props) => {
         className="peer ps-9 pe-9"
         placeholder={placeholder}
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={handleChange}
       />
       <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
         {isLoading ? (

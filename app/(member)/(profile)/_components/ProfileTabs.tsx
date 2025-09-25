@@ -8,19 +8,18 @@ import {
 import { ChevronDown } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PersonalInformation } from "./PersonalInformation";
-import { GetUserDetailsType } from "@/app/data/user/get-user-details";
 import { BankDetails } from "./BankDetails";
 import { SocialMedia } from "./SocialMedia";
-import { GetAvailableJobsType } from "@/app/data/job/get-available-jobs";
 import { Jobs } from "./Jobs";
+import { GetUserProfileType } from "@/app/data/user/get-user-profile";
 
 interface Props {
-  jobs: GetAvailableJobsType[];
-  user: GetUserDetailsType;
+  query: string;
+  user: GetUserProfileType;
   myProfile: boolean;
 }
 
-export const ProfileTabs = ({ user, jobs, myProfile }: Props) => {
+export const ProfileTabs = ({ user, query, myProfile }: Props) => {
   const myProfileTab = [
     {
       label: "Personal Information",
@@ -94,7 +93,7 @@ export const ProfileTabs = ({ user, jobs, myProfile }: Props) => {
           <SocialMedia myProfile={myProfile} socialMedia={user.socials} />
         </TabsContent>
         <TabsContent className="w-full" value="Jobs">
-          <Jobs jobs={jobs} />
+          <Jobs query={query} />
         </TabsContent>
       </Tabs>
 
@@ -138,7 +137,7 @@ export const ProfileTabs = ({ user, jobs, myProfile }: Props) => {
                         myProfile={myProfile}
                       />
                     )}
-                    {value === "Jobs" && <Jobs jobs={jobs} />}
+                    {value === "Jobs" && <Jobs query={query} />}
                   </CardContent>
                 </CollapsibleContent>
               </Collapsible>

@@ -25,6 +25,7 @@ export const getJobApplicants = async ({
               OR: [
                 { name: { contains: query, mode: "insensitive" as const } },
                 { username: { contains: query, mode: "insensitive" as const } },
+                { email: { contains: query, mode: "insensitive" as const } },
               ],
             },
           },
@@ -33,6 +34,13 @@ export const getJobApplicants = async ({
               OR: [
                 { title: { contains: query, mode: "insensitive" as const } },
                 { reward: { contains: query, mode: "insensitive" as const } },
+                {
+                  description: {
+                    contains: query,
+                    mode: "insensitive" as const,
+                  },
+                },
+                { JobID: { contains: query, mode: "insensitive" as const } },
               ],
             },
           },

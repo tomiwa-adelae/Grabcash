@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import { Loader } from "@/components/Loader";
 import { JobCTAs } from "@/app/(member)/(jobs)/available-jobs/[slug]/_components/JobCTAs";
 import { ProofForm } from "@/app/(member)/(jobs)/available-jobs/[slug]/_components/ProofForm";
+import { Banner } from "@/components/Banner";
+import { IconEye } from "@tabler/icons-react";
 
 interface Props {
   name: string;
@@ -35,8 +37,13 @@ export const PreviewJob = ({ name, email, phoneNumber }: Props) => {
   }
 
   return (
-    <div className="mt-6">
+    <div className="space-y-6">
       <PageHeader title="Job Details" />
+      <Banner
+        text="Here’s how your job will appear to potential applicants. Review all details before posting to ensure accuracy."
+        variant="default"
+        icon={IconEye}
+      />
       <div className="space-y-4 mt-4">
         <p className="text-base">
           Job title: <span className="text-muted-foreground">{job.title}</span>
@@ -89,7 +96,9 @@ export const PreviewJob = ({ name, email, phoneNumber }: Props) => {
         </p>
         <p className="text-base">
           Available Slots:{" "}
-          <span className="text-muted-foreground">49 remaining</span>
+          <span className="text-muted-foreground">
+            {job.noOfWorkers} remaining
+          </span>
         </p>
         <p className="text-base">
           Status: <span className="text-primary">Open</span>

@@ -3,6 +3,7 @@ import { SearchBar } from "@/app/(member)/_components/SearchBar";
 import { DEFAULT_LIMIT } from "@/constants";
 import { ClosedJobsList } from "@/app/(admin)/_components/ClosedJobsList";
 import { getClosedJobs } from "@/app/data/admin/job/get-closed-jobs";
+import { EmptyState } from "@/components/EmptyState";
 
 type SearchParams = Promise<{
   query?: string;
@@ -28,13 +29,21 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
           Manage the closed jobs on Earnsphere
         </p>
       </div>
-      <SearchBar />
-      <ClosedJobsList
-        initialJobs={jobData.jobs}
-        initialHasNext={jobData.pagination.hasNext}
-        initialTotal={jobData.pagination.total}
-        query={query}
-      />
+      {jobData.jobs.length !== 0 && <SearchBar />}
+      {jobData.jobs.length !== 0 && (
+        <ClosedJobsList
+          initialJobs={jobData.jobs}
+          initialHasNext={jobData.pagination.hasNext}
+          initialTotal={jobData.pagination.total}
+          query={query}
+        />
+      )}
+      {jobData.jobs.length === 0 && (
+        <EmptyState
+          title="No jobs found"
+          description="Once jobs have been closed, they would appear here"
+        />
+      )}
     </div>
   );
 };

@@ -69,20 +69,30 @@ export const Header = () => {
                 )}
               </NavigationMenuItem>
             ))}
+            {session?.user.username && (
+              <Button
+                variant={"ghost"}
+                size="md"
+                asChild
+                className="text-muted-foreground px-3"
+              >
+                <Link href={`/${session?.user.username}`}>My profile</Link>
+              </Button>
+            )}
           </NavigationMenuList>
         </NavigationMenu>
         <div className="flex items-center justify-end gap-2">
           <ThemeToggle />
-          <Button variant={"ghost"} size="icon">
+          {/* <Button variant={"ghost"} size="icon">
             <Bell />
-          </Button>
+          </Button> */}
           <div className="hidden md:flex items-center justify-end gap-2">
             {!isPending && (
               <UserDropdown
                 image={session?.user.image || DEFAULT_PROFILE_PICTURE}
-                name={session?.user.name!}
-                email={session?.user.email!}
-                username={session?.user.username!}
+                name={session?.user.name ?? "User"}
+                email={session?.user.email ?? ""}
+                username={session?.user.username ?? ""}
               />
             )}
           </div>

@@ -28,6 +28,8 @@ export const getUserDetails = async (username?: string) => {
       emailVerified: true,
       createdAt: true,
       earnings: true,
+      lifeTimeEarnings: true,
+      withdrawalPin: true,
       isAdmin: true,
       socials: {
         select: {

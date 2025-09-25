@@ -26,6 +26,20 @@ export const getAllSubmissions = async (params: Params = {}) => {
           ],
         },
       },
+      {
+        User: {
+          OR: [
+            {
+              name: { contains: query, mode: "insensitive" },
+              email: { contains: query, mode: "insensitive" },
+              username: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+      },
     ];
   }
 

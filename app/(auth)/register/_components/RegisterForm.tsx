@@ -173,10 +173,11 @@ export function RegisterForm() {
     startGoogleTransition(async () => {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/",
+        // callbackURL: "/onboarding",
         fetchOptions: {
           onSuccess: () => {
             toast.success(`Signed up with google...`);
+            router.push("/onboarding");
           },
           onError: (error) => {
             toast.error(error.error.message || "Internal server error");

@@ -14,7 +14,7 @@ export const RecentUsers = async () => {
             Latest user registrations and activity
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <div className="flex items-center gap-1 text-sm text-green-500">
             <TrendingUp className="h-4 w-4" />
             <span>+12%</span>
@@ -24,7 +24,7 @@ export const RecentUsers = async () => {
             <span className="hidden sm:inline">Add User</span>
             <span className="sm:hidden">Add</span>
           </Button>
-        </div>
+        </div> */}
       </div>
 
       <div className="space-y-2">

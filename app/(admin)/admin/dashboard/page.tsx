@@ -14,11 +14,14 @@ import { getTotalUsers } from "@/app/data/admin/user/get-total-users";
 import { getPendingJobSubmissions } from "@/app/data/admin/job/submission/get-pending-job-submissions";
 import { PageHeader } from "@/app/(member)/_components/PageHeader";
 import { RecentUsers } from "../../_components/RecentUsers";
+import { formatMoneyInput } from "@/lib/utils";
+import { getTotalPlatformEarnings } from "@/app/data/admin/job/payment/get-total-platform-earnings";
 
 export default async function page() {
   const activeJobs = await getActiveJobs();
   const totalUsers = await getTotalUsers();
   const pendingSubmissions = await getPendingJobSubmissions();
+  const totalPlatformEarnings = await getTotalPlatformEarnings();
 
   // Dashboard stats data
   const stats = [
@@ -46,17 +49,17 @@ export default async function page() {
       change: "+15%",
       changeType: "positive" as const,
       icon: "clock",
-      color: "text-purple-500",
-      bgColor: "bg-purple-500/10",
-    },
-    {
-      title: "Payout Requests",
-      value: 40,
-      change: "-2.4%",
-      changeType: "negative" as const,
-      icon: "money",
       color: "text-orange-500",
       bgColor: "bg-orange-500/10",
+    },
+    {
+      title: "Platform Earnings",
+      value: `₦${formatMoneyInput(totalPlatformEarnings)}`,
+      change: "+15%",
+      changeType: "positive" as const,
+      icon: "clock",
+      color: "text-purple-500",
+      bgColor: "bg-purple-500/10",
     },
   ];
 

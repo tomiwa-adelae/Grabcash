@@ -38,7 +38,10 @@ export default function UserDropdown({ image, name, email, username }: Props) {
               alt={`${name}'s profile picture`}
               className="object-cover"
             />
-            <AvatarFallback>{name[0].toUpperCase()}</AvatarFallback>
+            <AvatarFallback>
+              {" "}
+              {name ? name[0]?.toUpperCase() : "U"}
+            </AvatarFallback>
           </Avatar>
           <h5 className="font-medium text-sm">{name}</h5>
           <ChevronDownIcon

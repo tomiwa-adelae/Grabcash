@@ -166,12 +166,7 @@ export const onboardingProfileSchema = z
         message: "Country must be selected.",
       })
       .optional(),
-    bio: z
-      .string()
-      // .min(32, {
-      // 	message: "Bio must be selected.",
-      // })
-      .optional(),
+    bio: z.string().optional(),
     accountName: z.string().min(3, {
       message: "Account name must be at least 3 character.",
     }),

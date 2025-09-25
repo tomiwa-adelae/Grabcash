@@ -40,7 +40,8 @@ export const saveProfilePicture = async (
 };
 
 export const saveProfile = async (
-  data: OnboardingPrismaProfileSchemaType
+  data: OnboardingPrismaProfileSchemaType,
+  bankCode: string
 ): Promise<ApiResponse> => {
   const { user } = await requireUser();
 
@@ -58,6 +59,7 @@ export const saveProfile = async (
       },
       data: {
         ...userData,
+        bankCode,
         socials: {
           deleteMany: {}, // Delete existing socials first
           create:

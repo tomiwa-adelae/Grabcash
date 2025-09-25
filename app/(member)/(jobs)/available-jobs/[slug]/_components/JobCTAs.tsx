@@ -24,28 +24,28 @@ export const JobCTAs = ({ jobLink, alreadyApplied, isOwner }: Props) => {
           </a>
         </Button>
       )}
-      {!alreadyApplied && (
+      {/* {!alreadyApplied && (
         <Button size="md" variant={"outline"} className="w-full sm:w-auto">
           <BookmarkCheck />
           Save for later
         </Button>
-      )}
-      <Button
+      )} */}
+      {/* <Button
         size="md"
         variant={"outline"}
         className="border-primary text-primary hover:bg-primary/10 hover:text-primary w-full sm:w-auto"
       >
         <Share />
         Share Job
-      </Button>
-      <Button
+      </Button> */}
+      {/* <Button
         size="md"
         variant={"outline"}
         className="border-destructive text-destructive hover:bg-destructive/5 hover:text-destructive w-full sm:w-auto"
       >
         <Flag />
         Report Job
-      </Button>
+      </Button> */}
     </div>
   );
 };

@@ -1,10 +1,11 @@
+import { getUserDetails } from "@/app/data/user/get-user-details";
 import { getSubscriptionDetails } from "@/app/data/user/subscription/get-subscription-details";
 import { Confetti } from "@/components/Confetti";
 import { NairaIcon } from "@/components/NairaIcon";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { formatDate, formatMoneyInput } from "@/lib/utils";
+import { formatDate, formatMoneyInput, formattedStatus } from "@/lib/utils";
 import { Check } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -13,6 +14,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
   const { id } = await searchParams;
 
   const subscriptionDetails = await getSubscriptionDetails(id);
+  const user = await getUserDetails();
 
   return (
     <div className="not-prose relative w-full py-16 md:py-32">
@@ -42,9 +44,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
               <Separator />
               <p>
                 Billing Type:{" "}
-                {subscriptionDetails?.plan.billingCycle === "ANNUALLY"
-                  ? "Yearly"
-                  : "Monthly"}
+                {formattedStatus[subscriptionDetails?.plan.billingCycle!]}
               </p>
               <Separator />
               <p>
@@ -66,14 +66,17 @@ const page = async ({ searchParams }: { searchParams: any }) => {
                   ))}
                 </ul>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4 mt-6">
                 <Button className="w-full" size="md" asChild>
-                  <Link href="/dashboard">Go to Dashboard</Link>
+                  <Link href="/available-jobs">Browse Jobs</Link>
                 </Button>
-                <Button className="w-full" size="md" variant={"ghost"} asChild>
-                  <Link href="/dashboard/subscriptions">
-                    Manage Subscription
-                  </Link>
+                <Button
+                  className="w-full"
+                  size="md"
+                  variant={"secondary"}
+                  asChild
+                >
+                  <Link href={`/${user.username}`}>View profile</Link>
                 </Button>
               </div>
             </CardContent>

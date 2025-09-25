@@ -190,6 +190,17 @@ export const approveApplication = async (
       },
     });
 
+    await prisma.payout.create({
+      data: {
+        userId: applicant.User.id,
+        amount: Number(reward),
+        status: "PAID",
+        fee: 0,
+        title: `${applicant.Job.title} reward`,
+        type: "CREDIT",
+      },
+    });
+
     await mailjet.post("send", { version: "v3.1" }).request({
       Messages: [
         {
@@ -292,5 +303,24 @@ export const rejectApplication = async (
     return { status: "success", message: "Submission rejected" };
   } catch (error) {
     return { status: "error", message: "Failed to reject submission" };
+  }
+};
+
+export const verifyPayment = async (id: string): Promise<ApiResponse> => {
+  await requireAdmin();
+  try {
+    const payment = await prisma.jobPayment.update({
+      where: { id },
+      data: { status: "SUCCESS" },
+      select: { jobId: true },
+    });
+    await prisma.job.update({
+      where: { id: payment.jobId },
+      data: { paymentVerified: true },
+    });
+
+    return { status: "success", message: "Payment successfully verified" };
+  } catch (error) {
+    return { status: "error", message: "Failed to mark payment as paid" };
   }
 };

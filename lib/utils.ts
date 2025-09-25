@@ -174,4 +174,12 @@ export const formattedStatus: Record<string, string> = {
   PUBLISHED: "Published",
   DELETED: "Deleted",
   ARCHIVED: "Archived",
+  PAID: "Paid",
+  CREDIT: "Credit",
+  PROCESSING: "Processing",
+  DEBIT: "Debit",
 };
+
+export function removeCommas(value: any) {
+  return value.replace(/,/g, "");
+}

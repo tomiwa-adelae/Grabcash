@@ -57,7 +57,8 @@ export const updatePersonalDetails = async (
 };
 
 export const updateBankDetails = async (
-  data: EditBankDetailsSchemaType
+  data: EditBankDetailsSchemaType,
+  bankCode: string
 ): Promise<ApiResponse> => {
   const { user } = await requireUser();
 
@@ -73,6 +74,7 @@ export const updateBankDetails = async (
       },
       data: {
         ...validation.data,
+        bankCode,
       },
     });
 

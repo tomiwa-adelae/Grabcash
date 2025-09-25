@@ -9,48 +9,43 @@ datasource db {
 }
 
 model User {
-  id                   String   @id
+  id                   String        @id
   name                 String
-  email                String   @unique
-  username             String?  @unique
+  email                String        @unique
+  username             String?       @unique
   displayUsername      String?
   phoneNumber          String?
   country              String?
   bio                  String?
   accountName          String?
   bankName             String?
+  bankCode             String?
   accountNumber        String?
   emailVerified        Boolean
   image                String?
   dob                  String?
   identificationType   String?
   identificationNumber String?
-  onboardingCompleted  Boolean? @default(false)
-
-  isAdmin Boolean @default(false)
-
-  status UserStatus @default(ACTIVE)
-
-  credits Int @default(20)
-
-  earnings Int @default(0)
-
-  subscription Subscription?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  sessions Session[]
-  accounts Account[]
-  socials  Socials[]
-  jobs     Job[]
-  Payment  Payment[]
-
-  following Follow[] @relation("UserFollowing")
-  followers Follow[] @relation("UserFollowers")
-
-  jobPayments JobPayment[]
-  applicants  Applicant[]
+  onboardingCompleted  Boolean?      @default(false)
+  credits              Int           @default(20)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  earnings             Int           @default(0)
+  isAdmin              Boolean       @default(false)
+  status               UserStatus    @default(ACTIVE)
+  lifeTimeEarnings     Int           @default(0)
+  withdrawalPin        String?
+  applicants           Applicant[]
+  jobs                 Job[]
+  jobPayments          JobPayment[]
+  Payment              Payment[]
+  payouts              Payout[]
+  subscription         Subscription?
+  accounts             Account[]
+  following            Follow[]      @relation("UserFollowing")
+  followers            Follow[]      @relation("UserFollowers")
+  sessions             Session[]
+  socials              Socials[]
 
   @@unique([email, username])
   @@map("user")
@@ -59,7 +54,7 @@ model User {
 model Session {
   id        String   @id
   expiresAt DateTime
-  token     String
+  token     String   @unique
   createdAt DateTime
   updatedAt DateTime
   ipAddress String?
@@ -67,7 +62,6 @@ model Session {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([token])
   @@map("session")
 }
 
@@ -76,7 +70,6 @@ model Account {
   accountId             String
   providerId            String
   userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
   idToken               String?
@@ -86,6 +79,7 @@ model Account {
   password              String?
   createdAt             DateTime
   updatedAt             DateTime
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("account")
 }
@@ -102,147 +96,152 @@ model Verification {
 }
 
 model Socials {
-  id  String @id @default(uuid())
-  url String
-
-  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String @id @default(uuid())
+  url    String
   userId String
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("socials")
 }
 
 model Job {
-  id                 String  @id @default(uuid())
+  id                 String       @id @default(uuid())
   type               String
   title              String
-  slug               String? @unique
+  slug               String?      @unique
   description        String?
   category           String?
   jobLink            String?
-  // deadline           String?
   reward             String?
   noOfWorkers        String?
-  // estimatedTime      String?
-  // estimatedTimeUnit  String?
   instructions       String?
   proofOfCompletion  String?
   submissionType     String?
   submissionRequired String?
   finalNotes         String?
-
-  jobID String?
-
-  status JobStatus @default(DRAFT)
-
-  paymentVerified Boolean @default(false)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  User        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
-  jobOpen     Boolean @default(true) // <-- NEW FIELD
-  filledSlots Int     @default(0) // ✅ new field to track approved submissions
-
-  jobPayments JobPayment[]
-  applicants  Applicant[]
+  status             JobStatus    @default(DRAFT)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  userId             String
+  paymentVerified    Boolean      @default(false)
+  jobID              String?      @unique
+  jobOpen            Boolean      @default(true)
+  filledSlots        Int          @default(0)
+  applicants         Applicant[]
+  User               User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobPayments        JobPayment[]
 
   @@unique([slug, userId])
-  @@unique([jobID])
 }
 
 model SubscriptionPlan {
-  id           String       @id @default(uuid())
-  name         String       @default("Basic")
-  billingCycle BillingCycle @default(MONTHLY)
+  id           String         @id @default(uuid())
+  name         String         @default("Basic")
+  billingCycle BillingCycle   @default(MONTHLY)
   price        String
   durationDays String
   description  String
   features     Json?
   badge        String?
-  isActive     Boolean      @default(true)
-
+  isActive     Boolean        @default(true)
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  Subscription Subscription[]
   Payment      Payment[]
+  Subscription Subscription[]
 }
 
 model Subscription {
-  id        String             @id @default(uuid())
-  startDate DateTime
-  endDate   DateTime
-  status    SubscriptionStatus
-
-  user               User             @relation(fields: [userId], references: [id])
-  userId             String           @unique
-  plan               SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
+  id                 String             @id @default(uuid())
+  startDate          DateTime
+  endDate            DateTime
+  status             SubscriptionStatus
+  userId             String             @unique
   subscriptionPlanId String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @default(now()) @updatedAt
+  plan               SubscriptionPlan   @relation(fields: [subscriptionPlanId], references: [id])
+  user               User               @relation(fields: [userId], references: [id])
 }
 
 model Follow {
-  id String @id @default(uuid())
-
-  // The user who is following
-  followerId String
-  follower   User   @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
-
-  // The user being followed
+  id          String   @id @default(uuid())
+  followerId  String
   followingId String
-  following   User   @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  follower    User     @relation("UserFollowing", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("UserFollowers", fields: [followingId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Ensure a user can't follow the same person twice
   @@unique([followerId, followingId])
-  // Prevent self-follows at database level
   @@map("follow")
 }
 
 model JobPayment {
-  id            String @id @default(uuid())
+  id            String           @id @default(uuid())
   txRef         String
   transactionId String
   amount        String
-
-  status JobPaymentStatus @default(PENDING)
-
-  User   User   @relation(fields: [userId], references: [id])
-  userId String
-  Job    Job    @relation(fields: [jobId], references: [id])
-  jobId  String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status        JobPaymentStatus @default(PENDING)
+  userId        String
+  jobId         String
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  Job           Job              @relation(fields: [jobId], references: [id])
+  User          User             @relation(fields: [userId], references: [id])
 }
 
 model Applicant {
-  id String @id @default(uuid())
-
-  User   User   @relation(fields: [userId], references: [id])
-  userId String
-  Job    Job    @relation(fields: [jobId], references: [id])
-  jobId  String
-
-  screenshots String[] @default([])
-  shortText   String?
-  paragraph   String?
-
-  applicationID String
-
+  id              String               @id @default(uuid())
+  userId          String
+  jobId           String
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  paragraph       String?
+  screenshots     String[]             @default([])
+  shortText       String?
+  status          JobApplicationStatus @default(PENDING)
+  applicationID   String               @unique
   rejectionReason String?
-
-  status JobApplicationStatus @default(PENDING)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  Job             Job                  @relation(fields: [jobId], references: [id])
+  User            User                 @relation(fields: [userId], references: [id])
 
   @@unique([userId, jobId])
-  @@unique([applicationID])
+}
+
+model Payment {
+  id                 String           @id @default(uuid())
+  amount             String
+  transactionId      String
+  reference          String
+  status             PaymentStatus    @default(PENDING)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  userId             String
+  subscriptionPlanId String
+  plan               SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
+  user               User             @relation(fields: [userId], references: [id])
+}
+
+model Payout {
+  id            String       @id @default(uuid())
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  userId        String
+  amount        Int
+  fee           Int
+  bankName      String?
+  accountNumber String?
+  accountName   String?
+  title         String?
+  withdrawal    Boolean?     @default(false)
+  type          PayoutType?
+  status        PayoutStatus @default(PENDING)
+  User          User         @relation(fields: [userId], references: [id])
+}
+
+enum PayoutType {
+  DEBIT
+  CREDIT
 }
 
 enum JobStatus {
@@ -261,22 +260,6 @@ enum SubscriptionStatus {
   ACTIVE
   EXPIRED
   CANCELED
-}
-
-model Payment {
-  id String @id @default(uuid())
-
-  amount        String
-  transactionId String
-  reference     String
-  status        PaymentStatus @default(PENDING)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  user          User          @relation(fields: [userId], references: [id])
-  userId        String
-
-  plan               SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
-  subscriptionPlanId String
 }
 
 enum PaymentStatus {
@@ -303,4 +286,13 @@ enum UserStatus {
   SUSPENDED
   DELETED
   UNVERIFIED
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+  REJECTED
+  CANCELLED
 }

@@ -24,6 +24,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { formatMoneyInput } from "@/lib/utils";
 import { NairaIcon } from "@/components/NairaIcon";
+import { usePaystackPayment } from "react-paystack";
 
 interface Props {
   name: string;
@@ -42,47 +43,106 @@ export const PricingPlans = ({ email, name, phoneNumber, plans }: Props) => {
     (plan) => plan.billingCycle === (isAnnual ? "ANNUALLY" : "MONTHLY")
   );
 
+  // For Flutterwave
+  // const handlePayment = (plan: GetSubscriptionPlansType) => {
+  //   const config = {
+  //     public_key: env.NEXT_PUBLIC_FW_PUBLIC_KEY,
+  //     tx_ref: `${Date.now()}`,
+  //     amount: plan.price, // dynamic price
+  //     currency: "NGN",
+  //     payment_options: "card,mobilemoney,ussd",
+  //     customer: {
+  //       email,
+  //       phone_number: phoneNumber,
+  //       name,
+  //     },
+  //     customizations: {
+  //       title: "Earnsphere subscription",
+  //       description: `Payment for ${plan.name} (${plan.billingCycle.toLowerCase()})`,
+  //       logo: EARNSPHERE_LOGO,
+  //     },
+  //   };
+  //   initiatePayment({
+  //     config,
+  //     onSuccess: async (response) => {
+  //       const { data: result, error } = await tryCatch(
+  //         activateSubscription({planId: plan.id, amount: plan.price,  reference: response.tx_ref, status: response.status, transactionId: response.transaction_id  })
+  //       );
+  //       if (error) {
+  //         toast.error(error.message || "Oops! Internal server error");
+  //         return;
+  //       }
+
+  //       if (result?.status === "success") {
+  //         toast.success(result.message);
+  //         router.push(`/subscriptions/success?id=${result.data?.id}`);
+  //       } else {
+  //         toast.error(result.message);
+  //       }
+  //     },
+  //     onClose: async () => {
+  //       toast.info("Payment cancelled");
+  //     },
+  //     onError: async (error) => {
+  //       toast.error("Payment failed: " + error.message);
+  //     },
+  //   });
+  // };
+
   const handlePayment = (plan: GetSubscriptionPlansType) => {
     const config = {
-      public_key: env.NEXT_PUBLIC_FW_PUBLIC_KEY,
-      tx_ref: `${Date.now()}`,
-      amount: plan.price, // dynamic price
-      currency: "NGN",
-      payment_options: "card,mobilemoney,ussd",
-      customer: {
-        email,
-        phone_number: phoneNumber,
+      reference: new Date().getTime().toString(),
+      email,
+      amount: Number(plan.price) * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+      publicKey: env.NEXT_PUBLIC_PS_PUBLIC_KEY,
+      metadata: {
         name,
-      },
-      customizations: {
-        title: "Earnsphere subscription",
-        description: `Payment for ${plan.name} (${plan.billingCycle.toLowerCase()})`,
-        logo: EARNSPHERE_LOGO,
+        custom_fields: [
+          {
+            display_name: "Full Name",
+            variable_name: "full_name",
+            value: name,
+          },
+          {
+            display_name: "Phone Number",
+            variable_name: "phone_number",
+            value: phoneNumber,
+          },
+        ],
       },
     };
-    initiatePayment({
-      config,
-      onSuccess: async (response) => {
-        const { data: result, error } = await tryCatch(
-          activateSubscription(plan.id, response)
-        );
-        if (error) {
-          toast.error(error.message || "Oops! Internal server error");
-          return;
-        }
 
-        if (result?.status === "success") {
-          toast.success(result.message);
-          router.push(`/subscriptions/success?id=${result.data?.id}`);
-        } else {
-          toast.error(result.message);
-        }
+    const initializePayment = usePaystackPayment(config);
+
+    initializePayment({
+      onSuccess: (reference) => {
+        startTransition(async () => {
+          toast.loading("Saving payment...");
+          const { data: result, error } = await tryCatch(
+            activateSubscription({
+              amount: plan.price,
+              status: reference.status,
+              planId: plan.id,
+              reference: reference.trxref,
+              transactionId: reference.transaction,
+            })
+          );
+          if (error) {
+            toast.error(error.message || "Oops! Internal server error");
+            return;
+          }
+
+          if (result?.status === "success") {
+            toast.success(result.message);
+            router.push(`/subscriptions/success?id=${result.data?.id}`);
+            toast.dismiss();
+          } else {
+            toast.error(result.message);
+          }
+        });
       },
-      onClose: async () => {
+      onClose: (error) => {
         toast.info("Payment cancelled");
-      },
-      onError: async (error) => {
-        toast.error("Payment failed: " + error.message);
       },
     });
   };

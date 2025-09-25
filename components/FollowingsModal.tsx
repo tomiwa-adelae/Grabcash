@@ -133,7 +133,7 @@ export function FollowingsModal({
           </DialogTitle>
           <div className="py-2 border-b">
             <div className="container">
-              <SearchBar />
+              {followings.length !== 0 && <SearchBar />}
             </div>
           </div>
           <div

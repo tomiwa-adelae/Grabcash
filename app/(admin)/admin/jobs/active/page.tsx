@@ -4,6 +4,7 @@ import React from "react";
 import { DEFAULT_LIMIT } from "@/constants";
 import { getActiveJobs } from "@/app/data/admin/job/get-active-jobs";
 import { ActiveJobsList } from "@/app/(admin)/_components/ActiveJobsList";
+import { EmptyState } from "@/components/EmptyState";
 
 type SearchParams = Promise<{
   query?: string;
@@ -29,13 +30,21 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
           Manage the active jobs on Earnsphere
         </p>
       </div>
-      <SearchBar />
-      <ActiveJobsList
-        initialJobs={jobData.jobs}
-        initialHasNext={jobData.pagination.hasNext}
-        initialTotal={jobData.pagination.total}
-        query={query}
-      />
+      {jobData.jobs.length !== 0 && <SearchBar />}
+      {jobData.jobs.length !== 0 && (
+        <ActiveJobsList
+          initialJobs={jobData.jobs}
+          initialHasNext={jobData.pagination.hasNext}
+          initialTotal={jobData.pagination.total}
+          query={query}
+        />
+      )}
+      {jobData.jobs.length === 0 && (
+        <EmptyState
+          title="No jobs found"
+          description="Once jobs are active, they would appear here"
+        />
+      )}
     </div>
   );
 };

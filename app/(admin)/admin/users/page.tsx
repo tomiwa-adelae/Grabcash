@@ -4,6 +4,7 @@ import React from "react";
 import { UsersList } from "../../_components/UsersList";
 import { getTotalUsers } from "@/app/data/admin/user/get-total-users";
 import { DEFAULT_LIMIT } from "@/constants";
+import { EmptyState } from "@/components/EmptyState";
 
 type SearchParams = Promise<{
   query?: string;
@@ -27,13 +28,21 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
           Manage the users on Earnsphere
         </p>
       </div>
-      <SearchBar />
-      <UsersList
-        initialUsers={usersData.users}
-        initialHasNext={usersData.pagination.hasNext}
-        initialTotal={usersData.pagination.total}
-        query={query}
-      />
+      {usersData.users.length !== 0 && <SearchBar />}
+      {usersData.users.length !== 0 && (
+        <UsersList
+          initialUsers={usersData.users}
+          initialHasNext={usersData.pagination.hasNext}
+          initialTotal={usersData.pagination.total}
+          query={query}
+        />
+      )}
+      {usersData.users.length === 0 && (
+        <EmptyState
+          title="No users found"
+          description="Once users have been created an account, they would appear here"
+        />
+      )}
     </div>
   );
 };

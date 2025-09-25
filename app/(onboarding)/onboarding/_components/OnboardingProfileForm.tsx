@@ -64,6 +64,7 @@ export function OnBoardingProfileForm({ user }: Props) {
   const router = useRouter();
 
   const { firstName, lastName } = splitName(user?.name);
+  const [bankCode, setBankCode] = useState("");
 
   const [pending, startTransition] = useTransition();
 
@@ -248,7 +249,9 @@ export function OnBoardingProfileForm({ user }: Props) {
               data?.socialLinks.filter((link: any) => link?.url.trim() !== ""),
       };
 
-      const { data: result, error } = await tryCatch(saveProfile(parsedData));
+      const { data: result, error } = await tryCatch(
+        saveProfile(parsedData, bankCode)
+      );
 
       if (error) {
         toast.error(error.message || "Oops! Internal server error");
@@ -459,7 +462,11 @@ export function OnBoardingProfileForm({ user }: Props) {
                   <FormItem>
                     <FormLabel>Bank name</FormLabel>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        const bank = banks.find((b) => b.bankName === value);
+                        setBankCode(bank?.bankCode || "");
+                      }}
                       defaultValue={field.value}
                     >
                       <FormControl>
@@ -469,8 +476,8 @@ export function OnBoardingProfileForm({ user }: Props) {
                       </FormControl>
                       <SelectContent>
                         {banks.map((bank, index) => (
-                          <SelectItem key={index} value={bank}>
-                            {bank}
+                          <SelectItem key={index} value={bank.bankName}>
+                            {bank.bankName}
                           </SelectItem>
                         ))}
                       </SelectContent>

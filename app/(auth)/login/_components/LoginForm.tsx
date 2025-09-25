@@ -43,10 +43,11 @@ export function LoginForm() {
     startGoogleTransition(async () => {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/",
+        callbackURL: "/available-jobs",
         fetchOptions: {
           onSuccess: (res) => {
             toast.success(`Signed in with google...`);
+            // router.push(`/available-jobs`);
           },
           onError: (error) => {
             toast.error(error.error.message || "Internal server error");
@@ -65,7 +66,7 @@ export function LoginForm() {
           onSuccess: async (res) => {
             if (res.data.user.emailVerified) {
               toast.success(`Welcome back, ${res.data.user.name}`);
-              router.push(`/`);
+              router.push(`/available-jobs`);
             } else {
               await authClient.emailOtp.sendVerificationOtp({
                 email: data.email,

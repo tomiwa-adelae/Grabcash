@@ -57,10 +57,22 @@ export const approveApplication = async (
       },
       data: {
         earnings: { increment: reward },
+        lifeTimeEarnings: { increment: reward },
       },
       select: {
         name: true,
         email: true,
+      },
+    });
+
+    await prisma.payout.create({
+      data: {
+        userId: applicant.User.id,
+        amount: Number(reward),
+        status: "PAID",
+        fee: 0,
+        title: `${applicant.Job.title} reward`,
+        type: "CREDIT",
       },
     });
 

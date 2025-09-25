@@ -21,11 +21,17 @@ export const followings = async ({
           ? {
               OR: [
                 {
-                  following: { name: { contains: query, mode: "insensitive" } },
+                  following: {
+                    name: { contains: query, mode: "insensitive" },
+                    username: { contains: query, mode: "insensitive" },
+                    email: { contains: query, mode: "insensitive" },
+                  },
                 },
                 {
                   following: {
+                    name: { contains: query, mode: "insensitive" },
                     username: { contains: query, mode: "insensitive" },
+                    email: { contains: query, mode: "insensitive" },
                   },
                 },
               ],

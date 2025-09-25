@@ -17,6 +17,15 @@ export const getPendingJobSubmissions = async (params: Params = {}) => {
     whereConditions.OR = [
       { applicationID: { contains: query, mode: "insensitive" } },
       {
+        User: {
+          OR: [
+            { name: { contains: query, mode: "insensitive" as const } },
+            { username: { contains: query, mode: "insensitive" as const } },
+            { email: { contains: query, mode: "insensitive" as const } },
+          ],
+        },
+      },
+      {
         Job: {
           OR: [
             { title: { contains: query, mode: "insensitive" } },

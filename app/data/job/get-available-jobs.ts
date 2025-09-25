@@ -38,6 +38,8 @@ export const getAvailableJobs = async (params: GetAvailableJobsParams = {}) => {
       { title: { contains: query, mode: "insensitive" } },
       { category: { contains: query, mode: "insensitive" } },
       { reward: { contains: query, mode: "insensitive" } },
+      { noOfWorkers: { contains: query, mode: "insensitive" } },
+      { jobID: { contains: query, mode: "insensitive" } },
     ];
   }
 
@@ -51,6 +53,7 @@ export const getAvailableJobs = async (params: GetAvailableJobsParams = {}) => {
         title: true,
         category: true,
         noOfWorkers: true,
+        jobID: true,
         reward: true,
         _count: {
           select: {

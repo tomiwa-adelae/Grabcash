@@ -34,8 +34,6 @@ const page = async ({
 
   const user = await getUserProfile(username);
 
-  console.log(user);
-
   const jobs = await getAvailableJobs();
 
   // Updated to get pagination data

@@ -3,6 +3,7 @@ import { SearchBar } from "@/app/(member)/_components/SearchBar";
 import { getAllSubmissions } from "@/app/data/admin/submission/get-all-submissions";
 import { DEFAULT_LIMIT } from "@/constants";
 import { AllSubmissionsList } from "../../_components/AllSubmissionsList";
+import { EmptyState } from "@/components/EmptyState";
 
 type SearchParams = Promise<{
   query?: string;
@@ -28,13 +29,21 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
           Manage the all submissions on Earnsphere
         </p>
       </div>
-      <SearchBar />
-      <AllSubmissionsList
-        initialSubmissions={submissionData.submissions}
-        initialHasNext={submissionData.pagination.hasNext}
-        initialTotal={submissionData.pagination.total}
-        query={query}
-      />
+      {submissionData.submissions.length !== 0 && <SearchBar />}
+      {submissionData.submissions.length !== 0 && (
+        <AllSubmissionsList
+          initialSubmissions={submissionData.submissions}
+          initialHasNext={submissionData.pagination.hasNext}
+          initialTotal={submissionData.pagination.total}
+          query={query}
+        />
+      )}
+      {submissionData.submissions.length === 0 && (
+        <EmptyState
+          title="No submissions found"
+          description="Once workers have submitted a job, they would appear here"
+        />
+      )}
     </div>
   );
 };

@@ -24,7 +24,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
   return (
     <div className="py-16 md:py-32 container space-y-6">
       <PageHeader title="My Jobs and Campaigns" />
-      <SearchBar />
+      {jobsData.jobs.length !== 0 && <SearchBar />}
       {jobsData.jobs.length !== 0 && (
         <>
           <JobsTable
@@ -45,6 +45,8 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
         <EmptyState
           title="No jobs found"
           description="Once you've created a job, they would appear here"
+          buttonSlug="/new-job"
+          buttonText="Create a job"
         />
       )}
     </div>

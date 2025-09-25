@@ -12,7 +12,19 @@ const mailjet = Mailjet.apiConnect(
   env.MAILJET_API_PRIVATE_KEY
 );
 
-export const activateSubscription = async (planId: string, response: any) => {
+export const activateSubscription = async ({
+  amount,
+  planId,
+  status,
+  reference,
+  transactionId,
+}: {
+  amount: string;
+  planId: string;
+  status: string;
+  reference: string;
+  transactionId: string;
+}) => {
   const { user } = await requireUser();
 
   try {
@@ -26,11 +38,13 @@ export const activateSubscription = async (planId: string, response: any) => {
       data: {
         userId: user.id,
         subscriptionPlanId: plan.id,
-        amount: `${response.amount}`,
-        reference: response.tx_ref,
-        transactionId: `${response.transaction_id}`,
+        amount,
+        reference,
+        transactionId,
         status:
-          response.status === "successful" || response.status === "completed"
+          status === "successful" ||
+          status === "completed" ||
+          status === "success"
             ? "SUCCESS"
             : "FAILED",
       },
@@ -54,6 +68,17 @@ export const activateSubscription = async (planId: string, response: any) => {
           Date.now() + Number(plan.durationDays) * 24 * 60 * 60 * 1000
         ),
         status: "ACTIVE",
+      },
+    });
+
+    await prisma.payout.create({
+      data: {
+        amount: Number(amount),
+        fee: Number(amount),
+        type: "DEBIT",
+        userId: user.id,
+        title: `Earnsphere ${plan.name} subscription`,
+        status: "PAID",
       },
     });
 

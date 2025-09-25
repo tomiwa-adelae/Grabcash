@@ -2,10 +2,14 @@ import { getUserDetails } from "@/app/data/user/get-user-details";
 import { PricingPlans } from "./_components/PricingPlans";
 import { getSubscriptionPlans } from "@/app/data/user/subscription/get-subscription-plans";
 import { PageGradient } from "@/components/PageGradient";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 const page = async () => {
   const user = await getUserDetails();
   const plans = await getSubscriptionPlans();
+
+  if (!user.onboardingCompleted) return redirect("/onboarding");
 
   return (
     <div className="not-prose relative w-full py-16 md:py-32">

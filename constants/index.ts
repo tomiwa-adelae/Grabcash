@@ -90,22 +90,22 @@ export const memberNavLinks = [
       },
     ],
   },
+  // {
+  //   slug: "/credits",
+  //   label: "Credits",
+  // },
   {
-    slug: "/credits",
-    label: "Credits",
+    slug: "/wallet",
+    label: "Wallet",
   },
-  {
-    slug: "/Earnings",
-    label: "Earnings",
-  },
-  {
-    slug: "/academy",
-    label: "Academy",
-  },
-  {
-    slug: "/community",
-    label: "Community",
-  },
+  // {
+  //   slug: "/academy",
+  //   label: "Academy",
+  // },
+  // {
+  //   slug: "/community",
+  //   label: "Community",
+  // },
 ];
 
 export const footer = [
@@ -117,7 +117,7 @@ export const footer = [
         label: "Get started",
       },
       {
-        slug: "/pricing",
+        slug: "/subscriptions",
         label: "Pricing",
       },
       {
@@ -191,10 +191,10 @@ export const footer = [
         slug: "/partner-agreement",
         label: "Partner agreement",
       },
-      {
-        slug: "/refund-policy",
-        label: "Refund policy",
-      },
+      // {
+      //   slug: "/refund-policy",
+      //   label: "Refund policy",
+      // },
     ],
   },
 ];
@@ -439,28 +439,28 @@ export const countries = [
 ];
 
 export const banks = [
-  "Access Bank",
-  "Citibank Nigeria",
-  "Ecobank Nigeria",
-  "Fidelity Bank",
-  "First Bank of Nigeria",
-  "First City Monument Bank (FCMB)",
-  "Globus Bank",
-  "Guaranty Trust Bank (GTBank)",
-  "Heritage Bank",
-  "Keystone Bank",
-  "Polaris Bank",
-  "Providus Bank",
-  "Stanbic IBTC Bank",
-  "Standard Chartered Bank",
-  "Sterling Bank",
-  "SunTrust Bank",
-  "Titan Trust Bank",
-  "Union Bank of Nigeria",
-  "United Bank for Africa (UBA)",
-  "Unity Bank",
-  "Wema Bank",
-  "Zenith Bank",
+  { bankName: "Access Bank", bankCode: "044" },
+  { bankName: "Citibank Nigeria", bankCode: "023" },
+  { bankName: "Ecobank Nigeria", bankCode: "050" },
+  { bankName: "Fidelity Bank", bankCode: "070" },
+  { bankName: "First Bank of Nigeria", bankCode: "011" },
+  { bankName: "First City Monument Bank (FCMB)", bankCode: "214" },
+  { bankName: "Globus Bank", bankCode: "00103" },
+  { bankName: "Guaranty Trust Bank (GTBank)", bankCode: "058" },
+  { bankName: "Heritage Bank", bankCode: "030" },
+  { bankName: "Keystone Bank", bankCode: "082" },
+  { bankName: "Polaris Bank", bankCode: "076" },
+  { bankName: "Providus Bank", bankCode: "101" },
+  { bankName: "Stanbic IBTC Bank", bankCode: "221" },
+  { bankName: "Standard Chartered Bank", bankCode: "068" },
+  { bankName: "Sterling Bank", bankCode: "232" },
+  { bankName: "SunTrust Bank", bankCode: "100" },
+  { bankName: "Titan Trust Bank", bankCode: "102" },
+  { bankName: "Union Bank of Nigeria", bankCode: "032" },
+  { bankName: "United Bank for Africa (UBA)", bankCode: "033" },
+  { bankName: "Unity Bank", bankCode: "215" },
+  { bankName: "Wema Bank", bankCode: "035" },
+  { bankName: "Zenith Bank", bankCode: "057" },
 ];
 
 export const filters = [
@@ -844,10 +844,10 @@ export const estimatedTimes = [
 
 export const submissionTypes = [
   { value: "screenshots", label: "Screenshots" },
-  { value: "documents", label: "Documents" },
-  { value: "link", label: "Link" },
-  { value: "shortText", label: "Short Text" },
-  { value: "longParagraph", label: "Long Paragraph" },
+  // { value: "documents", label: "Documents" },
+  // { value: "link", label: "Link" },
+  // { value: "shortText", label: "Short Text" },
+  // { value: "longParagraph", label: "Long Paragraph" },
 ];
 
 type ButtonVariant =
@@ -887,8 +887,8 @@ export const subscriptionPlans: {
   {
     name: "Pro",
     price: {
-      monthly: "1000",
-      annually: "8000",
+      monthly: "900",
+      annually: "10000",
     },
     description:
       "Unlock the full earnsphere experience — access all earning tools, campaigns, and learning resources.",
@@ -915,7 +915,7 @@ export const userDropdownLinks = [
   },
   {
     icon: Users,
-    slug: "/",
+    slug: "/top-members",
     label: "Top members",
   },
   {
@@ -985,11 +985,14 @@ export const adminNavLinks = [
         slug: "/admin/subscriptions",
         icon: IconAccessible,
       },
-      {
-        title: "Refunds / Disputes",
-        slug: "/admin/refunds",
-        icon: IconCreditCardRefund,
-      },
+      // {
+      //   title: "Refunds / Disputes",
+      //   slug: "/admin/refunds",
+      //   icon: IconCreditCardRefund,
+      // },
     ],
   },
 ];
+
+export const DEFAULT_MINIMUM_PAYOUT = 5000;
+export const DEFAULT_WITHDRAWAL_FEE = 5.5;

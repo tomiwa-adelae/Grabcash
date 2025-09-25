@@ -34,6 +34,8 @@ export const getMyJobs = async ({
       { title: { contains: query, mode: "insensitive" } },
       { category: { contains: query, mode: "insensitive" } },
       { reward: { contains: query, mode: "insensitive" } },
+      { description: { contains: query, mode: "insensitive" } },
+      { noOfWorkers: { contains: query, mode: "insensitive" } },
     ];
   }
 
@@ -49,6 +51,8 @@ export const getMyJobs = async ({
         reward: true,
         noOfWorkers: true,
         status: true,
+        jobID: true,
+        paymentVerified: true,
         jobOpen: true,
         createdAt: true,
         _count: {

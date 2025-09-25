@@ -22,6 +22,7 @@ import { formatMoneyInput } from "@/lib/utils";
 import { env } from "@/lib/env";
 import { DEFAULT_COMMISSION, EARNSPHERE_LOGO } from "@/constants";
 import { useFlutterwavePayment } from "@/hooks/use-flutterwave-payment";
+import { usePaystackPayment } from "react-paystack";
 
 interface Props {
   open: boolean;
@@ -62,48 +63,109 @@ export function ConfirmPostingModal({
       if (result?.status === "success") {
         toast.success(result.message);
 
+        // For Flutterwave
+        // const config = {
+        //   public_key: env.NEXT_PUBLIC_FW_PUBLIC_KEY,
+        //   tx_ref: `${Date.now()}`,
+        //   amount: totalWithFee, // dynamic price
+        //   currency: "NGN",
+        //   payment_options: "card,mobilemoney,ussd",
+        //   customer: {
+        //     email,
+        //     phone_number: phoneNumber,
+        //     name,
+        //   },
+        //   customizations: {
+        //     title: `Earnsphere - ${data.title}`,
+        //     description: `Payment for ${totalWithFee} (${data.title})`,
+        //     logo: EARNSPHERE_LOGO,
+        //   },
+        // };
+
+        // initiatePayment({
+        //   config,
+        //   onSuccess: async (response) => {
+        //     const { data: paymentResult, error } = await tryCatch(
+        //       verifyJobPayment(result.id!, totalWithFee, response)
+        //     );
+        //     if (error) {
+        //       toast.error(error.message || "Oops! Internal server error");
+        //       return;
+        //     }
+
+        //     if (paymentResult?.status === "success") {
+        //       toast.success(paymentResult.message);
+        //       router.push(`/new-job/success?slug=${result?.slug}`);
+        //     } else {
+        //       toast.error(paymentResult.message);
+        //     }
+        //   },
+        //   onClose: async () => {
+        //     toast.info("Payment cancelled");
+        //     router.push(`/new-job/error?slug=${result?.slug}`);
+        //   },
+        //   onError: async (error) => {
+        //     toast.error("Payment failed: " + error.message);
+        //     router.push(`/new-job/error?slug=${result?.slug}`);
+        //   },
+        // });
+
         const config = {
-          public_key: env.NEXT_PUBLIC_FW_PUBLIC_KEY,
-          tx_ref: `${Date.now()}`,
-          amount: totalWithFee, // dynamic price
-          currency: "NGN",
-          payment_options: "card,mobilemoney,ussd",
-          customer: {
-            email,
-            phone_number: phoneNumber,
+          reference: new Date().getTime().toString(),
+          email,
+          amount: Number(totalWithFee) * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+          publicKey: env.NEXT_PUBLIC_PS_PUBLIC_KEY,
+          metadata: {
             name,
-          },
-          customizations: {
-            title: `Earnsphere - ${data.title}`,
-            description: `Payment for ${totalWithFee} (${data.title})`,
-            logo: EARNSPHERE_LOGO,
+            custom_fields: [
+              {
+                display_name: "Full Name",
+                variable_name: "full_name",
+                value: name,
+              },
+              {
+                display_name: "Phone Number",
+                variable_name: "phone_number",
+                value: phoneNumber,
+              },
+            ],
           },
         };
 
-        initiatePayment({
-          config,
-          onSuccess: async (response) => {
-            const { data: paymentResult, error } = await tryCatch(
-              verifyJobPayment(result.id!, totalWithFee, response)
-            );
-            if (error) {
-              toast.error(error.message || "Oops! Internal server error");
-              return;
-            }
+        const initializePayment = usePaystackPayment(config);
 
-            if (paymentResult?.status === "success") {
-              toast.success(paymentResult.message);
-              router.push(`/new-job/success?slug=${result?.slug}`);
-            } else {
-              toast.error(paymentResult.message);
-            }
+        closeModal();
+        initializePayment({
+          onSuccess: (reference) => {
+            startTransition(async () => {
+              toast.loading("Saving payment...");
+              const { data: paymentResult, error } = await tryCatch(
+                verifyJobPayment({
+                  id: result.id!,
+                  amount: totalWithFee,
+                  reference: reference.trxref,
+                  status: reference.status,
+                  transactionId: reference.transaction,
+                })
+              );
+              if (error) {
+                toast.error(error.message || "Oops! Internal server error");
+                return;
+              }
+
+              if (paymentResult?.status === "success") {
+                toast.success(paymentResult.message);
+                router.push(`/new-job/success?slug=${result?.slug}`);
+              } else {
+                toast.error(paymentResult.message);
+                router.push(`/new-job/error?slug=${result?.slug}`);
+              }
+
+              toast.dismiss();
+            });
           },
-          onClose: async () => {
+          onClose: (error) => {
             toast.info("Payment cancelled");
-            router.push(`/new-job/error?slug=${result?.slug}`);
-          },
-          onError: async (error) => {
-            toast.error("Payment failed: " + error.message);
             router.push(`/new-job/error?slug=${result?.slug}`);
           },
         });

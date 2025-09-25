@@ -8,6 +8,12 @@ import { getJobDetails } from "@/app/data/user/job/get-job-details";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FileUser, Pen } from "lucide-react";
+import { Banner } from "@/components/Banner";
+import { IconBan } from "@tabler/icons-react";
+import { PaymentFailedBanner } from "@/components/PaymentFailedBanner";
+import { DEFAULT_COMMISSION } from "@/constants";
+import { getUserDetails } from "@/app/data/user/get-user-details";
+import { RetryPaymentButton } from "../../(new_jobs)/new-job/error/_components/RetryPaymentButton";
 
 type Params = Promise<{
   slug: string;
@@ -16,11 +22,30 @@ type Params = Promise<{
 const page = async ({ params }: { params: Params }) => {
   const { slug } = await params;
 
+  const user = await getUserDetails();
+
   const job = await getJobDetails(slug);
 
+  const baseTotal = Number(job.reward) * Number(job.noOfWorkers);
+  const totalWithFee = (
+    baseTotal +
+    (baseTotal * DEFAULT_COMMISSION) / 100
+  ).toFixed(); // Add 10%
+
   return (
-    <div className="py-16 md:py-32 container">
+    <div className="py-16 md:py-32 container space-y-6">
       <PageHeader title="Job Details" />
+      {!job.paymentVerified && (
+        <PaymentFailedBanner
+          totalWithFee={totalWithFee}
+          id={job.id}
+          slug={job.slug!}
+          title={job.title}
+          email={user.email}
+          name={user.name}
+          phoneNumber={user.phoneNumber}
+        />
+      )}
       <div className="space-y-4 mt-4">
         <p className="text-base">
           Job title: <span className="text-muted-foreground">{job.title}</span>
@@ -101,16 +126,28 @@ const page = async ({ params }: { params: Params }) => {
           Some editing is closed because there are applicants on the job already
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-          <Button asChild size="md" className="w-full">
+          {job.paymentVerified ? (
+            <Button asChild size="md" className="w-full">
+              <Link href={`/jobs/${job.slug}/submissions`}>
+                <FileUser />
+                View submissions ({job._count.applicants})
+              </Link>
+            </Button>
+          ) : (
+            <RetryPaymentButton
+              totalWithFee={totalWithFee}
+              id={job.id}
+              slug={job.slug!}
+              title={job.title}
+              email={user.email}
+              name={user.name}
+              phoneNumber={user.phoneNumber}
+            />
+          )}
+          <Button asChild size="md" className="w-full" variant={"secondary"}>
             <Link href={`/jobs/${job.slug}/edit`}>
               <Pen />
               Edit Job
-            </Link>
-          </Button>
-          <Button asChild size="md" variant={"outline"} className="w-full">
-            <Link href={`/jobs/${job.slug}/submissions`}>
-              <FileUser />
-              View submissions ({job._count.applicants})
             </Link>
           </Button>
         </div>

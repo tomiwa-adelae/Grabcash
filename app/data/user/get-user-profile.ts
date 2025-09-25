@@ -74,4 +74,4 @@ export const getUserProfile = async (username: string) => {
   return user;
 };
 
-export type GetUserDetailsType = Awaited<ReturnType<typeof getUserProfile>>;
+export type GetUserProfileType = Awaited<ReturnType<typeof getUserProfile>>;

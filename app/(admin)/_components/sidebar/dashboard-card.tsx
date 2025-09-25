@@ -19,7 +19,7 @@ const iconMap: Record<string, any> = {
 interface DashboardCardProps {
   stat: {
     title: string;
-    value: number;
+    value: number | string;
     change: string;
     changeType: "positive" | "negative";
     icon: any;

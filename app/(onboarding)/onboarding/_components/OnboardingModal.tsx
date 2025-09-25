@@ -79,7 +79,7 @@ export function OnboardingModal({ user }: Props) {
           <div className="flex flex-col justify-end gap-4 sm:flex-row sm:items-center">
             <DialogFooter>
               <DialogClose asChild>
-                <Button size="md" type="button" variant="ghost">
+                <Button size="md" type="button" variant="secondary">
                   Skip
                 </Button>
               </DialogClose>

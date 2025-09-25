@@ -146,6 +146,7 @@ export function JobsTable({
                 >
                   {job.title}
                 </Link>
+                <p className="text-muted-foreground text-xs">{job.jobID}</p>
               </TableCell>
               <TableCell>{job.category}</TableCell>
               <TableCell>
@@ -164,9 +165,13 @@ export function JobsTable({
                 {formatMoneyInput(job.reward)}
               </TableCell>
               <TableCell>
-                <Badge variant={job.jobOpen ? "default" : "pending"}>
-                  {job.jobOpen ? "Active" : "Closed"}
-                </Badge>
+                {job.paymentVerified ? (
+                  <Badge variant={job.jobOpen ? "default" : "pending"}>
+                    {job.jobOpen ? "Active" : "Closed"}
+                  </Badge>
+                ) : (
+                  <Badge variant={"pending"}>No payment</Badge>
+                )}
               </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
@@ -187,11 +192,13 @@ export function JobsTable({
                     <DropdownMenuItem asChild>
                       <Link href={`/jobs/${job.slug}/edit`}>Edit Job</Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href={`/jobs/${job.slug}/submissions`}>
-                        View Submissions
-                      </Link>
-                    </DropdownMenuItem>
+                    {job.paymentVerified && (
+                      <DropdownMenuItem asChild>
+                        <Link href={`/jobs/${job.slug}/submissions`}>
+                          View Submissions
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
@@ -238,7 +245,7 @@ export function JobsTable({
           {!hasNext && jobs.length > 0 && (
             <TableRow>
               <TableCell
-                colSpan={5}
+                colSpan={6}
                 className="text-center py-4 text-sm text-muted-foreground"
               >
                 All jobs loaded ({jobs.length} total)

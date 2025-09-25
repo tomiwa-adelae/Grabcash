@@ -142,6 +142,7 @@ export function AvailableJobsTable({
                 >
                   {job.title}
                 </Link>
+                <p className="text-xs text-muted-foreground">{job.jobID}</p>
               </TableCell>
               <TableCell>{job.category}</TableCell>
               <TableCell>

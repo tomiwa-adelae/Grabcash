@@ -29,12 +29,16 @@ export const getClosedJobs = async ({
       { reward: { contains: query, mode: "insensitive" } },
       {
         User: {
-          name: { contains: query, mode: "insensitive" },
-          email: { contains: query, mode: "insensitive" },
-          username: {
-            contains: query,
-            mode: "insensitive",
-          },
+          OR: [
+            {
+              name: { contains: query, mode: "insensitive" },
+              email: { contains: query, mode: "insensitive" },
+              username: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+          ],
         },
       },
     ];

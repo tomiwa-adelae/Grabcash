@@ -27,7 +27,7 @@ import {
 import { splitName } from "@/lib/utils";
 import { banks } from "@/constants";
 import { GetUserDetailsType } from "@/app/data/user/get-user-details";
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Loader } from "@/components/Loader";
 import { tryCatch } from "@/hooks/use-try-catch";
 import { useRouter } from "next/navigation";
@@ -40,6 +40,8 @@ interface Props {
 
 export function EditBankInformationForm({ user }: Props) {
   const router = useRouter();
+
+  const [bankCode, setBankCode] = useState("");
 
   const [pending, startTransition] = useTransition();
 
@@ -54,7 +56,9 @@ export function EditBankInformationForm({ user }: Props) {
 
   function onSubmit(data: EditBankDetailsSchemaType) {
     startTransition(async () => {
-      const { data: result, error } = await tryCatch(updateBankDetails(data));
+      const { data: result, error } = await tryCatch(
+        updateBankDetails(data, bankCode)
+      );
 
       if (error) {
         toast.error(error.message || "Oops! Internal server error");
@@ -95,8 +99,11 @@ export function EditBankInformationForm({ user }: Props) {
                 <FormItem>
                   <FormLabel>Bank name</FormLabel>
                   <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      const bank = banks.find((b) => b.bankName === value);
+                      setBankCode(bank?.bankCode || "");
+                    }}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -105,8 +112,8 @@ export function EditBankInformationForm({ user }: Props) {
                     </FormControl>
                     <SelectContent>
                       {banks.map((bank, index) => (
-                        <SelectItem key={index} value={bank}>
-                          {bank}
+                        <SelectItem key={index} value={bank.bankName}>
+                          {bank.bankName}
                         </SelectItem>
                       ))}
                     </SelectContent>

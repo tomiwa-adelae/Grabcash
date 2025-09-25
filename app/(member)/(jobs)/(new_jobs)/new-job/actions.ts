@@ -2,6 +2,7 @@
 
 import { requireUser } from "@/app/data/user/require-user";
 import { requireSubscription } from "@/app/data/user/subscription/require-subscription";
+import { DEFAULT_COMMISSION } from "@/constants";
 import { JobPostedEmail } from "@/emails/job-posted-email";
 import { NewJobBroadcastEmail } from "@/emails/new-job-broadcast-email";
 import { prisma } from "@/lib/db";
@@ -143,16 +144,19 @@ export const saveDraft = async (
   }
 };
 
-export const verifyJobPayment = async (
-  id: string,
-  amount: string,
-  response: {
-    amount: number;
-    tx_ref: string;
-    transaction_id: number;
-    status: string;
-  }
-): Promise<ApiResponse> => {
+export const verifyJobPayment = async ({
+  id,
+  amount,
+  transactionId,
+  status,
+  reference,
+}: {
+  id: string;
+  amount: string;
+  transactionId: string;
+  status: string;
+  reference: string;
+}): Promise<ApiResponse> => {
   const { user } = await requireUser();
   await requireSubscription();
   try {
@@ -165,25 +169,47 @@ export const verifyJobPayment = async (
       data: {
         paymentVerified: true,
       },
+      select: {
+        noOfWorkers: true,
+        reward: true,
+        id: true,
+        title: true,
+      },
     });
 
     await prisma.jobPayment.create({
       data: {
         amount,
-        transactionId: response.transaction_id.toString(),
-        txRef: response.tx_ref,
+        transactionId: transactionId,
+        txRef: reference,
         jobId: job.id,
         userId: user.id,
         status:
-          response.status === "successful"
+          status === "successful"
             ? "SUCCESS"
-            : response.status === "approved"
+            : status === "approved"
               ? "SUCCESS"
-              : response.status === "failed"
-                ? "FAILED"
-                : response.status === "pending"
-                  ? "PENDING"
-                  : "PENDING",
+              : status === "success"
+                ? "SUCCESS"
+                : status === "failed"
+                  ? "FAILED"
+                  : status === "pending"
+                    ? "PENDING"
+                    : "PENDING",
+      },
+    });
+
+    const basePrice = Number(job.reward) * Number(job.noOfWorkers); // 10,000
+    const fee = basePrice * (DEFAULT_COMMISSION / 100); // 1,000
+
+    await prisma.payout.create({
+      data: {
+        amount: Number(amount),
+        fee,
+        type: "CREDIT",
+        userId: user.id,
+        title: `${job.title} payment`,
+        status: "PAID",
       },
     });
 
