@@ -1,10 +1,12 @@
 "use server";
 
+import { logActivity } from "@/app/data/admin/activity/log-activity";
 import { requireUser } from "@/app/data/user/require-user";
 import { DEFAULT_MINIMUM_PAYOUT, DEFAULT_WITHDRAWAL_FEE } from "@/constants";
 import { prisma } from "@/lib/db";
 import { env } from "@/lib/env";
 import { ApiResponse } from "@/lib/types";
+import { formatMoneyInput } from "@/lib/utils";
 import axios from "axios";
 import { revalidatePath } from "next/cache";
 
@@ -27,6 +29,7 @@ export const initiatePayout = async ({
         bankCode: true,
         bankName: true,
         accountName: true,
+        id: true,
       },
     });
 
@@ -143,7 +146,7 @@ export const initiatePayout = async ({
         },
       });
 
-      await prisma.payout.create({
+      const payout = await prisma.payout.create({
         data: {
           userId: session.user.id,
           amount: withdrawalFee,
@@ -154,6 +157,17 @@ export const initiatePayout = async ({
           fee: 0,
           title: "Withdrawal fee",
           type: "DEBIT",
+        },
+      });
+
+      // Log the activity
+      await logActivity({
+        type: "PAYOUT_COMPLETED",
+        description: `${user.name} withdrew ₦${formatMoneyInput(payoutAmount)}`,
+        userId: user.id,
+        payoutId: payout.id,
+        metadata: {
+          amount: amount,
         },
       });
 

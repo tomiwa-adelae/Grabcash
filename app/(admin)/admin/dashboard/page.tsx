@@ -1,5 +1,4 @@
 import { DashboardCard } from "@/app/(admin)/_components/sidebar/dashboard-card";
-import { RevenueChart } from "@/app/(admin)/_components/sidebar/revenue-chart";
 import { QuickActions } from "@/app/(admin)/_components/sidebar/quick-actions";
 import { SystemStatus } from "@/app/(admin)/_components/sidebar/system-status";
 import { RecentActivity } from "@/app/(admin)/_components/sidebar/recent-activity";
@@ -16,12 +15,47 @@ import { PageHeader } from "@/app/(member)/_components/PageHeader";
 import { RecentUsers } from "../../_components/RecentUsers";
 import { formatMoneyInput } from "@/lib/utils";
 import { getTotalPlatformEarnings } from "@/app/data/admin/job/payment/get-total-platform-earnings";
+import { getPlatformAnalytics } from "@/app/data/admin/job/payment/get-revenue-analytics";
+import { PlatformRevenueChart } from "../../_components/sidebar/revenue-chart";
+import { getAllActivities } from "@/app/data/admin/activity/get-all-activities";
+import { DEFAULT_LIMIT } from "@/constants";
+import { getTopMembers } from "@/app/data/user/get-top-members";
+import { TopMembersList } from "../../_components/TopMembersList";
+// import { PlatformRevenueChart } from "../../_components/sidebar/revenue-chart";
+// import { getAllPlatformPayments } from "@/app/data/admin/job/payment/get-revenue-analytics";
 
-export default async function page() {
+type SearchParams = Promise<{
+  query?: string;
+  status?: string;
+}>;
+
+export default async function page({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
+  const { query, status } = await searchParams;
+
   const activeJobs = await getActiveJobs();
   const totalUsers = await getTotalUsers();
   const pendingSubmissions = await getPendingJobSubmissions();
   const totalPlatformEarnings = await getTotalPlatformEarnings();
+
+  const totalPayments = await getPlatformAnalytics();
+
+  // Get initial data - change limit back to 10 for production
+  const activitiesData = await getAllActivities({
+    query,
+    page: 1,
+    limit: DEFAULT_LIMIT, // Back to 10 for production, or keep at 2 for testing
+  });
+
+  // Get initial data - change limit back to 10 for production
+  const membersData = await getTopMembers({
+    query,
+    page: 1,
+    limit: DEFAULT_LIMIT, // Back to 10 for production, or keep at 2 for testing
+  });
 
   // Dashboard stats data
   const stats = [
@@ -83,7 +117,8 @@ export default async function page() {
       <div className="grid grid-cols-1 gap-4 sm:gap-6 xl:grid-cols-3">
         {/* Charts Section */}
         <div className="space-y-4 sm:space-y-6 xl:col-span-2">
-          <RevenueChart />
+          <PlatformRevenueChart analytics={totalPayments} />
+          {/* <PlatformRevenueChart analytics={sampleAnalytics} /> */}
           <RecentUsers />
         </div>
 
@@ -91,7 +126,18 @@ export default async function page() {
         <div className="space-y-4 sm:space-y-6">
           {/* <QuickActions /> */}
           <SystemStatus />
-          <RecentActivity />
+          <RecentActivity
+            initialActivities={activitiesData.activities}
+            initialHasNext={activitiesData.pagination.hasNext}
+            initialTotal={activitiesData.pagination.total}
+            query={query}
+          />
+          <TopMembersList
+            initialMembers={membersData.members}
+            initialHasNext={membersData.pagination.hasNext}
+            initialTotal={membersData.pagination.total}
+            query={query}
+          />
         </div>
       </div>
     </div>

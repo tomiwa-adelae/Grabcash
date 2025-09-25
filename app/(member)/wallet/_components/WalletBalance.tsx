@@ -107,7 +107,10 @@ export const WalletBalance = ({
       {!withdrawalPin && (
         <SetWithdrawalPinModal
           open={openWithdrawalModal}
-          closeModal={() => setOpenWithdrawalModal(false)}
+          closeModal={() => {
+            setOpenWithdrawalModal(false);
+            setOpenModal(true);
+          }}
         />
       )}
 

@@ -9,10 +9,10 @@ datasource db {
 }
 
 model User {
-  id                   String        @id
+  id                   String           @id
   name                 String
-  email                String        @unique
-  username             String?       @unique
+  email                String           @unique
+  username             String?          @unique
   displayUsername      String?
   phoneNumber          String?
   country              String?
@@ -26,14 +26,14 @@ model User {
   dob                  String?
   identificationType   String?
   identificationNumber String?
-  onboardingCompleted  Boolean?      @default(false)
-  credits              Int           @default(20)
-  createdAt            DateTime      @default(now())
-  updatedAt            DateTime      @updatedAt
-  earnings             Int           @default(0)
-  isAdmin              Boolean       @default(false)
-  status               UserStatus    @default(ACTIVE)
-  lifeTimeEarnings     Int           @default(0)
+  onboardingCompleted  Boolean?         @default(false)
+  credits              Int              @default(20)
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  earnings             Int              @default(0)
+  isAdmin              Boolean          @default(false)
+  status               UserStatus       @default(ACTIVE)
+  lifeTimeEarnings     Int              @default(0)
   withdrawalPin        String?
   applicants           Applicant[]
   jobs                 Job[]
@@ -42,10 +42,11 @@ model User {
   payouts              Payout[]
   subscription         Subscription?
   accounts             Account[]
-  following            Follow[]      @relation("UserFollowing")
-  followers            Follow[]      @relation("UserFollowers")
+  following            Follow[]         @relation("UserFollowing")
+  followers            Follow[]         @relation("UserFollowers")
   sessions             Session[]
   socials              Socials[]
+  RecentActivity       RecentActivity[]
 
   @@unique([email, username])
   @@map("user")
@@ -105,10 +106,10 @@ model Socials {
 }
 
 model Job {
-  id                 String       @id @default(uuid())
+  id                 String           @id @default(uuid())
   type               String
   title              String
-  slug               String?      @unique
+  slug               String?          @unique
   description        String?
   category           String?
   jobLink            String?
@@ -119,17 +120,18 @@ model Job {
   submissionType     String?
   submissionRequired String?
   finalNotes         String?
-  status             JobStatus    @default(DRAFT)
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime     @updatedAt
+  status             JobStatus        @default(DRAFT)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
   userId             String
-  paymentVerified    Boolean      @default(false)
-  jobID              String?      @unique
-  jobOpen            Boolean      @default(true)
-  filledSlots        Int          @default(0)
+  paymentVerified    Boolean          @default(false)
+  jobID              String?          @unique
+  jobOpen            Boolean          @default(true)
+  filledSlots        Int              @default(0)
   applicants         Applicant[]
-  User               User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   jobPayments        JobPayment[]
+  RecentActivity     RecentActivity[]
 
   @@unique([slug, userId])
 }
@@ -161,6 +163,7 @@ model Subscription {
   updatedAt          DateTime           @default(now()) @updatedAt
   plan               SubscriptionPlan   @relation(fields: [subscriptionPlanId], references: [id])
   user               User               @relation(fields: [userId], references: [id])
+  RecentActivity     RecentActivity[]
 }
 
 model Follow {
@@ -223,20 +226,64 @@ model Payment {
 }
 
 model Payout {
-  id            String       @id @default(uuid())
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  userId        String
-  amount        Int
-  fee           Int
-  bankName      String?
-  accountNumber String?
-  accountName   String?
-  title         String?
-  withdrawal    Boolean?     @default(false)
-  type          PayoutType?
-  status        PayoutStatus @default(PENDING)
-  User          User         @relation(fields: [userId], references: [id])
+  id             String           @id @default(uuid())
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  userId         String
+  amount         Int
+  fee            Int
+  bankName       String?
+  accountNumber  String?
+  accountName    String?
+  title          String?
+  withdrawal     Boolean?         @default(false)
+  type           PayoutType?
+  status         PayoutStatus     @default(PENDING)
+  User           User             @relation(fields: [userId], references: [id])
+  RecentActivity RecentActivity[]
+}
+
+model RecentActivity {
+  id          String       @id @default(cuid())
+  type        ActivityType
+  description String
+  createdAt   DateTime     @default(now())
+
+  // Relations
+  userId String? // optional, if related to a user
+  user   User?   @relation(fields: [userId], references: [id])
+
+  jobId String? // optional, if related to a job
+  job   Job?    @relation(fields: [jobId], references: [id])
+
+  payoutId String? // optional, if related to a payout/withdrawal
+  payout   Payout? @relation(fields: [payoutId], references: [id])
+
+  subscriptionId String?
+  subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
+
+  metadata Json? // flexible field for extra details (amount, IP address, etc.)
+}
+
+enum ActivityType {
+  USER_REGISTERED
+  USER_SUSPENDED
+  USER_UPGRADED
+  USER_REACHED_MILESTONE
+
+  JOB_POSTED
+  JOB_APPROVED
+  JOB_REJECTED
+  JOB_COMPLETED
+  JOB_SUBMISSION_PENDING
+
+  PAYOUT_REQUESTED
+  PAYOUT_COMPLETED
+  PAYOUT_FAILED
+  DEPOSIT_RECEIVED
+
+  SYSTEM_ALERT
+  SECURITY_ALERT
 }
 
 enum PayoutType {

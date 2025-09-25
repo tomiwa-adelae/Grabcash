@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { Laptop, Monitor, Smartphone } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import qs from "query-string";
+import dayjs from "dayjs";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -182,4 +183,100 @@ export const formattedStatus: Record<string, string> = {
 
 export function removeCommas(value: any) {
   return value.replace(/,/g, "");
+}
+
+export function transformPayments(payments: any[]) {
+  // filter only revenue payments
+  const revenuePayments = payments.filter(
+    (p) =>
+      (p.type === "JOB_PAYMENT" || p.type === "SUBSCRIPTION") &&
+      (p.status === "SUCCESS" || p.status === "ACTIVE")
+  );
+
+  // group by month
+  const grouped: Record<string, number> = {};
+  revenuePayments.forEach((p) => {
+    const month = dayjs(p.createdAt).format("MMM"); // "Sep"
+    const amount =
+      typeof p.amount === "string" ? parseFloat(p.amount) : p.amount;
+    grouped[month] = (grouped[month] || 0) + amount;
+  });
+
+  // turn into chartData
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  return months.map((m) => ({
+    month: m,
+    value: grouped[m] || 0,
+    color: "bg-green-500", // you could dynamically style based on growth later
+  }));
+}
+
+export function getSummaryStats(payments: any[]) {
+  const chartData = transformPayments(payments);
+  const total = chartData.reduce((sum, m) => sum + m.value, 0);
+  const avg = total / chartData.filter((m) => m.value > 0).length || 0;
+
+  // crude growth = last month vs previous month
+  const lastTwo = chartData.filter((m) => m.value > 0).slice(-2);
+  let growth = 0;
+  if (lastTwo.length === 2) {
+    growth = ((lastTwo[1].value - lastTwo[0].value) / lastTwo[0].value) * 100;
+  }
+
+  return {
+    total,
+    avg,
+    growth,
+    chartData,
+  };
+}
+
+export function getLastMonths(count: number): string[] {
+  const months: string[] = [];
+  const today = new Date();
+
+  for (let i = count - 1; i >= 0; i--) {
+    const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+    months.push(
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`
+    );
+  }
+  return months;
+}
+
+export function mergeAnalytics(
+  months: string[],
+  jobPaymentsByMonth: { month: string; value: number }[],
+  subscriptionsByMonth: { month: string; value: number }[],
+  payoutsByMonth: { month: string; value: number }[]
+) {
+  const mapJob = Object.fromEntries(
+    jobPaymentsByMonth.map((d) => [d.month, d.value])
+  );
+  const mapSubs = Object.fromEntries(
+    subscriptionsByMonth.map((d) => [d.month, d.value])
+  );
+  const mapPayouts = Object.fromEntries(
+    payoutsByMonth.map((d) => [d.month, d.value])
+  );
+
+  return months.map((month) => ({
+    month,
+    jobPayments: mapJob[month] ?? 0,
+    subscriptions: mapSubs[month] ?? 0,
+    payouts: mapPayouts[month] ?? 0,
+  }));
 }

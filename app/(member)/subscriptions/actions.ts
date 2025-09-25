@@ -1,5 +1,6 @@
 "use server";
 
+import { logActivity } from "@/app/data/admin/activity/log-activity";
 import { requireUser } from "@/app/data/user/require-user";
 import { ProSubscriptionEmail } from "@/emails/pro-subscription-email";
 import { prisma } from "@/lib/db";
@@ -79,6 +80,19 @@ export const activateSubscription = async ({
         userId: user.id,
         title: `Earnsphere ${plan.name} subscription`,
         status: "PAID",
+      },
+    });
+
+    // Log the activity
+    await logActivity({
+      type: "USER_UPGRADED",
+      description: `${plan.name} plan was activated for ${user.name || user.email}`,
+      userId: user.id,
+      subscriptionId: subscription.id,
+      metadata: {
+        planName: plan.name,
+        price: plan.price,
+        durationDays: plan.durationDays,
       },
     });
 

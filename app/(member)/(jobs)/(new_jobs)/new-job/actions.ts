@@ -1,5 +1,6 @@
 "use server";
 
+import { logActivity } from "@/app/data/admin/activity/log-activity";
 import { requireUser } from "@/app/data/user/require-user";
 import { requireSubscription } from "@/app/data/user/subscription/require-subscription";
 import { DEFAULT_COMMISSION } from "@/constants";
@@ -225,6 +226,19 @@ export const verifyJobPayment = async ({
       select: {
         email: true,
         name: true,
+      },
+    });
+
+    // Log the activity
+    await logActivity({
+      type: "JOB_POSTED",
+      description: `New job "${job.title}" created by ${user.name}.`,
+      jobId: job.id,
+      userId: user.id,
+      metadata: {
+        reward: job.reward,
+        category: job.category,
+        status: job.status,
       },
     });
 

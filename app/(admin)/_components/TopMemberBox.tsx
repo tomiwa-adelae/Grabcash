@@ -5,11 +5,9 @@ import { formatDate } from "@/lib/utils";
 import { IconCalendar, IconMail, IconMapPin } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { UserActions } from "./UserActions";
 import { useState } from "react";
 import { UserStatus } from "@/lib/generated/prisma";
 import { useRouter } from "next/navigation";
-import { DeleteUserModal } from "./DeleteUserModal";
 
 interface Props {
   image: string | null;
@@ -26,7 +24,7 @@ interface Props {
   applicants: number;
 }
 
-export const UserBox = ({
+export const TopMemberBox = ({
   image,
   name,
   email,
@@ -93,60 +91,8 @@ export const UserBox = ({
               </div>
             </div>
           </div>
-          <div className="md:hidden">
-            <UserActions
-              username={username}
-              isAdmin={isAdmin}
-              status={status}
-              id={id}
-              onDelete={() => {
-                setOpenDeleteModal(true);
-              }}
-            />
-          </div>
         </div>
       </div>
-
-      <div className="ml-auto hidden md:flex items-center justify-between md:justify-end w-full md:w-auto gap-3">
-        <div>
-          <div className="text-muted-foreground flex items-center gap-1 text-xs">
-            <IconCalendar className="h-3 w-3" />
-            <span>{formatDate(createdAt)}</span>
-          </div>
-          <div className="flex items-center justify-start gap-2">
-            <p className="text-muted-foreground text-xs">
-              <span className="text-black dark:text-white">{jobs}</span> jobs
-              posted
-            </p>
-            <p className="text-muted-foreground text-xs">
-              <span className="text-black dark:text-white">{applicants}</span>{" "}
-              jobs completed
-            </p>
-          </div>
-        </div>
-        <div className="">
-          <UserActions
-            username={username}
-            isAdmin={isAdmin}
-            status={status}
-            id={id}
-            onDelete={() => {
-              setOpenDeleteModal(true);
-            }}
-          />
-        </div>
-      </div>
-      {/* Modal rendered outside the table */}
-      {openDeleteModal && (
-        <DeleteUserModal
-          open={openDeleteModal}
-          closeModal={() => setOpenDeleteModal(false)}
-          username={username}
-          name={name}
-          image={image}
-          id={id}
-        />
-      )}
     </motion.div>
   );
 };
