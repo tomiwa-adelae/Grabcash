@@ -25,8 +25,8 @@ export const PrivacySettings = () => {
         <h3 className="font-medium text-base">Public Profile</h3>
         <p className="text-sm">
           Your public profile lets other users see your basic details and jobs
-          you share. If set to public, anyone on Earnsphere can view your
-          profile. If private, only approved followers can see your details.
+          you share. If set to public, anyone on grabcash can view your profile.
+          If private, only approved followers can see your details.
         </p>
       </div>
       <div className="grid gap-2">

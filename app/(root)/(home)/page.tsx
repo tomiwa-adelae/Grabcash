@@ -31,7 +31,7 @@ const page = async () => {
           <>
             Earn, Learn & Grow with{" "}
             <span className={`${lobster.className} text-primary font-normal`}>
-              earnsphere.
+              grabcash.
             </span>
           </>
         }
@@ -49,9 +49,7 @@ const page = async () => {
         title={
           <>
             How{" "}
-            <span className={`${lobster.className} font-normal`}>
-              earnsphere
-            </span>{" "}
+            <span className={`${lobster.className} font-normal`}>grabcash</span>{" "}
             works
           </>
         }

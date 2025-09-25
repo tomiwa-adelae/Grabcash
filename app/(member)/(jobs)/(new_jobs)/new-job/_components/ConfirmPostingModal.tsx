@@ -20,7 +20,7 @@ import { NewJobFormSchemaType } from "@/lib/zodSchemas";
 import { NairaIcon } from "@/components/NairaIcon";
 import { formatMoneyInput } from "@/lib/utils";
 import { env } from "@/lib/env";
-import { DEFAULT_COMMISSION, EARNSPHERE_LOGO } from "@/constants";
+import { DEFAULT_COMMISSION, GRABCASH_LOGO } from "@/constants";
 import { useFlutterwavePayment } from "@/hooks/use-flutterwave-payment";
 import { usePaystackPayment } from "react-paystack";
 
@@ -76,9 +76,9 @@ export function ConfirmPostingModal({
         //     name,
         //   },
         //   customizations: {
-        //     title: `Earnsphere - ${data.title}`,
+        //     title: `grabcash - ${data.title}`,
         //     description: `Payment for ${totalWithFee} (${data.title})`,
-        //     logo: EARNSPHERE_LOGO,
+        //     logo: grabcash_LOGO,
         //   },
         // };
 

@@ -21,6 +21,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "grabcash.fly.storage.tigris.dev",
+        port: "",
+      },
+      {
+        protocol: "https",
         hostname: "lh3.googleusercontent.com",
         port: "",
       },

@@ -11,7 +11,7 @@ const dmsans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Earnsphere",
+  title: "grabcash",
 };
 
 export default function RootLayout({

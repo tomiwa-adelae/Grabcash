@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Check } from "lucide-react";
-import { EARNSPHERE_LOGO, subscriptionPlans } from "@/constants";
+import { grabcash_LOGO, subscriptionPlans } from "@/constants";
 import { Badge } from "@/components/ui/badge";
 import { SubscriptionPlan } from "@/lib/generated/prisma";
 import { env } from "@/lib/env";
@@ -57,9 +57,9 @@ export const PricingPlans = ({ email, name, phoneNumber, plans }: Props) => {
   //       name,
   //     },
   //     customizations: {
-  //       title: "Earnsphere subscription",
+  //       title: "grabcash subscription",
   //       description: `Payment for ${plan.name} (${plan.billingCycle.toLowerCase()})`,
-  //       logo: EARNSPHERE_LOGO,
+  //       logo: grabcash_LOGO,
   //     },
   //   };
   //   initiatePayment({

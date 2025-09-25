@@ -81,7 +81,7 @@ export const approveApplication = async (
         {
           From: {
             Email: env.SENDER_EMAIL_ADDRESS,
-            Name: "Earnsphere",
+            Name: "grabcash",
           },
           To: [{ Email: worker.email, Name: worker.name }],
           Subject: `Submission approved - ${applicant.Job.title}`,
@@ -158,7 +158,7 @@ export const rejectApplication = async (
         {
           From: {
             Email: env.SENDER_EMAIL_ADDRESS,
-            Name: "Earnsphere",
+            Name: "grabcash",
           },
           To: [{ Email: worker.email, Name: worker.name }],
           Subject: `Submission rejected - ${applicant.Job.title}`,

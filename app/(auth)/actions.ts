@@ -34,10 +34,10 @@ export const sendRegistrationEmail = async (
         {
           From: {
             Email: env.SENDER_EMAIL_ADDRESS,
-            Name: "Earnsphere",
+            Name: "grabcash",
           },
           To: [{ Email: email, Name: name }],
-          Subject: `Welcome to Earnsphere, ${name}`,
+          Subject: `Welcome to grabcash, ${name}`,
           HTMLPart: RegistrationEmail({ name }),
         },
       ],

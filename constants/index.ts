@@ -12,6 +12,7 @@ import {
   IconFileLike,
   IconFlagExclamation,
   IconLayoutDashboard,
+  IconSettings,
   IconUsersGroup,
 } from "@tabler/icons-react";
 import {
@@ -25,7 +26,7 @@ import {
   UsersRound,
 } from "lucide-react";
 
-export const EMAIL_ADDRESS = "contact@earnsphere.com";
+export const EMAIL_ADDRESS = "contact@grabcash.com";
 export const PHONE_NUMBER = "+234 800 233 4433";
 export const YOUTUBE_URL = "www.youtube.com";
 export const INSTAGRAM_URL = "www.instagram.com";
@@ -37,7 +38,7 @@ export const DEFAULT_PROFILE_PICTURE =
 
 export const identificationTypes = ["NIN", "BVN"];
 
-export const EARNSPHERE_LOGO =
+export const GRABCASH_LOGO =
   "https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg";
 
 export const CREDIT_TO_POST_NEW_JOB = 6;
@@ -110,7 +111,7 @@ export const memberNavLinks = [
 
 export const footer = [
   {
-    title: "Earnsphere",
+    title: "grabcash",
     links: [
       {
         slug: "/register",
@@ -876,7 +877,7 @@ export const subscriptionPlans: {
       annually: "0",
     },
     description:
-      "Basic access with essential features — perfect for exploring earnsphere and getting started.",
+      "Basic access with essential features — perfect for exploring grabcash and getting started.",
     features: [
       "Limited access to earning opportunities",
       "Basic task feed with concise search",
@@ -891,13 +892,13 @@ export const subscriptionPlans: {
       annually: "10000",
     },
     description:
-      "Unlock the full earnsphere experience — access all earning tools, campaigns, and learning resources.",
+      "Unlock the full grabcash experience — access all earning tools, campaigns, and learning resources.",
     features: [
       "Access real, verified earning tasks",
       "Weekly payouts to your bank or wallet",
       "Join bounty campaigns & create job listings",
       "Earn from referrals & affiliate programs",
-      "Full access to the Earnsphere Academy",
+      "Full access to the grabcash Academy",
       "Advanced search & filtering tools",
       "Eligibility for Leaderboards & Hall of Champions",
       "Premium customer support",
@@ -911,7 +912,7 @@ export const userDropdownLinks = [
   {
     icon: Crown,
     slug: "/subscriptions",
-    label: "Get earnsphere+",
+    label: "Get grabcash+",
   },
   {
     icon: Users,
@@ -992,7 +993,13 @@ export const adminNavLinks = [
       // },
     ],
   },
+  {
+    title: "Settings",
+    slug: "/admin/settings",
+    icon: IconSettings,
+  },
 ];
 
 export const DEFAULT_MINIMUM_PAYOUT = 5000;
 export const DEFAULT_WITHDRAWAL_FEE = 5.5;
+export const PLATFORM_NAME = "Grabcash";

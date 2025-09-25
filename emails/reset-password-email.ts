@@ -11,7 +11,7 @@ export function ResetPasswordEmail({ resetURL }: { resetURL: string }) {
           <tr>
             <td style="text-align: center; padding: 20px;">
               <h1 style="color: #111827; margin-bottom: 10px; font-size: 24px;">Password Reset</h1>
-              <p style="color: #6b7280; font-size: 16px; margin: 0;">Reset your Earnsphere password</p>
+              <p style="color: #6b7280; font-size: 16px; margin: 0;">Reset your grabcash password</p>
             </td>
           </tr>
 

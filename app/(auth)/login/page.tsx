@@ -21,7 +21,7 @@ const page = async () => {
       </div>
       <LoginForm />
       <p className="text-center text-balance text-muted-foreground text-base mt-6">
-        Don't have an account with earnsphere?{" "}
+        Don't have an account with grabcash?{" "}
         <Link
           href="/register"
           className="hover:underline text-primary font-medium"

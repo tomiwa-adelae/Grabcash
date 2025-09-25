@@ -9,14 +9,14 @@ const page = () => {
     <div className="container py-16 md:py-32">
       <div className="text-center md:w-5/6 mx-auto">
         <h1 className="text-2xl md:text-3xl lg:text-5xl font-semibold">
-          5 Simple Ways to Boost Your Earnings on Earnsphere in Just 7 Days
+          5 Simple Ways to Boost Your Earnings on grabcash in Just 7 Days
         </h1>
         <p className="text-muted-foreground text-base mt-4">
-          Whether you’re new to Earnsphere or have been posting jobs and
-          bounties for a while, the truth is—small tweaks can lead to big gains.
-          In this post, we’ll share five practical, beginner-friendly strategies
-          to help you get more done, earn more, and attract better opportunities
-          within a single week.
+          Whether you’re new to grabcash or have been posting jobs and bounties
+          for a while, the truth is—small tweaks can lead to big gains. In this
+          post, we’ll share five practical, beginner-friendly strategies to help
+          you get more done, earn more, and attract better opportunities within
+          a single week.
         </p>
 
         <p className="text-base text-primary font-medium uppercase italic mt-6">
@@ -105,7 +105,7 @@ const page = () => {
             <div className="space-y-0.5">
               <h4 className="font-medium text-base underline">Sarah Adeyemi</h4>
               <p className="text-sm text-muted-foreground">
-                Content & Community Strategist at Earnsphere
+                Content & Community Strategist at grabcash
               </p>
             </div>
             <div className="text-sm flex items-center justify-center md:justify-start gap-4">
@@ -119,14 +119,13 @@ const page = () => {
           </div>
         </div>
         <p className="text-muted-foreground text-base mt-6">
-          Sarah is passionate about simplifying the future of work. At
-          Earnsphere, she creates content that helps users understand how to
-          maximize opportunities, build income streams, and grow within the
-          community. With a background in digital marketing and user engagement,
-          she blends insights with storytelling to make learning about
-          micro-jobs and bounties easy and inspiring. When she’s not writing,
-          Sarah enjoys exploring productivity hacks and mentoring young
-          freelancers.
+          Sarah is passionate about simplifying the future of work. At grabcash,
+          she creates content that helps users understand how to maximize
+          opportunities, build income streams, and grow within the community.
+          With a background in digital marketing and user engagement, she blends
+          insights with storytelling to make learning about micro-jobs and
+          bounties easy and inspiring. When she’s not writing, Sarah enjoys
+          exploring productivity hacks and mentoring young freelancers.
         </p>
       </div>
     </div>

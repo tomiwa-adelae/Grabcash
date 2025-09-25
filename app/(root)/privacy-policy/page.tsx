@@ -21,8 +21,8 @@ const page = () => {
             Privacy Policy{" "}
           </h1>
           <p>
-            This privacy policy ("Policy") explains how Earnsphere Limited (“the
-            site”, “earnsphere.com”, “we”, “our”, “us”) collects, uses, and
+            This privacy policy ("Policy") explains how grabcash Limited (“the
+            site”, “grabcash.com”, “we”, “our”, “us”) collects, uses, and
             protects your information when you visit or use our website. It also
             describes how we handle personal data and device information to
             support our platform’s features and services.
@@ -126,7 +126,7 @@ const page = () => {
               Safeguarding Your Data{" "}
             </h2>
             <p className="text-sm my-2">
-              Earnsphere is committed to keeping your data secure and
+              grabcash is committed to keeping your data secure and
               confidential. We take measures to prevent unauthorized access,
               theft, or disclosure by using modern technologies and best
               practices.
@@ -152,7 +152,7 @@ const page = () => {
             </p>
             <ul className="list-disc list-inside space-y-2 text-sm">
               <li>Pages you visit most often</li>
-              <li>Websites you visit before or after Earnsphere</li>
+              <li>Websites you visit before or after grabcash</li>
               <li>How you interact with our features</li>
             </ul>
             <p className="text-sm my-2">
@@ -172,9 +172,9 @@ const page = () => {
             </h2>
             <p className="text-sm my-2">
               Our website may contain links to third-party sites. Once you leave
-              Earnsphere.com, we are not responsible for the protection or
-              privacy of your information on other sites. Please review the
-              privacy policies of any third-party websites you visit.
+              grabcash.com, we are not responsible for the protection or privacy
+              of your information on other sites. Please review the privacy
+              policies of any third-party websites you visit.
             </p>
           </div>
           <Separator />
@@ -193,7 +193,7 @@ const page = () => {
               <li>Contacting us to withdraw previously given consent</li>
             </ul>
             <p className="text-sm my-2">
-              Earnsphere will not sell, lease, or distribute your personal
+              grabcash will not sell, lease, or distribute your personal
               information to third parties without your permission, except where
               required by law. Promotional materials will only be sent with your
               consent.
@@ -226,7 +226,7 @@ const page = () => {
               <li>Personalize recommendations</li>
             </ul>
             <p className="text-sm my-2">
-              All third-party access will be supervised by Earnsphere and used
+              All third-party access will be supervised by grabcash and used
               only for the purposes described here.
             </p>
           </div>

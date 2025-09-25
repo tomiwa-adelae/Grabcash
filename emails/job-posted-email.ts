@@ -32,7 +32,7 @@ export function JobPostedEmail({
           <td style="text-align: center; padding: 20px;">
             <h1 style="color: #111827; margin-bottom: 10px; font-size: 24px;">✅ Your Job Has Been Posted!</h1>
             <p style="color: #6b7280; font-size: 16px; margin: 0;">
-              Hi ${name}, your job is now live on Earnsphere.
+              Hi ${name}, your job is now live on grabcash.
             </p>
           </td>
         </tr>

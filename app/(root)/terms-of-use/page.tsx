@@ -21,7 +21,7 @@ const page = () => {
             Terms of Use
           </h1>
           <p>
-            Thank you for visiting Earnsphere.com. Please read, understand and
+            Thank you for visiting grabcash.com. Please read, understand and
             agree to these Terms of Use before accessing or using our services.
           </p>
         </div>
@@ -34,13 +34,11 @@ const page = () => {
             <p className="text-sm my-2">For the purpose of this Agreement:</p>
             <ul className="list-disc list-inside space-y-2 text-sm">
               <li>
-                "The Company" refers to Earnsphere Limited (the parent company
-                of Earnsphere.com).
+                "The Company" refers to grabcash Limited (the parent company of
+                grabcash.com).
               </li>
-              <li>"This website" refers to Earnsphere.com.</li>
-              <li>
-                "Us", "We" refer to Earnsphere.com and its parent company.
-              </li>
+              <li>"This website" refers to grabcash.com.</li>
+              <li>"Us", "We" refer to grabcash.com and its parent company.</li>
               <li>
                 "User Content" refers to all data, materials, and media provided
                 by users on the marketplace, including but not limited to
@@ -84,7 +82,7 @@ const page = () => {
             <p className="text-sm my-2">
               These conditions take effect the moment you first access the site
               and constitute a legally binding agreement between you and
-              Earnsphere.
+              grabcash.
             </p>
           </div>
           <Separator />
@@ -109,7 +107,7 @@ const page = () => {
               <li>Must not impersonate any individual or organization. </li>
             </ul>
             <p className="text-sm my-2">
-              Earnsphere will not be liable for fraudulent activity conducted by
+              grabcash will not be liable for fraudulent activity conducted by
               users.
             </p>
           </div>
@@ -230,7 +228,7 @@ const page = () => {
               Disclaimer And Limitation Of Liability
             </h2>
             <p className="text-sm my-2">
-              All services are provided “as is.” Earnsphere is not responsible
+              All services are provided “as is.” grabcash is not responsible
               for:
             </p>
             <ul className="list-disc list-inside space-y-2 text-sm">
@@ -268,7 +266,7 @@ const page = () => {
               Intellectual Property{" "}
             </h2>
             <p className="text-sm my-2">
-              All site content is owned by Earnsphere or its licensors. You may
+              All site content is owned by grabcash or its licensors. You may
               not reproduce or redistribute without permission.
             </p>
           </div>
@@ -279,7 +277,7 @@ const page = () => {
               This Agreement remains in effect until terminated:
             </p>
             <ul className="list-disc list-inside space-y-2 text-sm">
-              <li>By Earnsphere, if you violate these Terms.</li>
+              <li>By grabcash, if you violate these Terms.</li>
               <li>By you, by ceasing use and requesting account deletion.</li>
             </ul>
           </div>
@@ -310,7 +308,7 @@ const page = () => {
               Indemnification{" "}
             </h2>
             <p className="text-sm my-2">
-              You agree to indemnify and hold harmless Earnsphere against any
+              You agree to indemnify and hold harmless grabcash against any
               claims arising from your misuse of our services.
             </p>
           </div>
@@ -371,7 +369,7 @@ const page = () => {
           <div>
             <h2 className="font-semibold text-xl md:text-2xl">Giftcards </h2>
             <p className="text-sm my-2">
-              Earnsphere is the only authorized dealer of giftcards. Credits are
+              grabcash is the only authorized dealer of giftcards. Credits are
               non-refundable and cannot be converted back to cash.{" "}
             </p>
           </div>

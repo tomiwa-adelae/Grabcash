@@ -73,7 +73,7 @@ export function OnboardingModal({ user }: Props) {
             <DialogTitle>Complete your profile</DialogTitle>
             <DialogDescription>
               You are few steps away from unlocking the full experience of
-              Earnsphere. Get started now
+              grabcash. Get started now
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col justify-end gap-4 sm:flex-row sm:items-center">

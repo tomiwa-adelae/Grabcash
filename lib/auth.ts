@@ -33,7 +33,7 @@ export const auth = betterAuth({
           {
             From: {
               Email: env.SENDER_EMAIL_ADDRESS,
-              Name: "Earnsphere",
+              Name: "grabcash",
             },
             To: [
               {
@@ -43,9 +43,9 @@ export const auth = betterAuth({
             ],
             ReplyTo: {
               Email: env.SENDER_EMAIL_ADDRESS,
-              Name: "Earnsphere Support",
+              Name: "grabcash Support",
             },
-            Subject: `Reset your password - Earnsphere`,
+            Subject: `Reset your password - grabcash`,
             HTMLPart: ResetPasswordEmail({ resetURL }),
           },
         ],
@@ -60,10 +60,10 @@ export const auth = betterAuth({
         let content = "";
 
         if (type === "email-verification") {
-          subject = "Verify your email - Earnsphere";
+          subject = "Verify your email - grabcash";
           content = VerificationEmail({ otp });
         } else if (type === "forget-password") {
-          subject = "Reset your password - Earnsphere";
+          subject = "Reset your password - grabcash";
           content = ``;
         }
 
@@ -72,7 +72,7 @@ export const auth = betterAuth({
             {
               From: {
                 Email: env.SENDER_EMAIL_ADDRESS,
-                Name: "Earnsphere",
+                Name: "grabcash",
               },
               To: [
                 {
@@ -82,7 +82,7 @@ export const auth = betterAuth({
               ],
               ReplyTo: {
                 Email: env.SENDER_EMAIL_ADDRESS,
-                Name: "Earnsphere Support",
+                Name: "grabcash Support",
               },
               Subject: subject,
               HTMLPart: content,

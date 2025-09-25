@@ -49,7 +49,7 @@ export const FAQs = ({ showTitle }: Props) => {
         {showTitle && (
           <h2 className="dark:text-black mb-8 font-semibold text-3xl md:text-4xl text-center">
             <span className={`${lobster.className} text-primary font-normal`}>
-              earnsphere
+              grabcash
             </span>{" "}
             FAQs
           </h2>

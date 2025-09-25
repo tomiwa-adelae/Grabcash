@@ -12,7 +12,7 @@ export function ProSubscriptionEmail({
     <html>
       <head>
         <meta charset="utf-8" />
-        <title>Welcome to Earnsphere Pro</title>
+        <title>Welcome to grabcash Pro</title>
       </head>
       <body style="font-family: Arial, sans-serif; background-color: #f9fafb; margin: 0; padding: 0;">
         <table align="center" width="600" cellpadding="0" cellspacing="0" style="margin: 40px auto; background: #ffffff; border-radius: 8px; padding: 20px;">
@@ -20,7 +20,7 @@ export function ProSubscriptionEmail({
           <!-- Header -->
           <tr>
             <td style="text-align: center; padding: 20px;">
-              <h1 style="color: #111827; margin-bottom: 10px; font-size: 24px;">🎉 Welcome to Earnsphere Pro!</h1>
+              <h1 style="color: #111827; margin-bottom: 10px; font-size: 24px;">🎉 Welcome to grabcash Pro!</h1>
               <p style="color: #6b7280; font-size: 16px; margin: 0;">
                 Hi ${name}, your Pro subscription is now active.
               </p>
@@ -48,7 +48,7 @@ export function ProSubscriptionEmail({
                 <li>Weekly payouts to your bank or wallet</li>
                 <li>Join bounty campaigns & create job listings</li>
                 <li>Earn from referrals & affiliate programs</li>
-                <li>Full access to the Earnsphere Academy</li>
+                <li>Full access to the grabcash Academy</li>
                 <li>Advanced search & filtering tools</li>
                 <li>Eligibility for Leaderboards & Hall of Champions</li>
                 <li>Premium customer support</li>
@@ -70,7 +70,7 @@ export function ProSubscriptionEmail({
           <tr>
             <td style="padding-top: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
               <p style="color: #6b7280; font-size: 14px; margin: 0;">
-                Thanks for being part of Earnsphere.<br />
+                Thanks for being part of grabcash.<br />
                 You can manage your subscription anytime from your account settings.
               </p>
             </td>

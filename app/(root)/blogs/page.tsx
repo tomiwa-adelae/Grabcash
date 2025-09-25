@@ -8,7 +8,7 @@ const page = () => {
     <div>
       <Showcase
         title="Blog"
-        description="Insights, Tips, and Stories to Boost Your Earnings. Stay ahead with practical advice, platform updates, and success stories from Earnsphere members and experts."
+        description="Insights, Tips, and Stories to Boost Your Earnings. Stay ahead with practical advice, platform updates, and success stories from grabcash members and experts."
         image={"/assets/images/blog-img.jpg"}
       />
       <LatestBlogs />

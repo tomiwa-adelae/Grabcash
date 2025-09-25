@@ -30,7 +30,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
             You're now subscribed to {subscriptionDetails?.plan.name}
           </h1>
           <p>
-            Your subscription is active. Enjoy full full earnsphere experience -
+            Your subscription is active. Enjoy full full grabcash experience -
             access to tasks, campaigns, and payouts.
           </p>
         </div>
@@ -40,7 +40,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
               <CardTitle>Plan summary</CardTitle>
             </CardHeader>
             <CardContent className="text-base font-medium space-y-4">
-              <p>Plan name: Earnsphere {subscriptionDetails?.plan.name}</p>
+              <p>Plan name: grabcash {subscriptionDetails?.plan.name}</p>
               <Separator />
               <p>
                 Billing Type:{" "}

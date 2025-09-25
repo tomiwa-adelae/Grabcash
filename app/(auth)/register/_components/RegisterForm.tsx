@@ -179,7 +179,6 @@ export function RegisterForm() {
             toast.success(`Signed up with google...`);
             router.push("/onboarding");
             // await tryCatch(sendRegistrationEmail(res.data.f, data.firstName));
-            console.log(res);
           },
           onError: (error) => {
             toast.error(error.error.message || "Internal server error");

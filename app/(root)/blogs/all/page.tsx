@@ -7,7 +7,7 @@ const page = () => {
     <div className="py-16 md:py-32">
       <div className="container">
         <h1 className="font-semibold text-4xl md:text-4xl lg:text-6xl">
-          Earnsphere Blog
+          grabcash Blog
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
           <PopularBlog />

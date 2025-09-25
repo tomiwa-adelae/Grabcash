@@ -46,9 +46,7 @@ export const Footer = () => {
           ))}
         </div>
         <Separator className="mt-12 mb-8 bg-muted-foreground" />
-        <p className="text-sm">
-          &copy; {year} Earnsphere. All rights reserved.
-        </p>
+        <p className="text-sm">&copy; {year} grabcash. All rights reserved.</p>
       </div>
     </footer>
   );

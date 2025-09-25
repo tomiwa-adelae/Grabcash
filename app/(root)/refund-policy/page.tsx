@@ -30,7 +30,7 @@ const page = () => {
             >
               Terms of Use.
             </Link>{" "}
-            EarnSphere reserves the right to update or modify this Refund Policy
+            grabcash reserves the right to update or modify this Refund Policy
             at any time without prior notice.
           </p>
           <p>Full Refund Guarantee</p>
@@ -110,8 +110,8 @@ const page = () => {
               Unethical Orders & Cancellation Policy{" "}
             </h2>
             <p className="text-sm my-2">
-              EarnSphere has a zero-tolerance policy for unethical activities.
-              Any micro-job, bounty campaign, or order obtained by:
+              grabcash has a zero-tolerance policy for unethical activities. Any
+              micro-job, bounty campaign, or order obtained by:
             </p>
             <ul className="list-disc list-inside space-y-2 text-sm">
               <li>Exploiting technical glitches,</li>

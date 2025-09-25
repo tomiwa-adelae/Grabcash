@@ -5,7 +5,7 @@ import { Loader } from "./Loader";
 import { toast } from "sonner";
 import { verifyJobPayment } from "@/app/(member)/(jobs)/(new_jobs)/new-job/actions";
 import { tryCatch } from "@/hooks/use-try-catch";
-import { EARNSPHERE_LOGO } from "@/constants";
+import { grabcash_LOGO } from "@/constants";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useFlutterwavePayment } from "@/hooks/use-flutterwave-payment";
@@ -49,9 +49,9 @@ export function PaymentFailedBanner({
   //         name,
   //       },
   //       customizations: {
-  //         title: `Earnsphere - ${title}`,
+  //         title: `grabcash - ${title}`,
   //         description: `Payment for ${totalWithFee} (${title})`,
-  //         logo: EARNSPHERE_LOGO,
+  //         logo: grabcash_LOGO,
   //       },
   //     };
 
@@ -97,9 +97,9 @@ export function PaymentFailedBanner({
     //     name,
     //   },
     //   customizations: {
-    //     title: `Earnsphere - ${title}`,
+    //     title: `grabcash - ${title}`,
     //     description: `Payment for ${totalWithFee} (${title})`,
-    //     logo: EARNSPHERE_LOGO,
+    //     logo: grabcash_LOGO,
     //   },
     // };
     // initiatePayment({

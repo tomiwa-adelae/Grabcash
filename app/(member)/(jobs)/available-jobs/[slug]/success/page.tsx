@@ -17,8 +17,8 @@ const page = async ({ searchParams }: { searchParams: any }) => {
     <div className="py-16 md:py-32 container">
       <PageHeader title="Nice work! You’ve just submitted your tasks🎉" />
       <p className="text-base text-muted-foreground mt-1.5">
-        Thank you for using Earnsphere! Keep going — the more tasks you
-        complete, the more you earn.
+        Thank you for using grabcash! Keep going — the more tasks you complete,
+        the more you earn.
       </p>
       <Separator className="my-6" />
 

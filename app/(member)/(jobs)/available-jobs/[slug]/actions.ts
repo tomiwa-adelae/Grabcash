@@ -142,7 +142,7 @@ export const saveApplicantScreenshot = async (
           {
             From: {
               Email: env.SENDER_EMAIL_ADDRESS,
-              Name: "Earnsphere",
+              Name: "grabcash",
             },
             To: [{ Email: job.User.email, Name: job.User.name }],
             Subject: `Job closed - ${job.title}`,

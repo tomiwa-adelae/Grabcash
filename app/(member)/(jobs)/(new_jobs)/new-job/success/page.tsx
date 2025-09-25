@@ -18,7 +18,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
 
   return (
     <div>
-      <PageHeader title="Your job is now live on Earnsphere🎉" />
+      <PageHeader title="Your job is now live on grabcash🎉" />
       <p className="text-base text-muted-foreground mt-1.5">
         We’ve notified relevant freelancers and partners.
       </p>

@@ -51,7 +51,7 @@ export const WalletBalance = ({
         className="text-white"
       >
         <CardContent className="py-4">
-          <CardDescription>Earnsphere Wallet Balance</CardDescription>
+          <CardDescription>grabcash Wallet Balance</CardDescription>
           <div className="flex items-center justify start gap-2">
             <h1 className="font-bold text-3xl md:text-4xl lg:text-5xl mt-2 md:mt-4">
               <NairaIcon />

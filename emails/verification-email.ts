@@ -11,7 +11,7 @@ export function VerificationEmail({ otp }: { otp: string }) {
           <tr>
             <td style="text-align: center; padding: 20px;">
               <h1 style="color: #111827; margin-bottom: 10px; font-size: 24px;">Email Verification</h1>
-              <p style="color: #6b7280; font-size: 16px; margin: 0;">Welcome to Earnsphere!</p>
+              <p style="color: #6b7280; font-size: 16px; margin: 0;">Welcome to grabcash!</p>
             </td>
           </tr>
 
@@ -36,7 +36,7 @@ export function VerificationEmail({ otp }: { otp: string }) {
           <tr>
             <td style="padding-top: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
               <p style="color: #6b7280; font-size: 14px; margin: 0;">
-                If you didn't create an account with Earnsphere, please ignore this email.
+                If you didn't create an account with grabcash, please ignore this email.
               </p>
             </td>
           </tr>

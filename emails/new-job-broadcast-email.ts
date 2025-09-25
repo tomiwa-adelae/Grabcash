@@ -16,7 +16,7 @@ export const NewJobBroadcastEmail = ({
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
     <div style="text-align: center; margin-bottom: 30px;">
       <h1 style="color: #333; margin-bottom: 10px;">🚀 New Job Posted</h1>
-      <p style="color: #666; font-size: 16px;">A fresh opportunity just went live on <strong>Earnsphere</strong>!</p>
+      <p style="color: #666; font-size: 16px;">A fresh opportunity just went live on <strong>grabcash</strong>!</p>
     </div>
 
     <div style="background: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
@@ -42,7 +42,7 @@ export const NewJobBroadcastEmail = ({
 
     <div style="border-top: 1px solid #e9ecef; padding-top: 20px; text-align: center;">
       <p style="color: #666; font-size: 14px; margin: 0;">
-        You’re receiving this email because you’re part of Earnsphere. 
+        You’re receiving this email because you’re part of grabcash. 
         Don’t miss out—apply before the slots are filled!
       </p>
     </div>

@@ -20,8 +20,6 @@ export const getTotalTransactionsMade = async () => {
     where: { status: "PAID", withdrawal: true },
   });
 
-  console.log("TOMIWA", jobPaymentsCount, subscriptionsCount, payoutsCount);
-
   // Total transactions
   const totalTransactions =
     jobPaymentsCount + subscriptionsCount + payoutsCount;

@@ -102,7 +102,7 @@ export default async function page({
       <div>
         <PageHeader title="Welcome Admin" />
         <p className="text-muted-foreground text-sm md:text-base">
-          Here&apos;s what&apos;s happening with Earnsphere today.
+          Here&apos;s what&apos;s happening with grabcash today.
         </p>
       </div>
 

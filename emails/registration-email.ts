@@ -6,15 +6,15 @@ export function RegistrationEmail({ name }: { name: string }) {
     <html>
       <head>
         <meta charset="utf-8" />
-        <title>Welcome to Earnsphere</title>
+        <title>Welcome to grabcash</title>
       </head>
       <body style="background-color:#f9fafb; font-family:Arial,sans-serif; margin:0; padding:0;">
         <table align="center" width="600" cellpadding="0" cellspacing="0" style="margin:auto; background:#ffffff; padding:20px; border-radius:8px;">
           <tr>
             <td>
-              <h1 style="color:#111827; font-size:24px;">Welcome to Earnsphere, ${name} 🎉</h1>
+              <h1 style="color:#111827; font-size:24px;">Welcome to grabcash, ${name} 🎉</h1>
               <p style="font-size:16px; color:#374151;">
-                Thanks for joining <b>Earnsphere</b> — the marketplace where you can
+                Thanks for joining <b>grabcash</b> — the marketplace where you can
                 <b>earn by completing simple tasks</b> or
                 <b>grow your brand with campaigns</b>.
               </p>

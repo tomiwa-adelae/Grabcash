@@ -247,7 +247,7 @@ export const verifyJobPayment = async ({
         {
           From: {
             Email: env.SENDER_EMAIL_ADDRESS,
-            Name: "Earnsphere",
+            Name: "grabcash",
           },
           To: [{ Email: user.email, Name: user.name }],
           Subject: `Your Job is Live`,
@@ -270,9 +270,9 @@ export const verifyJobPayment = async ({
         Messages: users.map((u) => ({
           From: {
             Email: env.SENDER_EMAIL_ADDRESS,
-            Name: "Earnsphere",
+            Name: "grabcash",
           },
-          To: [{ Email: u.email, Name: u.name || "Earnsphere User" }],
+          To: [{ Email: u.email, Name: u.name || "grabcash User" }],
           Subject: `New Job Posted: ${job.title}`,
           HTMLPart: NewJobBroadcastEmail({
             jobTitle: job.title,

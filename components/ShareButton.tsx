@@ -42,7 +42,7 @@ export function ShareButton({
   handles = {},
   profileUrl,
   profileName = "this profile",
-  platformName = "Earnsphere",
+  platformName = "grabcash",
   text = "",
   ...props
 }: ShareButtonProps) {

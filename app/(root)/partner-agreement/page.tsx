@@ -45,15 +45,15 @@ const page = () => {
             <ul className="list-disc list-inside space-y-2 text-sm">
               <li>
                 “Affiliate” refers to persons promoting and selling the
-                products/services of business partners through the Earnsphere
+                products/services of business partners through the grabcash
                 platform.
               </li>
               <li>
                 “Business partners” means the businesses, brands, and creators
                 of products or services who list and promote their offers on the
-                Earnsphere marketplace.
+                grabcash marketplace.
               </li>
-              <li>“Parties” refers to Earnsphere and the Business Partner.</li>
+              <li>“Parties” refers to grabcash and the Business Partner.</li>
               <li>
                 “Partner” refers to the undersigned business partner to this
                 Agreement.
@@ -67,7 +67,7 @@ const page = () => {
             </h2>
             <ul className="list-disc list-inside space-y-2 text-sm">
               <li>
-                Earnsphere provides businesses, brands, and creators the
+                grabcash provides businesses, brands, and creators the
                 opportunity to list their products or services on the Website as
                 Business Partners.
               </li>
@@ -107,7 +107,7 @@ const page = () => {
           <Separator />
           <div>
             <h2 className="font-semibold text-xl md:text-2xl">
-              Business Partner’s Responsibilities To Earnsphere{" "}
+              Business Partner’s Responsibilities To grabcash{" "}
             </h2>
             <p className="text-sm my-2">
               The Partner shall, in addition to following the Website’s Terms of
@@ -127,11 +127,11 @@ const page = () => {
                 advertising.{" "}
               </li>
               <li>
-                Direct all support-related inquiries to Earnsphere’s official
+                Direct all support-related inquiries to grabcash’s official
                 support channels.{" "}
               </li>
               <li>
-                Provide timely feedback to Earnsphere and to customers regarding
+                Provide timely feedback to grabcash and to customers regarding
                 listed offers.{" "}
               </li>
             </ul>
@@ -139,9 +139,9 @@ const page = () => {
           <Separator />
           <div>
             <h2 className="font-semibold text-xl md:text-2xl">
-              Earnsphere’s Responsibilities To Business Partners{" "}
+              grabcash’s Responsibilities To Business Partners{" "}
             </h2>
-            <p className="text-sm my-2">Earnsphere shall:</p>
+            <p className="text-sm my-2">grabcash shall:</p>
             <ul className="list-disc list-inside space-y-2 text-sm">
               <li>
                 List the Partner’s products or services on the marketplace.
@@ -165,7 +165,7 @@ const page = () => {
             <p className="text-sm my-2">
               Both Parties shall individually and jointly provide high-quality
               products or services, support, and customer care to users. All
-              warranties made by Earnsphere in its Terms of Use apply to users
+              warranties made by grabcash in its Terms of Use apply to users
               interacting with the Partner.
             </p>
           </div>
@@ -177,12 +177,12 @@ const page = () => {
             <ul className="list-disc list-inside space-y-2 text-sm">
               <li>
                 The Partner is an independent contractor and may not assume or
-                create any obligation on behalf of Earnsphere without prior
+                create any obligation on behalf of grabcash without prior
                 written authorization.
               </li>
               <li>
                 The Partner shall not collect funds directly on behalf of
-                Earnsphere.
+                grabcash.
               </li>
               <li>
                 If the Partner operates a physical location, it must comply with
@@ -194,9 +194,9 @@ const page = () => {
           <div>
             <h2 className="font-semibold text-xl md:text-2xl">Payments </h2>
             <p className="text-sm my-2">
-              Earnsphere will be responsible for receiving payments directly
-              from users and remitting due amounts to the Partner in accordance
-              with the agreed payout schedule.
+              grabcash will be responsible for receiving payments directly from
+              users and remitting due amounts to the Partner in accordance with
+              the agreed payout schedule.
             </p>
           </div>
           <Separator />
@@ -229,16 +229,16 @@ const page = () => {
             </h2>
             <ul className="list-disc list-inside space-y-2 text-sm">
               <li>
-                Nothing in this Agreement transfers ownership of Earnsphere’s
+                Nothing in this Agreement transfers ownership of grabcash’s
                 intellectual property to the Partner.
               </li>
               <li>
-                Earnsphere retains all rights to trademarks, designs, and other
+                grabcash retains all rights to trademarks, designs, and other
                 marketing materials shared with the Partner for promotional
                 purposes.
               </li>
               <li>
-                Subject to this Agreement, Earnsphere grants the Partner a
+                Subject to this Agreement, grabcash grants the Partner a
                 limited, non-exclusive, non-transferable license to use its
                 brand name, logo, and marketing materials for the purposes of
                 fulfilling obligations under this Agreement. This license
@@ -262,8 +262,8 @@ const page = () => {
                 package.
               </li>
               <li>
-                Earnsphere may suspend or terminate this Agreement if the
-                Partner violates the Terms of Use or any provision herein.
+                grabcash may suspend or terminate this Agreement if the Partner
+                violates the Terms of Use or any provision herein.
               </li>
             </ul>
           </div>
@@ -292,8 +292,8 @@ const page = () => {
               Indemnification
             </h2>
             <p className="text-sm my-2">
-              The Partner agrees to indemnify and hold harmless Earnsphere and
-              its agents against all claims, damages, or expenses (including
+              The Partner agrees to indemnify and hold harmless grabcash and its
+              agents against all claims, damages, or expenses (including
               reasonable attorney’s fees) arising from the Partner’s actions or
               products.
             </p>

@@ -278,8 +278,6 @@ export const RecentActivity = ({
   const observerRef = useRef<IntersectionObserver | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  console.log(activities);
-
   const loadMore = useCallback(async () => {
     if (isLoading || !hasNext) return;
 

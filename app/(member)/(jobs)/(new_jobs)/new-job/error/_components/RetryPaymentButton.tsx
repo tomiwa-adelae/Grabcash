@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { EARNSPHERE_LOGO } from "@/constants";
+import { GRABCASH_LOGO } from "@/constants";
 import { useFlutterwavePayment } from "@/hooks/use-flutterwave-payment";
 import { tryCatch } from "@/hooks/use-try-catch";
 import { env } from "@/lib/env";
@@ -48,9 +48,9 @@ export const RetryPaymentButton = ({
     //     name,
     //   },
     //   customizations: {
-    //     title: `Earnsphere - ${title}`,
+    //     title: `grabcash - ${title}`,
     //     description: `Payment for ${totalWithFee} (${title})`,
-    //     logo: EARNSPHERE_LOGO,
+    //     logo: GRABCASH_LOGO,
     //   },
     // };
     // initiatePayment({

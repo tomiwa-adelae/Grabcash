@@ -25,7 +25,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
       <div>
         <PageHeader title="All users" />
         <p className="text-muted-foreground text-sm md:text-base">
-          Manage the users on Earnsphere
+          Manage the users on grabcash
         </p>
       </div>
       {usersData.users.length !== 0 && <SearchBar />}

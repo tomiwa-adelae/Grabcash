@@ -26,7 +26,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
       <div>
         <PageHeader title="All jobs" />
         <p className="text-muted-foreground text-sm md:text-base">
-          Manage the all jobs on Earnsphere
+          Manage the all jobs on grabcash
         </p>
       </div>
       {jobData.jobs.length !== 0 && <SearchBar />}

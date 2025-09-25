@@ -11,7 +11,7 @@ const page = async () => {
           Change Password
         </h1>
         <p className="mt-2.5 text-muted-foreground">
-          Create a strong new password for your Earnsphere account.
+          Create a strong new password for your grabcash account.
         </p>
       </div>
       <ChangePasswordForm

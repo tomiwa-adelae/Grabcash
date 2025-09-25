@@ -78,7 +78,7 @@ export const activateSubscription = async ({
         fee: Number(amount),
         type: "DEBIT",
         userId: user.id,
-        title: `Earnsphere ${plan.name} subscription`,
+        title: `grabcash ${plan.name} subscription`,
         status: "PAID",
       },
     });
@@ -101,10 +101,10 @@ export const activateSubscription = async ({
         {
           From: {
             Email: env.SENDER_EMAIL_ADDRESS,
-            Name: "Earnsphere",
+            Name: "grabcash",
           },
           To: [{ Email: user.email, Name: user.name }],
-          Subject: `Welcome to Earnsphere Pro, ${user.name}`,
+          Subject: `Welcome to grabcash Pro, ${user.name}`,
           HTMLPart: ProSubscriptionEmail({ name: user.name, plan: plan.name }),
         },
       ],

@@ -12,7 +12,7 @@ const page = async () => {
             Complete Registration
           </h1>
           <p className="text-base text-muted-foreground max-w-2xl">
-            You’re almost there. Complete your earnsphere profile.
+            You’re almost there. Complete your grabcash profile.
           </p>
         </div>
         <OnBoardingProfileForm user={user} />

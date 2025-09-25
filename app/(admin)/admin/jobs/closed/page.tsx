@@ -26,7 +26,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
       <div>
         <PageHeader title="Closed jobs" />
         <p className="text-muted-foreground text-sm md:text-base">
-          Manage the closed jobs on Earnsphere
+          Manage the closed jobs on grabcash
         </p>
       </div>
       {jobData.jobs.length !== 0 && <SearchBar />}

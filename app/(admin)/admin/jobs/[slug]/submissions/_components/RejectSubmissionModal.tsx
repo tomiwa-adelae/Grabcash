@@ -19,7 +19,7 @@ import { NewJobFormSchemaType } from "@/lib/zodSchemas";
 import { NairaIcon } from "@/components/NairaIcon";
 import { formatMoneyInput } from "@/lib/utils";
 import { env } from "@/lib/env";
-import { EARNSPHERE_LOGO } from "@/constants";
+import { GRABCASH_LOGO } from "@/constants";
 import { useFlutterwavePayment } from "@/hooks/use-flutterwave-payment";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

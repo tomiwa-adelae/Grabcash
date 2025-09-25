@@ -31,7 +31,7 @@ const page = () => {
             >
               {env.BETTER_AUTH_URL}
             </Link>{" "}
-            (“the Website”). Earnsphere business partners may provide additional
+            (“the Website”). grabcash business partners may provide additional
             conditions for working with them. You are required to read and
             accept this Agreement before using this service.
           </p>
@@ -46,15 +46,15 @@ const page = () => {
             <ul className="list-disc list-inside space-y-2 text-sm">
               <li>
                 “Affiliate” refers to persons promoting and selling the
-                products/services of business partners through the Earnsphere
+                products/services of business partners through the grabcash
                 platform.
               </li>
               <li>
                 “Business partners” means the businesses, brands, and creators
                 of products or services who list and promote their offers on the
-                Earnsphere marketplace.
+                grabcash marketplace.
               </li>
-              <li>“Parties” refers to Earnsphere and the Affiliate.</li>
+              <li>“Parties” refers to grabcash and the Affiliate.</li>
             </ul>
           </div>
           <Separator />
@@ -72,9 +72,9 @@ const page = () => {
               </li>
               <li>
                 The Affiliate shall pay the sum of ₦8,000 to register as an
-                Earnsphere+ member. This grants access to all membership
-                features, learning resources, and affiliate tools for training
-                and promotion.
+                grabcash+ member. This grants access to all membership features,
+                learning resources, and affiliate tools for training and
+                promotion.
               </li>
             </ul>
           </div>
@@ -88,13 +88,13 @@ const page = () => {
               <li>
                 The Affiliate shall use their best efforts, skill, and
                 professionalism to promote the products and services of
-                Earnsphere’s partners both physically and on online
-                marketplaces. Such promotion must comply with all rules and
-                regulations governing the Website and any other platforms used.
+                grabcash’s partners both physically and on online marketplaces.
+                Such promotion must comply with all rules and regulations
+                governing the Website and any other platforms used.
               </li>
               <li>
                 The Affiliate agrees not to engage in any actions or make
-                remarks that may damage the Earnsphere brand or harm the public
+                remarks that may damage the grabcash brand or harm the public
                 perception of its business partners.
               </li>
             </ul>
@@ -108,12 +108,12 @@ const page = () => {
             <ul className="list-disc list-inside space-y-2 text-sm">
               <li>
                 The Affiliate operates as an independent contractor and may not
-                assume or create any obligation on behalf of Earnsphere without
+                assume or create any obligation on behalf of grabcash without
                 express written authorization.
               </li>
               <li>
                 The Affiliate shall not receive or collect any funds on behalf
-                of Earnsphere.
+                of grabcash.
               </li>
             </ul>
           </div>
@@ -127,7 +127,7 @@ const page = () => {
               <li>
                 The Affiliate is engaged solely as an independent contractor and
                 is not entitled to any employment benefits or welfare packages
-                provided to Earnsphere employees.
+                provided to grabcash employees.
               </li>
               <li>
                 Nothing in this Agreement creates an employer-employee
@@ -139,10 +139,10 @@ const page = () => {
           <Separator />
           <div>
             <h2 className="font-semibold text-xl md:text-2xl">
-              Earnsphere’s Obligations{" "}
+              grabcash’s Obligations{" "}
             </h2>
             <p className="text-sm my-2">
-              Earnsphere shall provide the Affiliate with:
+              grabcash shall provide the Affiliate with:
             </p>
             <ul className="list-disc list-inside space-y-2 text-sm">
               <li>
@@ -169,11 +169,11 @@ const page = () => {
                 products or offers are transferred to the Affiliate.
               </li>
               <li>
-                Earnsphere and its partners retain all rights to intellectual
+                grabcash and its partners retain all rights to intellectual
                 property, including trademarks, literary works, and designs..
               </li>
               <li>
-                Subject to this Agreement, Earnsphere grants the Affiliate a
+                Subject to this Agreement, grabcash grants the Affiliate a
                 limited license to use its brand name, logo, and marketing
                 assets for promotional purposes. This license expires upon
                 termination of this Agreement.
@@ -196,7 +196,7 @@ const page = () => {
                 Affiliate package.
               </li>
               <li>
-                Earnsphere may suspend or terminate this Agreement if the
+                grabcash may suspend or terminate this Agreement if the
                 Affiliate violates the Terms of Use or any provision of this
                 Agreement.
               </li>
@@ -234,7 +234,7 @@ const page = () => {
               Indemnification{" "}
             </h2>
             <p className="text-sm my-2">
-              The Affiliate agrees to defend and indemnify Earnsphere and its
+              The Affiliate agrees to defend and indemnify grabcash and its
               agents, and hold them harmless against all claims, damages, and
               expenses (including reasonable attorney’s fees) arising from the
               Affiliate’s actions, conduct, or interactions with business

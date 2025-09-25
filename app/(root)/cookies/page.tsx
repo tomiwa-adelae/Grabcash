@@ -23,7 +23,7 @@ const page = () => {
             Cookies{" "}
           </h1>
           <p>
-            Earnsphere (“we,” “us,” or “our”) may use cookies, web beacons,
+            grabcash (“we,” “us,” or “our”) may use cookies, web beacons,
             tracking pixels, and other similar tracking technologies when you
             visit our website{" "}
             <Link

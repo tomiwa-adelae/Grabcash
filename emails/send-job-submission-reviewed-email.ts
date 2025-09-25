@@ -26,7 +26,7 @@ export async function sendJobSubmissionReviewedEmail({
       {
         From: {
           Email: env.SENDER_EMAIL_ADDRESS,
-          Name: "Earnsphere",
+          Name: "grabcash",
         },
         To: [{ Email: to, Name: workerName }],
         Subject: `Your submission for "${jobTitle}" was ${status}`,
@@ -35,7 +35,7 @@ export async function sendJobSubmissionReviewedEmail({
           <p>Your submission for <b>${jobTitle}</b> has been <b>${status}</b>.</p>
           ${status === "APPROVED" ? `<p>You’ve earned ₦${reward}.</p>` : ""}
           <p>Reason: ${reason}</p>
-          <p>– The Earnsphere Team</p>
+          <p>– The grabcash Team</p>
         `,
       },
     ],

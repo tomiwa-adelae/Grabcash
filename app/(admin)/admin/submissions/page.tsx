@@ -26,7 +26,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
       <div>
         <PageHeader title="All submissions" />
         <p className="text-muted-foreground text-sm md:text-base">
-          Manage the all submissions on Earnsphere
+          Manage the all submissions on grabcash
         </p>
       </div>
       {submissionData.submissions.length !== 0 && <SearchBar />}
