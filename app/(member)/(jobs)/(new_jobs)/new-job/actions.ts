@@ -174,6 +174,9 @@ export const verifyJobPayment = async ({
         reward: true,
         id: true,
         title: true,
+        category: true,
+        status: true,
+        slug: true,
       },
     });
 
