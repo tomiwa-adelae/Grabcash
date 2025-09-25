@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Check } from "lucide-react";
-import { grabcash_LOGO, subscriptionPlans } from "@/constants";
+import { GRABCASH_LOGO, subscriptionPlans } from "@/constants";
 import { Badge } from "@/components/ui/badge";
 import { SubscriptionPlan } from "@/lib/generated/prisma";
 import { env } from "@/lib/env";
@@ -59,7 +59,7 @@ export const PricingPlans = ({ email, name, phoneNumber, plans }: Props) => {
   //     customizations: {
   //       title: "grabcash subscription",
   //       description: `Payment for ${plan.name} (${plan.billingCycle.toLowerCase()})`,
-  //       logo: grabcash_LOGO,
+  //       logo: GRABCASH_LOGO,
   //     },
   //   };
   //   initiatePayment({

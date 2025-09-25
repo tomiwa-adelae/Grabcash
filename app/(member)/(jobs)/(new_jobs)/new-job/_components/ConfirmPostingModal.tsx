@@ -78,7 +78,7 @@ export function ConfirmPostingModal({
         //   customizations: {
         //     title: `grabcash - ${data.title}`,
         //     description: `Payment for ${totalWithFee} (${data.title})`,
-        //     logo: grabcash_LOGO,
+        //     logo: GRABCASH_LOGO,
         //   },
         // };
 

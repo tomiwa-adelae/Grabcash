@@ -5,7 +5,7 @@ import { Loader } from "./Loader";
 import { toast } from "sonner";
 import { verifyJobPayment } from "@/app/(member)/(jobs)/(new_jobs)/new-job/actions";
 import { tryCatch } from "@/hooks/use-try-catch";
-import { grabcash_LOGO } from "@/constants";
+import { GRABCASH_LOGO } from "@/constants";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useFlutterwavePayment } from "@/hooks/use-flutterwave-payment";
@@ -51,7 +51,7 @@ export function PaymentFailedBanner({
   //       customizations: {
   //         title: `grabcash - ${title}`,
   //         description: `Payment for ${totalWithFee} (${title})`,
-  //         logo: grabcash_LOGO,
+  //         logo: GRABCASH_LOGO,
   //       },
   //     };
 
@@ -99,7 +99,7 @@ export function PaymentFailedBanner({
     //   customizations: {
     //     title: `grabcash - ${title}`,
     //     description: `Payment for ${totalWithFee} (${title})`,
-    //     logo: grabcash_LOGO,
+    //     logo: GRABCASH_LOGO,
     //   },
     // };
     // initiatePayment({
