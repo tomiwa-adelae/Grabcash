@@ -108,7 +108,7 @@ export function TopMembersList({
   return (
     <div className="border-border bg-card/40 rounded-xl border p-6">
       <h3 className="mb-4 text-xl font-semibold">Top members</h3>
-      {members.map((user, index) => (
+      {members.splice(0, 5).map((user, index) => (
         <TopMemberBox
           index={index}
           country={user.country}

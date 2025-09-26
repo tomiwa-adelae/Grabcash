@@ -337,7 +337,7 @@ export const RecentActivity = ({
     <div className="border-border bg-card/40 rounded-xl border p-6">
       <h3 className="mb-4 text-xl font-semibold">Recent Activity</h3>
       <div className="space-y-3">
-        {activities.map((activity) => {
+        {activities.splice(0, 5).map((activity) => {
           const { icon: Icon, color } =
             activityIconMap[activity.type] || activityIconMap.DEFAULT;
 
