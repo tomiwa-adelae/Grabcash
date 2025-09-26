@@ -150,6 +150,8 @@ export function ConfirmPostingModal({
               );
               if (error) {
                 toast.error(error.message || "Oops! Internal server error");
+                router.push(`/new-job/success?slug=${result?.slug}`);
+                toast.dismiss();
                 return;
               }
 

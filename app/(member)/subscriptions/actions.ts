@@ -78,7 +78,7 @@ export const activateSubscription = async ({
         fee: Number(amount),
         type: "DEBIT",
         userId: user.id,
-        title: `grabcash ${plan.name} subscription`,
+        title: `Grabcash ${plan.name} subscription`,
         status: "PAID",
       },
     });
@@ -86,7 +86,9 @@ export const activateSubscription = async ({
     // Log the activity
     await logActivity({
       type: "USER_UPGRADED",
-      description: `${plan.name} plan was activated for ${user.name || user.email}`,
+      description: `${plan.name} plan was activated for ${
+        user.name || user.email
+      }`,
       userId: user.id,
       subscriptionId: subscription.id,
       metadata: {

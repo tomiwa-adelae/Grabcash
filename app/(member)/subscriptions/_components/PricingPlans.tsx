@@ -129,6 +129,7 @@ export const PricingPlans = ({ email, name, phoneNumber, plans }: Props) => {
           );
           if (error) {
             toast.error(error.message || "Oops! Internal server error");
+            toast.dismiss();
             return;
           }
 
@@ -138,6 +139,7 @@ export const PricingPlans = ({ email, name, phoneNumber, plans }: Props) => {
             toast.dismiss();
           } else {
             toast.error(result.message);
+            toast.dismiss();
           }
         });
       },

@@ -40,7 +40,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
               <CardTitle>Plan summary</CardTitle>
             </CardHeader>
             <CardContent className="text-base font-medium space-y-4">
-              <p>Plan name: grabcash {subscriptionDetails?.plan.name}</p>
+              <p>Plan name: Grabcash {subscriptionDetails?.plan.name}</p>
               <Separator />
               <p>
                 Billing Type:{" "}

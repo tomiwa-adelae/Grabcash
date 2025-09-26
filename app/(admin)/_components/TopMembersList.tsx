@@ -7,6 +7,7 @@ import { Loader } from "@/components/Loader";
 import { GetTopMembersType } from "@/app/data/user/get-top-members";
 import { loadMoreMembers } from "@/app/data/user/wallet/load-more-top-members";
 import { TopMemberBox } from "./TopMemberBox";
+import { EmptyState } from "@/components/EmptyState";
 
 interface Props {
   initialMembers: GetTopMembersType[];
@@ -124,6 +125,13 @@ export function TopMembersList({
           applicants={user._count.applicants}
         />
       ))}
+
+      {members.length === 0 && (
+        <EmptyState
+          title="No members"
+          description="There are no members yet, they would appear here"
+        />
+      )}
 
       {/* Observer sentinel */}
       {hasNext && (
