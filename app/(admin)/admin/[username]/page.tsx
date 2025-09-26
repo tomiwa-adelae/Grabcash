@@ -1,10 +1,6 @@
 import { ShareButton } from "@/components/ShareButton";
 import { formatDate, formattedStatus } from "@/lib/utils";
-import { getAvailableJobs } from "@/app/data/job/get-available-jobs";
 import { env } from "@/lib/env";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
-import { isFollowing } from "@/app/data/follow/is-following";
 import { followers } from "@/app/data/follow/followers";
 import { followings } from "@/app/data/follow/followings";
 import { DEFAULT_LIMIT } from "@/constants";
@@ -12,7 +8,6 @@ import { ProfilePicture } from "@/app/(member)/(profile)/_components/ProfilePict
 import { FollowingDetails } from "@/app/(member)/(profile)/_components/FollowingDetails";
 import { Badge } from "@/components/ui/badge";
 import { getUserProfile } from "@/app/data/admin/user/get-user-profile";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { QuickActions } from "./_components/QuickActions";
 import { Earnings } from "./_components/Earnings";
 import { ProfileTabs } from "./_components/ProfileTabs";
@@ -34,8 +29,6 @@ const page = async ({
 
   const user = await getUserProfile(username);
 
-  const jobs = await getAvailableJobs();
-
   // Updated to get pagination data
   const userFollowersData = await followers({
     id: user.id,
@@ -51,8 +44,6 @@ const page = async ({
     page: 1,
     limit: DEFAULT_LIMIT,
   });
-
-  const following = await isFollowing(user.id);
 
   return (
     <div className="space-y-6">
