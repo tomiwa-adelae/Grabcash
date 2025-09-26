@@ -14,27 +14,26 @@ const lobster = Lobster_Two({
 const items = [
   {
     id: "1",
-    title: "What makes Origin UI different?",
+    title: "How do I get started?",
     content:
-      "Origin UI focuses on developer experience and performance. Built with TypeScript, it offers excellent type safety, follows accessibility standards, and provides comprehensive documentation with regular updates.",
+      "Create a free account, complete KYC verification, and browse tasks or campaigns to begin earning.",
   },
   {
     id: "2",
-    title: "How can I customize the components?",
-    content:
-      "Use our CSS variables for global styling, or className and style props for component-specific changes. We support CSS modules, Tailwind, and dark mode out of the box.",
+    title: "Is KYC required?",
+    content: "How do payouts work?",
   },
   {
     id: "3",
-    title: "Is Origin UI optimized for performance?",
+    title: "What’s the difference between free and subscribed plans?",
     content:
-      "Yes, with tree-shaking, code splitting, and minimal runtime overhead. Most components are under 5KB gzipped.",
+      "Free users get access to basic features. Subscribed users (₦8,000/year) unlock advanced campaigns, exclusive jobs, higher limits, and educational courses.",
   },
   {
     id: "4",
-    title: "How accessible are the components?",
+    title: "Can I earn without doing tasks?",
     content:
-      "All components follow WAI-ARIA standards, featuring proper ARIA attributes, keyboard navigation, and screen reader support. Regular testing ensures compatibility with NVDA, VoiceOver, and JAWS.",
+      "Yes! Join the affiliate program, invite friends, and earn commissions from purchases or sign-ups.",
   },
 ];
 
