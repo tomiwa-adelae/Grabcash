@@ -57,6 +57,7 @@ export const getClosedJobs = async ({
         reward: true,
         createdAt: true,
         jobOpen: true,
+        paymentVerified: true,
         jobPayments: {
           select: {
             status: true,

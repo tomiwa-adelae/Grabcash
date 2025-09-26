@@ -40,29 +40,29 @@ export function TopMembersList({
     setIsLoading(true);
     setError(null);
 
-    try {
-      const nextPage = currentPage + 1;
-      const result = await loadMoreMembers(nextPage, query);
+    // try {
+    //   const nextPage = currentPage + 1;
+    //   const result = await loadMoreMembers(nextPage, query);
 
-      if (result.success && result.data) {
-        setMembers((prevMembers) => {
-          const combined = [...prevMembers, ...result.data.members];
-          // ✅ Deduplicate by id
-          const unique = Array.from(
-            new Map(combined.map((u) => [u.id, u])).values()
-          );
-          return unique;
-        });
-        setCurrentPage(nextPage);
-        setHasNext(result.data.pagination.hasNext);
-      } else {
-        setError(result.error || "Failed to load more members");
-      }
-    } catch (err) {
-      setError("Failed to load more members");
-    } finally {
-      setIsLoading(false);
-    }
+    //   if (result.success && result.data) {
+    //     setMembers((prevMembers) => {
+    //       const combined = [...prevMembers, ...result.data.members];
+    //       // ✅ Deduplicate by id
+    //       const unique = Array.from(
+    //         new Map(combined.map((u) => [u.id, u])).values()
+    //       );
+    //       return unique;
+    //     });
+    //     setCurrentPage(nextPage);
+    //     setHasNext(result.data.pagination.hasNext);
+    //   } else {
+    //     setError(result.error || "Failed to load more members");
+    //   }
+    // } catch (err) {
+    //   setError("Failed to load more members");
+    // } finally {
+    //   setIsLoading(false);
+    // }
   }, [currentPage, hasNext, isLoading, query]);
 
   // Set up intersection observer
@@ -108,23 +108,24 @@ export function TopMembersList({
   return (
     <div className="border-border bg-card/40 rounded-xl border p-6">
       <h3 className="mb-4 text-xl font-semibold">Top members</h3>
-      {members.splice(0, 5).map((user, index) => (
-        <TopMemberBox
-          index={index}
-          country={user.country}
-          createdAt={user.createdAt}
-          email={user.email}
-          name={user.name}
-          image={user.image}
-          isAdmin={user.isAdmin}
-          status={user.status}
-          key={user.id}
-          username={user.username!}
-          id={user.id}
-          jobs={user._count.jobs}
-          applicants={user._count.applicants}
-        />
-      ))}
+      {members.length !== 0 &&
+        members.map((user, index) => (
+          <TopMemberBox
+            index={index}
+            country={user.country}
+            createdAt={user.createdAt}
+            email={user.email}
+            name={user.name}
+            image={user.image}
+            isAdmin={user.isAdmin}
+            status={user.status}
+            key={user.id}
+            username={user.username!}
+            id={user.id}
+            jobs={user._count.jobs}
+            applicants={user._count.applicants}
+          />
+        ))}
 
       {members.length === 0 && (
         <EmptyState
@@ -134,7 +135,7 @@ export function TopMembersList({
       )}
 
       {/* Observer sentinel */}
-      {hasNext && (
+      {/* {hasNext && (
         <div
           ref={sentinelRef}
           className="group hover:bg-accent/50 rounded-lg p-4 transition-colors items-center text-center text-muted-foreground text-sm"
@@ -170,7 +171,7 @@ export function TopMembersList({
         <div className="group hover:bg-accent/50 rounded-lg p-4 transition-colors items-center text-center text-muted-foreground text-sm">
           All members loaded ({members.length} total)
         </div>
-      )}
+      )} */}
     </div>
   );
 }

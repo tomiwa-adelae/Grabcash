@@ -1,13 +1,6 @@
 import { DashboardCard } from "@/app/(admin)/_components/sidebar/dashboard-card";
-import { QuickActions } from "@/app/(admin)/_components/sidebar/quick-actions";
 import { SystemStatus } from "@/app/(admin)/_components/sidebar/system-status";
 import { RecentActivity } from "@/app/(admin)/_components/sidebar/recent-activity";
-import {
-  IconActivityHeartbeat,
-  IconClock,
-  IconMoneybag,
-  IconUsersGroup,
-} from "@tabler/icons-react";
 import { getActiveJobs } from "@/app/data/admin/job/get-active-jobs";
 import { getTotalUsers } from "@/app/data/admin/user/get-total-users";
 import { getPendingJobSubmissions } from "@/app/data/admin/job/submission/get-pending-job-submissions";
@@ -21,8 +14,6 @@ import { getAllActivities } from "@/app/data/admin/activity/get-all-activities";
 import { DEFAULT_LIMIT } from "@/constants";
 import { getTopMembers } from "@/app/data/user/get-top-members";
 import { TopMembersList } from "../../_components/TopMembersList";
-// import { PlatformRevenueChart } from "../../_components/sidebar/revenue-chart";
-// import { getAllPlatformPayments } from "@/app/data/admin/job/payment/get-revenue-analytics";
 
 type SearchParams = Promise<{
   query?: string;

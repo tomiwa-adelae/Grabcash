@@ -118,6 +118,7 @@ export function ClosedJobsList({
           key={job.id}
           id={job.id}
           reward={job.reward!}
+          paymentVerified={job.paymentVerified}
         />
       ))}
 

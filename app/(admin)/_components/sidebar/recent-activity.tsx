@@ -284,28 +284,28 @@ export const RecentActivity = ({
     setIsLoading(true);
     setError(null);
 
-    try {
-      const nextPage = currentPage + 1;
-      const result = await loadMoreAllActivities(nextPage, query);
+    // try {
+    //   const nextPage = currentPage + 1;
+    //   const result = await loadMoreAllActivities(nextPage, query);
 
-      if (result.success && result.data) {
-        setActivities((prev) => {
-          const combined = [...prev, ...result.data.activities];
-          const unique = Array.from(
-            new Map(combined.map((u) => [u.id, u])).values()
-          );
-          return unique;
-        });
-        setCurrentPage(nextPage);
-        setHasNext(result.data.pagination.hasNext);
-      } else {
-        setError(result.error || "Failed to load more activities");
-      }
-    } catch (err) {
-      setError("Failed to load more activities");
-    } finally {
-      setIsLoading(false);
-    }
+    //   if (result.success && result.data) {
+    //     setActivities((prev) => {
+    //       const combined = [...prev, ...result.data.activities];
+    //       const unique = Array.from(
+    //         new Map(combined.map((u) => [u.id, u])).values()
+    //       );
+    //       return unique;
+    //     });
+    //     setCurrentPage(nextPage);
+    //     setHasNext(result.data.pagination.hasNext);
+    //   } else {
+    //     setError(result.error || "Failed to load more activities");
+    //   }
+    // } catch (err) {
+    //   setError("Failed to load more activities");
+    // } finally {
+    //   setIsLoading(false);
+    // }
   }, [currentPage, hasNext, isLoading, query]);
 
   // Intersection Observer for infinite scroll
@@ -337,7 +337,7 @@ export const RecentActivity = ({
     <div className="border-border bg-card/40 rounded-xl border p-6">
       <h3 className="mb-4 text-xl font-semibold">Recent Activity</h3>
       <div className="space-y-3">
-        {activities.splice(0, 5).map((activity) => {
+        {activities.map((activity) => {
           const { icon: Icon, color } =
             activityIconMap[activity.type] || activityIconMap.DEFAULT;
 
@@ -368,7 +368,7 @@ export const RecentActivity = ({
         })}
       </div>
 
-      {hasNext && (
+      {/* {hasNext && (
         <div
           ref={sentinelRef}
           className="group hover:bg-accent/50 rounded-lg p-4 transition-colors text-center text-muted-foreground text-sm"
@@ -402,7 +402,7 @@ export const RecentActivity = ({
         <div className="group hover:bg-accent/50 rounded-lg p-4 text-center text-muted-foreground text-sm">
           All activities loaded ({activities.length} total)
         </div>
-      )}
+      )} */}
     </div>
   );
 };
