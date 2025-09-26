@@ -60,7 +60,7 @@ const page = async ({
   const myProfile = username === session?.user.username;
 
   return (
-    <div className="py-16 md:py-32 container">
+    <div className="py-16 md:py-24 container">
       <div className="flex flex-col items-center justify-center w-full">
         <ProfilePicture
           myProfile={myProfile}

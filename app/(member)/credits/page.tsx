@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const page = () => {
   return (
-    <div className="py-16 md:py-32 container">
+    <div className="py-16 md:py-24 container">
       <PageHeader title="Your Credit Wallet" />
       <p className="text-base text-muted-foreground mt-1.5">
         Credits are used to post jobs, promote offers, and more. Each credit is

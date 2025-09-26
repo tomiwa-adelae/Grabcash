@@ -19,10 +19,12 @@ const page = async ({ params }: { params: Params }) => {
 
   const details = await getSubmittedJobDetails(id);
   return (
-    <div className="py-16 md:py-32 container space-y-6">
+    <div className="py-16 md:py-24 container space-y-6">
       <div>
         <PageHeader
-          title={`${details.Job.title} - ₦${formatMoneyInput(details.Job.reward)}`}
+          title={`${details.Job.title} - ₦${formatMoneyInput(
+            details.Job.reward
+          )}`}
         />
         <p className="text-base text-muted-foreground mt-1.5">
           Kindly review the work {details.User.name} did and approve or reject

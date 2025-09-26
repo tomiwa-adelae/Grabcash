@@ -4,7 +4,7 @@ import { Confetti } from "@/components/Confetti";
 
 const page = () => {
   return (
-    <div className="py-16 md:py-32 container">
+    <div className="py-16 md:py-24 container">
       <div className="space-y-2.5 flex flex-col items-center justify-center text-center">
         <h1 className="font-semibold text-4xl md:text-5xl">
           {" "}

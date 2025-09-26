@@ -6,7 +6,7 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className="container py-16 md:py-32">
+    <div className="container py-16 md:py-24">
       <div className="text-center md:w-5/6 mx-auto">
         <h1 className="text-2xl md:text-3xl lg:text-5xl font-semibold">
           5 Simple Ways to Boost Your Earnings on grabcash in Just 7 Days

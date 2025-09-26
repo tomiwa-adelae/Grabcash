@@ -10,7 +10,7 @@ const lobster = Lobster_Two({
 const page = () => {
   return (
     <div>
-      <div className="container py-16 md:py-32">
+      <div className="container py-16 md:py-24">
         <div className="space-y-2">
           <p
             className={`${lobster.className} text-lg md:text-2xl text-primary font-normal`}
@@ -102,8 +102,7 @@ const page = () => {
               How We Collect Your Data{" "}
             </h2>
             <p className="text-sm my-2">
-              We use the following technologies to collect your
-              information:{" "}
+              We use the following technologies to collect your information:{" "}
             </p>
             <ul className="list-disc list-inside space-y-2 text-sm">
               <li>

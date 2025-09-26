@@ -41,7 +41,7 @@ const page = async ({
   const job = await getJobDetails(slug);
 
   return (
-    <div className="py-16 md:py-32 container space-y-6">
+    <div className="py-16 md:py-24 container space-y-6">
       <PageHeader title={`Submission for ${job.title}`} />
       {applicants.applicantsData.length !== 0 && !query && (
         <SubmissionCards

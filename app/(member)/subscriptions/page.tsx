@@ -12,7 +12,7 @@ const page = async () => {
   if (!user.onboardingCompleted) return redirect("/onboarding");
 
   return (
-    <div className="not-prose relative w-full py-16 md:py-32">
+    <div className="not-prose relative w-full py-16 md:py-24">
       <PageGradient />
 
       <div className="container px-6">

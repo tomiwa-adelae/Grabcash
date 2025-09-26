@@ -17,7 +17,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
   const user = await getUserDetails();
 
   return (
-    <div className="not-prose relative w-full py-16 md:py-32">
+    <div className="not-prose relative w-full py-16 md:py-24">
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="bg-primary/10 absolute -top-[10%] left-[50%] h-[40%] w-[60%] -translate-x-1/2 rounded-full blur-3xl" />
         <div className="bg-primary/5 absolute -right-[10%] -bottom-[10%] h-[40%] w-[40%] rounded-full blur-3xl" />

@@ -16,7 +16,7 @@ const page = async ({ params }: { params: Params }) => {
   const user = await getUserDetails();
 
   return (
-    <div className="container py-16 md:py-32">
+    <div className="container py-16 md:py-24">
       <PageHeader title={`Edit - ${job.title}`} />
       <EditJobForm
         name={user.name}

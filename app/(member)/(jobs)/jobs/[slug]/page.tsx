@@ -33,7 +33,7 @@ const page = async ({ params }: { params: Params }) => {
   ).toFixed(); // Add 10%
 
   return (
-    <div className="py-16 md:py-32 container space-y-6">
+    <div className="py-16 md:py-24 container space-y-6">
       <PageHeader title="Job Details" />
       {!job.paymentVerified && (
         <PaymentFailedBanner

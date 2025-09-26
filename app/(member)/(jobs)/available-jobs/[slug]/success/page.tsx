@@ -14,7 +14,7 @@ const page = async ({ searchParams }: { searchParams: any }) => {
   const job = await getMySubmittedJob(id);
 
   return (
-    <div className="py-16 md:py-32 container">
+    <div className="py-16 md:py-24 container">
       <PageHeader title="Nice work! You’ve just submitted your tasks🎉" />
       <p className="text-base text-muted-foreground mt-1.5">
         Thank you for using grabcash! Keep going — the more tasks you complete,

@@ -13,7 +13,7 @@ const page = async () => {
   const sessions = await auth.api.listSessions({ headers: await headers() });
 
   return (
-    <div className="py-16 md:py-32 container">
+    <div className="py-16 md:py-24 container">
       <h1 className="text-center text-4xl font-semibold lg:text-5xl">
         Settings
       </h1>

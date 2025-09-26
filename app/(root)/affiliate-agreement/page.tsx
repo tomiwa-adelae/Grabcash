@@ -12,7 +12,7 @@ const lobster = Lobster_Two({
 const page = () => {
   return (
     <div>
-      <div className="container py-16 md:py-32">
+      <div className="container py-16 md:py-24">
         <div className="space-y-2">
           <p
             className={`${lobster.className} text-lg md:text-2xl text-primary font-normal`}
@@ -151,8 +151,7 @@ const page = () => {
               </li>
               <li>Customer support.</li>
               <li>
-                Data protection in accordance with the Website’s Privacy
-                Policy.{" "}
+                Data protection in accordance with the Website’s Privacy Policy.{" "}
               </li>
               <li>Technical support and maintenance. </li>
               <li>Accurate reporting on transactions and performance. </li>

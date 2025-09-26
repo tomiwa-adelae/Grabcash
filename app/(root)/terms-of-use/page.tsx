@@ -10,7 +10,7 @@ const lobster = Lobster_Two({
 const page = () => {
   return (
     <div>
-      <div className="container py-16 md:py-32">
+      <div className="container py-16 md:py-24">
         <div className="space-y-2">
           <p
             className={`${lobster.className} text-lg md:text-2xl text-primary font-normal`}

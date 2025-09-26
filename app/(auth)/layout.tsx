@@ -8,7 +8,7 @@ const layout = ({ children }: { children: ReactNode }) => {
     <div className="relative min-h-screen">
       <Header />
       <div className="pt-20">
-        <div className="py-16 md:py-32">
+        <div className="py-16 md:py-24">
           <PageGradient />
           {children}
           <Footer />

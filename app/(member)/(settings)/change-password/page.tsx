@@ -5,7 +5,7 @@ import { getUserDetails } from "@/app/data/user/get-user-details";
 const page = async () => {
   const user = await getUserDetails();
   return (
-    <div className="py-16 md:py-32 container">
+    <div className="py-16 md:py-24 container">
       <div className="text-center">
         <h1 className="text-center text-4xl font-semibold lg:text-5xl">
           Change Password
