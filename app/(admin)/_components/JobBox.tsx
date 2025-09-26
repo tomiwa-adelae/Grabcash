@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { JobActions } from "./JobActions";
 import { NairaIcon } from "@/components/NairaIcon";
+import { Badge } from "@/components/ui/badge";
 
 interface Props {
   index: number;
@@ -25,6 +26,7 @@ interface Props {
   createdAt: Date;
   id: string;
   reward: string;
+  paymentVerified: boolean;
 }
 
 export const JobBox = ({
@@ -40,6 +42,7 @@ export const JobBox = ({
   createdAt,
   id,
   reward,
+  paymentVerified,
 }: Props) => {
   const router = useRouter();
   const profilePicture = useConstructUrl(image);
@@ -72,15 +75,19 @@ export const JobBox = ({
                 {title} - <NairaIcon />
                 {formatMoneyInput(reward)}
               </Link>
-              <span
-                className={`rounded-full px-2 py-1 text-xs font-medium ${
-                  jobOpen
-                    ? "bg-purple-500/10 text-purple-500"
-                    : "bg-gray-500/10 text-gray-500"
-                }`}
-              >
-                {jobOpen ? "Active" : "Closed"}
-              </span>
+              {paymentVerified ? (
+                <span
+                  className={`rounded-full px-2 py-1 text-xs font-medium ${
+                    jobOpen
+                      ? "bg-purple-500/10 text-purple-500"
+                      : "bg-gray-500/10 text-gray-500"
+                  }`}
+                >
+                  {jobOpen ? "Active" : "Closed"}
+                </span>
+              ) : (
+                <Badge variant={"pending"}>No payment</Badge>
+              )}
             </div>
             <div className="text-muted-foreground mt-1 flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:gap-4">
               <div className="flex items-center gap-1 truncate hover:underline hover:text-primary">

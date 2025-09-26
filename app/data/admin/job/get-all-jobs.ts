@@ -56,6 +56,7 @@ export const getAllJobs = async ({
         createdAt: true,
         status: true,
         jobOpen: true,
+        paymentVerified: true,
         jobPayments: {
           select: {
             status: true,
