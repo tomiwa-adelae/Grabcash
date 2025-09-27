@@ -187,12 +187,6 @@ export function FollowersModal({
               </div>
             )}
 
-            {!hasNext && followers.length > 0 && (
-              <div className="text-center py-4 text-sm text-muted-foreground">
-                You've reached the end
-              </div>
-            )}
-
             {followers.length === 0 && !isLoading && (
               <div className="text-center py-8 text-muted-foreground">
                 No followers found

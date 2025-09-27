@@ -4,10 +4,10 @@ import { DEFAULT_LIMIT } from "@/constants";
 import { requireAdmin } from "../../require-admin";
 
 export const getPendingJobSubmissions = async (params: Params = {}) => {
-  const { query, page = 1, limit = DEFAULT_LIMIT } = params;
+  const { query, page = 1 } = params;
 
   await requireAdmin();
-  const skip = (page - 1) * limit;
+  // const skip = (page - 1) * limit;
 
   // Base query conditions
   const whereConditions: any = { status: "PENDING" };
@@ -56,8 +56,8 @@ export const getPendingJobSubmissions = async (params: Params = {}) => {
         },
       },
       orderBy: { createdAt: "desc" },
-      skip,
-      take: limit,
+      // skip,
+      // take: limit,
     }),
     prisma.applicant.count({
       where: whereConditions,
@@ -65,14 +65,15 @@ export const getPendingJobSubmissions = async (params: Params = {}) => {
   ]);
 
   // Calculate pagination
-  const totalPages = Math.ceil(totalCount / limit);
+  // const totalPages = Math.ceil(totalCount / limit);
+  const totalPages = 1;
   const hasNext = page < totalPages;
 
   return {
     jobs,
     pagination: {
       page,
-      limit,
+      limit: 0,
       total: totalCount,
       totalPages,
       hasNext,

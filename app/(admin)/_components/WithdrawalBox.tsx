@@ -42,7 +42,7 @@ export const WithdrawalBox = ({
           alt={`${name}'s profile`}
           width={1000}
           height={1000}
-          className="rounded-full size-14 object-cover"
+          className="rounded-full size-10 md:size-14 object-cover"
         />
 
         <div className="flex-1 flex items-start justify-between">

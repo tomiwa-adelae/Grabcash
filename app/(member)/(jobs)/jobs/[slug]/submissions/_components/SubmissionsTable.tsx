@@ -220,19 +220,17 @@ export function SubmissionsTable({
                         Loading more submissions...
                       </span>
                     </div>
-                  ) : hasNext ? (
-                    <Button
-                      size={"md"}
-                      onClick={() => {
-                        loadMore();
-                      }}
-                    >
-                      Load More ({applicants.length} of {totalCount})
-                    </Button>
                   ) : (
-                    <div className="text-sm text-muted-foreground">
-                      You've reached the end ({applicants.length} submissions)
-                    </div>
+                    hasNext && (
+                      <Button
+                        size={"md"}
+                        onClick={() => {
+                          loadMore();
+                        }}
+                      >
+                        Load More ({applicants.length} of {totalCount})
+                      </Button>
+                    )
                   )}
                 </TableCell>
               </TableRow>

@@ -513,7 +513,7 @@ export const Uploader = forwardRef<UploaderHandle, iAppProps>(
           </Card>
         ) : (
           <ScrollArea>
-            <div className="grid grid-cols-2 gap-4 overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden">
               {photos.map((photo, index) => (
                 <div
                   key={index}

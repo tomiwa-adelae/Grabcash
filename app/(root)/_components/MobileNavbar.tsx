@@ -192,7 +192,7 @@ export function MobileNavbar({ session }: Props) {
 
         {/* Bottom section - fixed at bottom */}
         {session && (
-          <div className="flex-shrink-0 border-t pt-4 container">
+          <div className="sticky bottom-0 bg-background border-t pt-4 container">
             <MobileNavUser session={session} />
           </div>
         )}

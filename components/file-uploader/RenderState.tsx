@@ -14,7 +14,7 @@ const RenderEmptyState = ({ isDragActive }: { isDragActive: boolean }) => {
           )}
         />
       </div>
-      <p className="mt-4 text-base font-semibold text-muted-foreground">
+      <p className="mt-4 text-sm md:text-base font-medium text-muted-foreground">
         Drop your files here or{" "}
         <span className="text-primary font-bold cursor-pointer">
           click to upload

@@ -59,7 +59,12 @@ export const UploadScreenshotModal = ({ id, slug }: Props) => {
 
   return (
     <div>
-      <Button onClick={() => setOpenModal(true)} size="md" variant={"outline"}>
+      <Button
+        onClick={() => setOpenModal(true)}
+        size="md"
+        className="w-full md:w-auto"
+        variant={"outline"}
+      >
         <Image />
         Upload screenshots
       </Button>

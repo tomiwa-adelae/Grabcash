@@ -72,6 +72,7 @@ export const SubmissionActions = ({ slug, id, onReject }: Props) => {
           disabled={pending}
           onSelect={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             handleApproveSubmission();
           }}
         >
@@ -80,6 +81,7 @@ export const SubmissionActions = ({ slug, id, onReject }: Props) => {
         <DropdownMenuItem
           onSelect={(e) => {
             e.preventDefault();
+            e.stopPropagation();
             onReject?.(); // Call the parent's reject handler
           }}
         >

@@ -146,6 +146,20 @@ export const approveApplication = async (
   await requireAdmin();
 
   try {
+    const alreadyApproved = await prisma.applicant.findUnique({
+      where: {
+        id,
+        Job: { OR: [{ slug: slug }] },
+        status: "APPROVED",
+      },
+    });
+
+    if (alreadyApproved)
+      return {
+        status: "error",
+        message: "Submission has already been approved",
+      };
+
     const applicant = await prisma.applicant.update({
       where: {
         id,
@@ -183,6 +197,7 @@ export const approveApplication = async (
       },
       data: {
         earnings: { increment: reward },
+        lifeTimeEarnings: { increment: reward },
       },
       select: {
         name: true,
@@ -228,6 +243,84 @@ export const approveApplication = async (
   }
 };
 
+// export const rejectApplication = async (
+//   id: string,
+//   slug: string,
+//   reason: string
+// ): Promise<ApiResponse> => {
+//   await requireAdmin();
+
+//   try {
+//     if (!reason) return { status: "error", message: "Please leave a reason" };
+
+//     const applicant = await prisma.applicant.update({
+//       where: {
+//         id,
+//         Job: { OR: [{ slug: slug }] },
+//       },
+//       data: {
+//         rejectionReason: reason,
+//         status: "REJECTED",
+//       },
+//       select: {
+//         userId: true,
+//         Job: {
+//           select: {
+//             title: true,
+//             reward: true,
+//             id: true,
+//             noOfWorkers: true,
+//             filledSlots: true,
+//           },
+//         },
+//       },
+//     });
+
+//     const worker = await prisma.user.findUnique({
+//       where: {
+//         id: applicant.userId,
+//       },
+//       select: {
+//         name: true,
+//         email: true,
+//       },
+//     });
+
+//     await prisma.job.update({
+//       where: { id: applicant.Job.id },
+//       data: { filledSlots: { decrement: 1 }, jobOpen: true },
+//     });
+
+//     if (!worker) return { status: "error", message: "Oops! An error occurred" };
+
+//     await mailjet.post("send", { version: "v3.1" }).request({
+//       Messages: [
+//         {
+//           From: {
+//             Email: env.SENDER_EMAIL_ADDRESS,
+//             Name: "grabcash",
+//           },
+//           To: [{ Email: worker.email, Name: worker.name }],
+//           Subject: `Submission rejected - ${applicant.Job.title}`,
+//           HTMLPart: JobSubmissionReviewedEmail({
+//             workerName: worker.name,
+//             jobTitle: applicant.Job.title,
+//             status: "REJECTED",
+//             reward: applicant.Job.reward!,
+//             reason,
+//           }),
+//         },
+//       ],
+//     });
+
+//     revalidatePath("/");
+
+//     return { status: "success", message: "Submission rejected" };
+//   } catch (error) {
+//     return { status: "error", message: "Failed to reject submission" };
+//   }
+// };
+
 export const rejectApplication = async (
   id: string,
   slug: string,
@@ -238,16 +331,11 @@ export const rejectApplication = async (
   try {
     if (!reason) return { status: "error", message: "Please leave a reason" };
 
-    const applicant = await prisma.applicant.update({
-      where: {
-        id,
-        Job: { OR: [{ slug: slug }] },
-      },
-      data: {
-        rejectionReason: reason,
-        status: "REJECTED",
-      },
+    // Fetch the applicant first to check current status
+    const applicant = await prisma.applicant.findUnique({
+      where: { id },
       select: {
+        status: true,
         userId: true,
         Job: {
           select: {
@@ -261,23 +349,71 @@ export const rejectApplication = async (
       },
     });
 
-    const worker = await prisma.user.findUnique({
-      where: {
-        id: applicant.userId,
+    if (!applicant) {
+      return { status: "error", message: "Applicant not found" };
+    }
+
+    // If previously approved → deduct reward
+    if (applicant.status === "APPROVED") {
+      const reward = applicant.Job.reward
+        ? parseInt(applicant.Job.reward, 10)
+        : 0;
+
+      // Deduct earnings
+      await prisma.user.update({
+        where: { id: applicant.userId },
+        data: {
+          earnings: { decrement: reward },
+        },
+      });
+
+      // Record a debit payout (negative record)
+      await prisma.payout.create({
+        data: {
+          userId: applicant.userId,
+          amount: -Math.abs(reward), // make sure it's negative
+          status: "PAID",
+          fee: 0,
+          title: `${applicant.Job.title} reward revoked`,
+          type: "DEBIT",
+        },
+      });
+    }
+
+    // Update applicant to REJECTED
+    const updatedApplicant = await prisma.applicant.update({
+      where: { id },
+      data: {
+        rejectionReason: reason,
+        status: "REJECTED",
       },
       select: {
-        name: true,
-        email: true,
+        userId: true,
+        Job: {
+          select: {
+            title: true,
+            reward: true,
+            id: true,
+          },
+        },
       },
     });
 
+    // Free up the slot again
     await prisma.job.update({
-      where: { id: applicant.Job.id },
+      where: { id: updatedApplicant.Job.id },
       data: { filledSlots: { decrement: 1 }, jobOpen: true },
+    });
+
+    // Get worker info
+    const worker = await prisma.user.findUnique({
+      where: { id: updatedApplicant.userId },
+      select: { name: true, email: true },
     });
 
     if (!worker) return { status: "error", message: "Oops! An error occurred" };
 
+    // Send rejection email
     await mailjet.post("send", { version: "v3.1" }).request({
       Messages: [
         {
@@ -286,12 +422,12 @@ export const rejectApplication = async (
             Name: "grabcash",
           },
           To: [{ Email: worker.email, Name: worker.name }],
-          Subject: `Submission rejected - ${applicant.Job.title}`,
+          Subject: `Submission rejected - ${updatedApplicant.Job.title}`,
           HTMLPart: JobSubmissionReviewedEmail({
             workerName: worker.name,
-            jobTitle: applicant.Job.title,
+            jobTitle: updatedApplicant.Job.title,
             status: "REJECTED",
-            reward: applicant.Job.reward!,
+            reward: updatedApplicant.Job.reward!,
             reason,
           }),
         },
@@ -302,6 +438,7 @@ export const rejectApplication = async (
 
     return { status: "success", message: "Submission rejected" };
   } catch (error) {
+    console.error(error);
     return { status: "error", message: "Failed to reject submission" };
   }
 };

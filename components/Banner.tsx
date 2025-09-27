@@ -19,7 +19,7 @@ export function Banner({ text, variant, icon }: Props) {
         variant === "default" && "bg-secondary text-white dark:text-white"
       )}
     >
-      <div className="flex grow gap-3 md:items-center">
+      <div className="flex items-center grow gap-3 md:items-center">
         <Icon className="size-7" />
         <p className="text-sm font-medium">{text}</p>
       </div>

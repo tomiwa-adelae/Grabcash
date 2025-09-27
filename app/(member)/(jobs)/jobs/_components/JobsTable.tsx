@@ -244,18 +244,6 @@ export function JobsTable({
               </TableCell>
             </TableRow>
           )}
-
-          {/* End state */}
-          {!hasNext && jobs.length > 0 && (
-            <TableRow>
-              <TableCell
-                colSpan={6}
-                className="text-center py-4 text-sm text-muted-foreground"
-              >
-                All jobs loaded ({jobs.length} total)
-              </TableCell>
-            </TableRow>
-          )}
         </TableBody>
       </Table>
     </div>

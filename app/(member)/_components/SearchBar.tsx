@@ -63,7 +63,7 @@ export const SearchBar = ({ placeholder = "Search...", search }: Props) => {
 
       const newUrl = `${pathname}?${params.toString()}`;
       router.push(newUrl, { scroll: false });
-    }, 300);
+    }, 3000);
 
     return () => clearTimeout(delayDebounceFn);
   }, [query]);

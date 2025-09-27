@@ -156,10 +156,10 @@ export function SubmissionsCard({
                       applicant.status === "PENDING"
                         ? "pending"
                         : applicant.status === "APPROVED"
-                          ? "default"
-                          : applicant.status === "REJECTED"
-                            ? "destructive"
-                            : "default"
+                        ? "default"
+                        : applicant.status === "REJECTED"
+                        ? "destructive"
+                        : "default"
                     }
                   >
                     {formattedStatus[applicant.status]}
@@ -243,22 +243,6 @@ export function SubmissionsCard({
         </div>
       )}
 
-      {/* End message card */}
-      {!hasNext && applicants.length > 0 && (
-        <div className="relative mx-auto w-full rounded-lg border border-dashed border-gray-300 px-4 sm:px-6 md:px-8 dark:border-gray-700">
-          <div className="absolute top-4 left-0 -z-0 h-px w-full bg-gray-400 sm:top-6 md:top-8 dark:bg-gray-600" />
-          <div className="absolute bottom-4 left-0 z-0 h-px w-full bg-gray-400 sm:bottom-6 md:bottom-8 dark:bg-gray-600" />
-          <div className="relative w-full border-x border-gray-400 dark:border-gray-600">
-            <div className="relative z-20 mx-auto py-8">
-              <div className="px-6 text-center">
-                <span className="text-sm text-muted-foreground">
-                  You've reached the end ({applicants.length} submissions)
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
       {/* Modal rendered outside the table */}
       {openRejectModal && selectedApplicant && (
         <RejectSubmissionModal

@@ -14,6 +14,7 @@ import { getAllActivities } from "@/app/data/admin/activity/get-all-activities";
 import { DEFAULT_LIMIT } from "@/constants";
 import { getTopMembers } from "@/app/data/user/get-top-members";
 import { TopMembersList } from "../../_components/TopMembersList";
+import { getTotalActiveJobs } from "@/app/data/admin/job/get-total-active-jobs";
 
 type SearchParams = Promise<{
   query?: string;
@@ -27,7 +28,7 @@ export default async function page({
 }) {
   const { query, status } = await searchParams;
 
-  const activeJobs = await getActiveJobs();
+  const activeJobs = await getTotalActiveJobs();
   const totalUsers = await getTotalUsers();
   const pendingSubmissions = await getPendingJobSubmissions();
   const totalPlatformEarnings = await getTotalPlatformEarnings();

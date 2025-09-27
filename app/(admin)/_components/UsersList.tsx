@@ -156,12 +156,6 @@ export function UsersList({
           )}
         </div>
       )}
-
-      {!hasNext && users.length > 0 && (
-        <div className="group hover:bg-accent/50 rounded-lg p-4 transition-colors items-center text-center text-muted-foreground text-sm">
-          All users loaded ({users.length} total)
-        </div>
-      )}
     </div>
   );
 }

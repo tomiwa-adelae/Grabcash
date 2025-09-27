@@ -208,18 +208,6 @@ export function DraftedJobsTable({
               </TableCell>
             </TableRow>
           )}
-
-          {/* End state */}
-          {!hasNext && jobs.length > 0 && (
-            <TableRow>
-              <TableCell
-                colSpan={5}
-                className="text-center py-4 text-sm text-muted-foreground"
-              >
-                All jobs loaded ({jobs.length} total)
-              </TableCell>
-            </TableRow>
-          )}
         </TableBody>
       </Table>
 

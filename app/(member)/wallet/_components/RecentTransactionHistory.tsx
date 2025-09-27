@@ -160,13 +160,6 @@ export const RecentTransactionHistory = ({
             )}
           </div>
         )}
-
-        {/* End state */}
-        {!hasNext && payouts.length > 0 && (
-          <div className="flex items-center text-xs justify-center space-x-2">
-            All payouts loaded ({payouts.length} total)
-          </div>
-        )}
       </div>
     </div>
   );

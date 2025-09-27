@@ -185,13 +185,6 @@ export function FollowingsModal({
                 </Button>
               </div>
             )}
-
-            {!hasNext && followings.length > 0 && (
-              <div className="text-center py-4 text-sm text-muted-foreground">
-                You've reached the end
-              </div>
-            )}
-
             {followings.length === 0 && !isLoading && (
               <div className="text-center py-8 text-muted-foreground">
                 No followings found

@@ -156,12 +156,6 @@ export function MembersList({
           )}
         </div>
       )}
-
-      {!hasNext && members.length > 0 && (
-        <div className="group hover:bg-accent/50 rounded-lg p-4 transition-colors items-center text-center text-muted-foreground text-sm">
-          All members loaded ({members.length} total)
-        </div>
-      )}
     </div>
   );
 }
