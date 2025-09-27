@@ -31,7 +31,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
           Manage the all subscriptions on grabcash
         </p>
       </div>
-      {subscriptionData.subscriptions.length !== 0 && <SearchBar />}
+      <SearchBar />
       {subscriptionData.subscriptions.length !== 0 && (
         <SubscriptionsList
           initialSubscriptions={subscriptionData.subscriptions}

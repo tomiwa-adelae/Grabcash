@@ -109,7 +109,7 @@ export const RecentTransactionHistory = ({
       id="history"
     >
       <h3 className="mb-4 text-xl font-semibold">Transaction History</h3>
-      {payouts.length !== 0 && <SearchBar />}
+      <SearchBar />
       {payouts.length === 0 && (
         <EmptyState
           title="No history"

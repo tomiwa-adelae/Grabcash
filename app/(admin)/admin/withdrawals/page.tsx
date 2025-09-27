@@ -30,7 +30,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
           Here are all the withdrawals on the platform
         </p>
       </div>
-      {withdrawalsData.withdrawals.length !== 0 && <SearchBar />}
+      <SearchBar />
       {withdrawalsData.withdrawals.length !== 0 && (
         <WithdrawalsList
           initialWithdrawals={withdrawalsData.withdrawals}

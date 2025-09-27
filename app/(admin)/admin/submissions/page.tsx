@@ -29,7 +29,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
           Manage the all submissions on grabcash
         </p>
       </div>
-      {submissionData.submissions.length !== 0 && <SearchBar />}
+      <SearchBar />
       {submissionData.submissions.length !== 0 && (
         <AllSubmissionsList
           initialSubmissions={submissionData.submissions}

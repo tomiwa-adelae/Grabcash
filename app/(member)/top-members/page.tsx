@@ -25,7 +25,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
       <div>
         <PageHeader title="Our Top Members members" />
       </div>
-      {membersData.members.length !== 0 && <SearchBar />}
+      <SearchBar />
       {membersData.members.length !== 0 && (
         <MembersList
           initialMembers={membersData.members}

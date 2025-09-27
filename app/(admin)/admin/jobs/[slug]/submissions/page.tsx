@@ -51,7 +51,7 @@ const page = async ({
           pending={pendingApplicantsCount}
         />
       )}
-      {applicants.applicantsData.length !== 0 && <SearchBar />}
+      <SearchBar />
       {applicants.applicantsData.length !== 0 && (
         <>
           <SubmissionsTable

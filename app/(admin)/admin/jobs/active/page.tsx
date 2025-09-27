@@ -30,7 +30,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
           Manage the active jobs on grabcash
         </p>
       </div>
-      {jobData.jobs.length !== 0 && <SearchBar />}
+      <SearchBar />
       {jobData.jobs.length !== 0 && (
         <ActiveJobsList
           initialJobs={jobData.jobs}

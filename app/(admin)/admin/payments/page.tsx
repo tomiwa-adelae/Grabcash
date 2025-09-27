@@ -88,7 +88,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
           <PaymentCard key={stat.title} stat={stat} index={index} />
         ))}
       </div>
-      {paymentData.payments.length !== 0 && <SearchBar />}
+      <SearchBar />
       <PaymentsList
         initialPayments={paymentData.payments}
         initialHasNext={paymentData.pagination.hasNext}

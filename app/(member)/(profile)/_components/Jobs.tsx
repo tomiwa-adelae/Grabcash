@@ -19,7 +19,7 @@ export const Jobs = async ({ query }: Props) => {
   return (
     <div className="bg-muted py-8 rounded-lg">
       <div className="container space-y-6">
-        {jobsData.jobs.length !== 0 && <SearchBar />}
+        <SearchBar />
         {jobsData.jobs.length !== 0 && (
           <>
             <JobsTable

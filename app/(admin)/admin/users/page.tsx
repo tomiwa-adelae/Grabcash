@@ -28,7 +28,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
           Manage the users on grabcash
         </p>
       </div>
-      {usersData.users.length !== 0 && <SearchBar />}
+      <SearchBar />
       {usersData.users.length !== 0 && (
         <UsersList
           initialUsers={usersData.users}

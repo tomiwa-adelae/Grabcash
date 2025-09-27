@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -133,7 +132,7 @@ export function FollowingsModal({
           </DialogTitle>
           <div className="py-2 border-b">
             <div className="container">
-              {followings.length !== 0 && <SearchBar />}
+              <SearchBar />
             </div>
           </div>
           <div
