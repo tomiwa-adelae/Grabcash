@@ -41,7 +41,7 @@ export const SearchBar = ({ placeholder = "Search...", search }: Props) => {
       setIsLoading(true);
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 1000);
+      }, 3000);
       return () => clearTimeout(timer);
     }
     setIsLoading(false);
