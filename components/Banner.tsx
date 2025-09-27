@@ -16,7 +16,7 @@ export function Banner({ text, variant, icon }: Props) {
         variant === "destructive" && "bg-destructive/10 text-destructive",
         variant === "primary" && "bg-primary/5 text-primary",
         variant === "pending" && "bg-yellow-500/10 text-yellow-500",
-        variant === "default" && "bg-secondary"
+        variant === "default" && "bg-secondary text-white dark:text-white"
       )}
     >
       <div className="flex grow gap-3 md:items-center">

@@ -124,7 +124,7 @@ export function JobsTable({
   }, [query, initialJobs, initialHasNext]);
 
   return (
-    <div className="[&>div]:max-h-screen hidden sm:block">
+    <div className=" hidden sm:block">
       <Table className="[&_td]:border-border [&_th]:border-border border-separate border-spacing-0 [&_tfoot_td]:border-t [&_th]:border-b [&_tr]:border-none [&_tr:not(:last-child)_td]:border-b">
         <TableHeader className="bg-background/90 sticky top-0 z-10 backdrop-blur-xs">
           <TableRow className="hover:bg-transparent">

@@ -137,7 +137,7 @@ export function SubmissionsTable({
 
   return (
     <>
-      <div className="[&>div]:max-h-screen hidden sm:block">
+      <div className=" hidden sm:block">
         <div
           ref={tableContainerRef}
           className="overflow-auto max-h-96"
@@ -187,10 +187,10 @@ export function SubmissionsTable({
                         applicant.status === "PENDING"
                           ? "pending"
                           : applicant.status === "APPROVED"
-                            ? "default"
-                            : applicant.status === "REJECTED"
-                              ? "destructive"
-                              : "default"
+                          ? "default"
+                          : applicant.status === "REJECTED"
+                          ? "destructive"
+                          : "default"
                       }
                     >
                       {formattedStatus[applicant.status]}
