@@ -1,6 +1,7 @@
 import {
   IconAccessible,
   IconActivityHeartbeat,
+  IconArrowsMinimize,
   IconBasketMinus,
   IconBriefcase,
   IconClipboardText,
@@ -994,9 +995,9 @@ export const adminNavLinks = [
     ],
   },
   {
-    title: "Settings",
-    slug: "/admin/settings",
-    icon: IconSettings,
+    title: "Exit",
+    slug: "/available-jobs",
+    icon: IconArrowsMinimize,
   },
 ];
 

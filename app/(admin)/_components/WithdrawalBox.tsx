@@ -47,7 +47,7 @@ export const WithdrawalBox = ({
 
         <div className="flex-1 flex items-start justify-between">
           <div>
-            <h3 className="truncate text-sm font-medium hover:underline hover:text-primary">
+            <h3 className="line-clamp-1 text-sm font-medium hover:underline hover:text-primary">
               {name} withdrawal
             </h3>
             <p className="text-xs text-muted-foreground">
@@ -67,8 +67,8 @@ export const WithdrawalBox = ({
             status === "PAID"
               ? "default"
               : status === "PENDING"
-                ? "pending"
-                : "destructive"
+              ? "pending"
+              : "destructive"
           }
         >
           {formattedStatus[status]}

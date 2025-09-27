@@ -138,6 +138,7 @@ export function SubmittedJobsTable({
           {jobs.map((job, index) => (
             <TableRow
               onClick={() => router.push(`/submitted-jobs/${job.id}`)}
+              className="cursor-pointer"
               key={`${job.id}-${index}`}
             >
               <TableCell className="font-medium">

@@ -221,8 +221,10 @@ export const MobileNavUser = ({ session }: Props) => {
               </AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{session?.user.name}</span>
-              <span className="text-muted-foreground truncate text-xs">
+              <span className="line-clamp-1 font-medium">
+                {session?.user.name}
+              </span>
+              <span className="text-muted-foreground line-clamp-1 text-xs">
                 {session?.user.email}
               </span>
             </div>
@@ -231,10 +233,10 @@ export const MobileNavUser = ({ session }: Props) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="min-w-64">
           <DropdownMenuLabel className="flex min-w-0 flex-col">
-            <span className="text-foreground truncate text-sm font-medium">
+            <span className="text-foreground line-clamp-1 text-sm font-medium">
               {session.user.name}
             </span>
-            <span className="text-muted-foreground truncate text-xs font-normal">
+            <span className="text-muted-foreground line-clamp-1 text-xs font-normal">
               {session.user.email}
             </span>
           </DropdownMenuLabel>

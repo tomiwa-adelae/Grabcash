@@ -74,7 +74,7 @@ export const AdminSidebar = memo(() => {
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <Logo size="text-xl" />
-                  <span className="truncate text-xs">Admin Panel</span>
+                  <span className="line-clamp-1 text-xs">Admin Panel</span>
                 </div>
               </Link>
             </SidebarMenuButton>

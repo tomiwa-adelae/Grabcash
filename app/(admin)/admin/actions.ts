@@ -319,6 +319,8 @@ export const verifyPayment = async (id: string): Promise<ApiResponse> => {
       data: { paymentVerified: true },
     });
 
+    revalidatePath("/");
+
     return { status: "success", message: "Payment successfully verified" };
   } catch (error) {
     return { status: "error", message: "Failed to mark payment as paid" };

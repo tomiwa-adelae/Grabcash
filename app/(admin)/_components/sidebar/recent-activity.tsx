@@ -124,7 +124,7 @@ export const RecentActivity = ({
                   <div className="text-sm font-medium line-clamp-2">
                     {activity.action}
                   </div>
-                  <div className="text-muted-foreground truncate text-xs">
+                  <div className="text-muted-foreground line-clamp-1 text-xs">
                     {activity.user}
                   </div>
                   <div className="text-muted-foreground text-xs">

@@ -70,7 +70,7 @@ export const JobBox = ({
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 href={`/admin/jobs/${slug}`}
-                className="truncate text-sm font-medium hover:underline hover:text-primary"
+                className="line-clamp-1 text-sm font-medium hover:underline hover:text-primary"
               >
                 {title} - <NairaIcon />
                 {formatMoneyInput(reward)}
@@ -90,7 +90,7 @@ export const JobBox = ({
               )}
             </div>
             <div className="text-muted-foreground mt-1 flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:gap-4">
-              <div className="flex items-center gap-1 truncate hover:underline hover:text-primary">
+              <div className="flex items-center gap-1 line-clamp-1 hover:underline hover:text-primary">
                 <Link href={`/admin/${username}`}>@{username}</Link>
               </div>
             </div>

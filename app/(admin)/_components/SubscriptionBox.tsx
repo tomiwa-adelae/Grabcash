@@ -66,7 +66,7 @@ export const SubscriptionBox = ({
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 href={`/admin/${username}`}
-                className="truncate text-sm font-medium hover:underline hover:text-primary"
+                className="line-clamp-1 text-sm font-medium hover:underline hover:text-primary"
               >
                 {name} - <NairaIcon />
                 {formatMoneyInput(amount)}
@@ -76,15 +76,15 @@ export const SubscriptionBox = ({
                   status === "ACTIVE"
                     ? "default"
                     : status === "EXPIRED"
-                      ? "destructive"
-                      : "pending"
+                    ? "destructive"
+                    : "pending"
                 }
               >
                 {formattedStatus[status]}
               </Badge>
             </div>
             <div className="text-muted-foreground mt-1 flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:gap-4">
-              <div className="flex items-center gap-1 truncate">
+              <div className="flex items-center gap-1 line-clamp-1">
                 {formattedStatus[billingCycle]}
               </div>
             </div>

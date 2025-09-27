@@ -71,7 +71,7 @@ export const PaymentBox = ({
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 href={`/admin/jobs/${slug}`}
-                className="truncate text-sm font-medium hover:underline hover:text-primary"
+                className="line-clamp-1 text-sm font-medium hover:underline hover:text-primary"
               >
                 {title} - <NairaIcon />
                 {formatMoneyInput(amount)}
@@ -81,15 +81,15 @@ export const PaymentBox = ({
                   status === "SUCCESS"
                     ? "default"
                     : status === "FAILED"
-                      ? "destructive"
-                      : "pending"
+                    ? "destructive"
+                    : "pending"
                 }
               >
                 {formattedStatus[status]}
               </Badge>
             </div>
             <div className="text-muted-foreground mt-1 flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:gap-4">
-              <div className="flex items-center gap-1 truncate">
+              <div className="flex items-center gap-1 line-clamp-1">
                 <Link
                   href={`/admin/${username}`}
                   className="hover:underline hover:text-primary"

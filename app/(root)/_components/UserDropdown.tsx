@@ -53,10 +53,10 @@ export default function UserDropdown({ image, name, email, username }: Props) {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-w-64">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
-          <span className="text-foreground truncate text-sm font-medium">
+          <span className="text-foreground line-clamp-1 text-sm font-medium">
             {name}
           </span>
-          <span className="text-muted-foreground truncate text-xs font-normal">
+          <span className="text-muted-foreground line-clamp-1 text-xs font-normal">
             {email}
           </span>
         </DropdownMenuLabel>

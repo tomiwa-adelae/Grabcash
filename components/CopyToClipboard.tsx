@@ -8,9 +8,9 @@ export const CopyToClipboard = ({ text }: { text: string }) => {
   const copyTextToClipboard = async ({ text }: { text: any }) => {
     try {
       await navigator.clipboard.writeText(text);
-      return toast(`Copied!`);
+      return toast.success(`Copied!`);
     } catch (err) {
-      return toast("Failed to copy!");
+      return toast.error("Failed to copy!");
     }
   };
   return (

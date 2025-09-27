@@ -138,7 +138,11 @@ export function JobsTable({
         </TableHeader>
         <TableBody>
           {jobs.map((job, index) => (
-            <TableRow className="cursor-pointer" key={`${job.id}-${index}`}>
+            <TableRow
+              onClick={() => router.push(`/jobs/${job.slug}`)}
+              className="cursor-pointer"
+              key={`${job.id}-${index}`}
+            >
               <TableCell className="font-medium">
                 <Link
                   href={`/available-jobs/${job.slug}`}

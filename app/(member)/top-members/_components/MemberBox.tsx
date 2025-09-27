@@ -69,7 +69,7 @@ export const MemberBox = ({
         <div className="flex-1 flex items-start justify-between">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h4 className="truncate text-sm font-medium">{name}</h4>
+              <h4 className="line-clamp-1 text-sm font-medium">{name}</h4>
               <span
                 className={`rounded-full px-2 py-1 text-xs font-medium ${
                   isAdmin
@@ -83,7 +83,7 @@ export const MemberBox = ({
             <div className="text-muted-foreground mt-1 flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:gap-4">
               <div className="flex items-center gap-1">
                 <IconMail className="h-3 w-3" />
-                <span className="truncate">{email}</span>
+                <span className="line-clamp-1">{email}</span>
               </div>
               <div className="flex items-center gap-1">
                 <IconMapPin className="h-3 w-3" />
