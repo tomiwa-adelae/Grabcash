@@ -3,6 +3,11 @@ import { Showcase } from "../_components/Showcase";
 import { LatestBlogs } from "./_components/LatestBlogs";
 import { PopularBlogs } from "./_components/PopularBlogs";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Blog - Grabcash",
+};
+
 const page = () => {
   return (
     <div>

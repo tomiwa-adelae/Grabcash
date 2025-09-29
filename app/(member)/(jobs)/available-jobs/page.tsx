@@ -7,6 +7,11 @@ import { AvailableJobsCard } from "./_components/AvailableJobsCard";
 import { DEFAULT_LIMIT } from "@/constants";
 import { EmptyState } from "@/components/EmptyState";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Available jobs - Grabcash",
+};
+
 type SearchParams = Promise<{
   query?: string;
 }>;

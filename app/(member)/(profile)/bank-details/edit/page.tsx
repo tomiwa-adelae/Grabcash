@@ -1,6 +1,11 @@
 import { getUserDetails } from "@/app/data/user/get-user-details";
 import { EditBankInformationForm } from "../../_components/EditBankInformationForm";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Bank details - Grabcash",
+};
+
 const page = async () => {
   const user = await getUserDetails();
 

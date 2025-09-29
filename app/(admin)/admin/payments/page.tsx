@@ -12,6 +12,11 @@ import { getTotalWithdrawals } from "@/app/data/admin/job/payment/get-total-with
 import { getAllPayments } from "@/app/data/admin/job/payment/get-all-payments";
 import { getTotalTransactionsMade } from "@/app/data/admin/job/payment/get-total-transactions-made";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Payments - Grabcash",
+};
+
 type SearchParams = Promise<{
   query?: string;
   status?: string;

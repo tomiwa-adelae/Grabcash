@@ -6,6 +6,11 @@ import { getActiveJobs } from "@/app/data/admin/job/get-active-jobs";
 import { ActiveJobsList } from "@/app/(admin)/_components/ActiveJobsList";
 import { EmptyState } from "@/components/EmptyState";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Active jobs - Grabcash",
+};
+
 type SearchParams = Promise<{
   query?: string;
   status?: string;

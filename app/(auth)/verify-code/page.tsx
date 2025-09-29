@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { VerifyCodeForm } from "./_components/VerifyCodeForm";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Verify code - Grabcash",
+};
+
 const page = async ({ searchParams }: { searchParams: any }) => {
   const { email } = await searchParams;
   return (

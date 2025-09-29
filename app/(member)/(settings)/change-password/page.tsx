@@ -2,6 +2,11 @@ import React from "react";
 import { ChangePasswordForm } from "../_components/ChangePasswordForm";
 import { getUserDetails } from "@/app/data/user/get-user-details";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Change password - Grabcash",
+};
+
 const page = async () => {
   const user = await getUserDetails();
   return (

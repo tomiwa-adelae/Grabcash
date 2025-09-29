@@ -6,6 +6,11 @@ import { WithdrawalsList } from "../../_components/WithdrawalsList";
 import { getAllWithdrawals } from "@/app/data/admin/job/payment/get-all-withdrawals";
 import { EmptyState } from "@/components/EmptyState";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "All withdrawals - Grabcash",
+};
+
 type SearchParams = Promise<{
   query?: string;
   status?: string;

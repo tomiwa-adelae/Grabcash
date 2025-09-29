@@ -9,6 +9,11 @@ import { PrivacySettings } from "../_components/PrivacySettings";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Settings - Grabcash",
+};
+
 const page = async () => {
   const sessions = await auth.api.listSessions({ headers: await headers() });
 

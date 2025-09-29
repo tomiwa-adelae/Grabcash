@@ -2,6 +2,11 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Confetti } from "@/components/Confetti";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Success - Grabcash",
+};
+
 const page = () => {
   return (
     <div className="container">

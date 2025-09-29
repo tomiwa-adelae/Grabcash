@@ -7,6 +7,11 @@ import { getMySubmittedJobs } from "@/app/data/user/job/submitted/get-my-submitt
 import { EmptyState } from "@/components/EmptyState";
 import { DEFAULT_LIMIT } from "@/constants";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Submitted jobs - Grabcash",
+};
+
 type SearchParams = Promise<{
   query?: string;
 }>;

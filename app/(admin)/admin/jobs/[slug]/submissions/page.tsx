@@ -13,6 +13,24 @@ import {
   getTotalApplicantsCount,
 } from "@/app/data/admin/job/submission/get-job-applicants";
 import { getJobDetails } from "@/app/data/admin/job/get-job-details";
+import { Metadata, ResolvingMetadata } from "next";
+
+export async function generateMetadata(
+  { params }: any,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { slug } = await params;
+  try {
+    const details = await getJobDetails(slug);
+    return {
+      title: `${details.title} submissions - Grabcash`,
+    };
+  } catch (error) {
+    return {
+      title: "Grabcash",
+    };
+  }
+}
 
 type Params = Promise<{
   slug: string;

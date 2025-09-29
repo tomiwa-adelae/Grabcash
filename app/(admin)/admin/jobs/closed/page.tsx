@@ -5,6 +5,11 @@ import { ClosedJobsList } from "@/app/(admin)/_components/ClosedJobsList";
 import { getClosedJobs } from "@/app/data/admin/job/get-closed-jobs";
 import { EmptyState } from "@/components/EmptyState";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Closed jobs - Grabcash",
+};
+
 type SearchParams = Promise<{
   query?: string;
   status?: string;

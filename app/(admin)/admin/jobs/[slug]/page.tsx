@@ -10,6 +10,24 @@ import { FileUser, Pen } from "lucide-react";
 import { getJobDetails } from "@/app/data/admin/job/get-job-details";
 import { Banner } from "@/components/Banner";
 import { IconCreditCard, IconEyeClosed } from "@tabler/icons-react";
+import { Metadata, ResolvingMetadata } from "next";
+
+export async function generateMetadata(
+  { params }: any,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { slug } = await params;
+  try {
+    const details = await getJobDetails(slug);
+    return {
+      title: `${details.title} - Grabcash`,
+    };
+  } catch (error) {
+    return {
+      title: "Grabcash",
+    };
+  }
+}
 
 type Params = Promise<{
   slug: string;

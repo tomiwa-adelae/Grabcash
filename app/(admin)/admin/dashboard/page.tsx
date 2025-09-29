@@ -16,6 +16,11 @@ import { getTopMembers } from "@/app/data/user/get-top-members";
 import { TopMembersList } from "../../_components/TopMembersList";
 import { getTotalActiveJobs } from "@/app/data/admin/job/get-total-active-jobs";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Dashboard - Grabcash",
+};
+
 type SearchParams = Promise<{
   query?: string;
   status?: string;

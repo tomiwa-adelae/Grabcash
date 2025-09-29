@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { ResetPasswordForm } from "./_components/ResetPasswordForm";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Reset password - Grabcash",
+};
+
 const page = async ({ searchParams }: { searchParams: any }) => {
   const { email, token } = await searchParams;
   return (

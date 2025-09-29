@@ -9,6 +9,11 @@ const lobster = Lobster_Two({
   weight: ["400", "700"],
 });
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Partner Agreement - Grabcash",
+};
+
 const page = () => {
   return (
     <div>

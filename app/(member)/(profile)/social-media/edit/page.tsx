@@ -1,6 +1,11 @@
 import { getUserDetails } from "@/app/data/user/get-user-details";
 import { EditSocialMediaForm } from "../../_components/EditSocialMediaForm";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Social media - Grabcash",
+};
+
 const page = async () => {
   const user = await getUserDetails();
 

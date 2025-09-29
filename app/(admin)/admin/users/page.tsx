@@ -6,6 +6,11 @@ import { getTotalUsers } from "@/app/data/admin/user/get-total-users";
 import { DEFAULT_LIMIT } from "@/constants";
 import { EmptyState } from "@/components/EmptyState";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "All users - Grabcash",
+};
+
 type SearchParams = Promise<{
   query?: string;
 }>;

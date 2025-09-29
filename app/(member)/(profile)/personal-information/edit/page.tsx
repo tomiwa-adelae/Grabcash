@@ -1,6 +1,11 @@
 import { getUserDetails } from "@/app/data/user/get-user-details";
 import { EditPersonalInformationForm } from "../../_components/EditPersonalInformationForm";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Persona information - Grabcash",
+};
+
 const page = async () => {
   const user = await getUserDetails();
 

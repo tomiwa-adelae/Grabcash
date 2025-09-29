@@ -5,6 +5,11 @@ import { DEFAULT_LIMIT } from "@/constants";
 import { AllSubmissionsList } from "../../_components/AllSubmissionsList";
 import { EmptyState } from "@/components/EmptyState";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "All submissions - Grabcash",
+};
+
 type SearchParams = Promise<{
   query?: string;
   status?: string;

@@ -7,6 +7,11 @@ import { getSubscriptions } from "@/app/data/admin/subscription/get-subscription
 import { SubscriptionsList } from "./_components/SubscriptionsList";
 import { EmptyState } from "@/components/EmptyState";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "All subscriptions - Grabcash",
+};
+
 type SearchParams = Promise<{
   query?: string;
   status?: string;

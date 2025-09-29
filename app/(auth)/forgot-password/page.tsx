@@ -2,6 +2,11 @@ import Link from "next/link";
 import { Footer } from "../_components/Footer";
 import { ForgotPasswordForm } from "./_components/ForgotPasswordForm";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Forgot password - Grabcash",
+};
+
 const page = () => {
   return (
     <div className="container">

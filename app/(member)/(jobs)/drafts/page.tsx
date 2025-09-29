@@ -7,6 +7,11 @@ import { EmptyState } from "@/components/EmptyState";
 import { DraftedJobsCard } from "./_components/DraftedJobsCard";
 import { SearchBar } from "../../_components/SearchBar";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "My drafts - Grabcash",
+};
+
 type SearchParams = Promise<{
   query?: string;
 }>;

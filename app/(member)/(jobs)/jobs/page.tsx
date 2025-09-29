@@ -7,6 +7,11 @@ import { getMyJobs } from "@/app/data/user/job/my-job/get-my-jobs";
 import { DEFAULT_LIMIT } from "@/constants";
 import { EmptyState } from "@/components/EmptyState";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "My jobs - Grabcash",
+};
+
 type SearchParams = Promise<{
   query?: string;
 }>;

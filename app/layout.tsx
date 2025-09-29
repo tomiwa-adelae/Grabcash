@@ -11,7 +11,9 @@ const dmsans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "grabcash",
+  title: "Grabcash – Earn Money Online with Simple Tasks",
+  description:
+    "Join Grabcash and get paid for completing small jobs online. Easy, flexible, and trusted way to earn extra income from anywhere.",
 };
 
 export default function RootLayout({

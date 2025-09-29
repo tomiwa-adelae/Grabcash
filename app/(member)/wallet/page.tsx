@@ -16,6 +16,13 @@ import { RecentTransactionHistory } from "./_components/RecentTransactionHistory
 import { getMyPayouts } from "@/app/data/user/wallet/get-my-payouts";
 import { DEFAULT_LIMIT } from "@/constants";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Wallet - Grabcash",
+  description:
+    "Cash out your Grabcash earnings quickly with secure payouts. Fast, reliable, and hassle-free withdrawals.",
+};
+
 type SearchParams = Promise<{
   query?: string;
 }>;

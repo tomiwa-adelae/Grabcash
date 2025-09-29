@@ -6,6 +6,11 @@ import { EmptyState } from "@/components/EmptyState";
 import { getTopMembers } from "@/app/data/user/get-top-members";
 import { MembersList } from "./_components/MembersList";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Top Members - Grabcash",
+};
+
 type SearchParams = Promise<{
   query?: string;
 }>;

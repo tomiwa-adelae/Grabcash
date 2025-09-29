@@ -3,7 +3,13 @@ import { PricingPlans } from "./_components/PricingPlans";
 import { getSubscriptionPlans } from "@/app/data/user/subscription/get-subscription-plans";
 import { PageGradient } from "@/components/PageGradient";
 import { redirect } from "next/navigation";
-import { toast } from "sonner";
+
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Grabcash Subscription Plans – Unlock Higher Earnings",
+  description:
+    "Upgrade your Grabcash account to access premium jobs, bigger rewards, and exclusive earning opportunities.",
+};
 
 const page = async () => {
   const user = await getUserDetails();

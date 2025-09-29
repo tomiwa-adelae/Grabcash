@@ -18,6 +18,24 @@ import { followers } from "@/app/data/follow/followers";
 import { followings } from "@/app/data/follow/followings";
 import { DEFAULT_LIMIT } from "@/constants";
 import { getMyJobs } from "@/app/data/user/job/my-job/get-my-jobs";
+import { Metadata, ResolvingMetadata } from "next";
+
+export async function generateMetadata(
+  { params }: any,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { username } = await params;
+  try {
+    const user = await getUserProfile(username);
+    return {
+      title: `${user.name} - Grabcash`,
+    };
+  } catch (error) {
+    return {
+      title: "Grabcash",
+    };
+  }
+}
 
 type Params = Promise<{
   username: string;

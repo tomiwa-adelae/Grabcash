@@ -1,6 +1,13 @@
 import { How } from "../_components/How";
 import { Showcase } from "../_components/Showcase";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "About Grabcash – Your Partner for Online Micro Jobs",
+  description:
+    "Grabcash connects people with businesses by offering simple tasks anyone can do. Learn more about our mission and impact.",
+};
+
 const page = () => {
   return (
     <div>

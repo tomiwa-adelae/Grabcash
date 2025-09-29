@@ -3,6 +3,11 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { Metadata } from "next";
+export const metadata: Metadata = {
+  title: "Verify email - Grabcash",
+};
+
 const page = async ({ searchParams }: { searchParams: any }) => {
   const session = await auth.api.getSession({
     headers: await headers(),
