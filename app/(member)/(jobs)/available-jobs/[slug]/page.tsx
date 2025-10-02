@@ -14,6 +14,24 @@ import { AlreadyAppliedBanner } from "@/components/AlreadyAppliedBanner";
 import { getUserDetails } from "@/app/data/user/get-user-details";
 import { Banner } from "@/components/Banner";
 import { IconMoodX, IconUserSquareRounded } from "@tabler/icons-react";
+import { Metadata, ResolvingMetadata } from "next";
+
+export async function generateMetadata(
+  { params }: any,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { slug } = await params;
+  try {
+    const job = await getJobDetails(slug);
+    return {
+      title: `${job.title} - Grabcash`,
+    };
+  } catch (error) {
+    return {
+      title: "Grabcash",
+    };
+  }
+}
 
 type Params = Promise<{
   slug: string;

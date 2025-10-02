@@ -32,6 +32,11 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { Lobster_Two } from "next/font/google";
 import { subjects } from "@/constants";
+import { useTransition } from "react";
+import { tryCatch } from "@/hooks/use-try-catch";
+import { contactUs } from "../actions";
+import { useConfetti } from "@/hooks/use-confetti";
+import { Loader } from "@/components/Loader";
 
 const lobster = Lobster_Two({
   subsets: ["latin"],
@@ -39,6 +44,9 @@ const lobster = Lobster_Two({
 });
 
 export function ContactForm() {
+  const [pending, startTransition] = useTransition();
+  const { triggerConfetti } = useConfetti();
+
   const form = useForm<ContactFormSchemaType>({
     resolver: zodResolver(contactFormSchema),
     defaultValues: {
@@ -50,12 +58,20 @@ export function ContactForm() {
   });
 
   function onSubmit(data: ContactFormSchemaType) {
-    toast("You submitted the following values", {
-      description: (
-        <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+    startTransition(async () => {
+      const { data: result, error } = await tryCatch(contactUs(data));
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      if (result.status === "success") {
+        toast.success(result.message);
+        triggerConfetti();
+      } else {
+        toast.error(result.message);
+      }
     });
   }
 
@@ -144,8 +160,13 @@ export function ContactForm() {
                 </FormItem>
               )}
             />
-            <Button className="w-full" size="md" type="submit">
-              Send message
+            <Button
+              className="w-full"
+              size="md"
+              type="submit"
+              disabled={pending}
+            >
+              {pending ? <Loader text="Sending..." /> : "Send message"}
             </Button>
           </form>
         </Form>

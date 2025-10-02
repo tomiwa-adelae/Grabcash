@@ -1,6 +1,7 @@
 "use server";
 
 import { logActivity } from "@/app/data/admin/activity/log-activity";
+import { getUserDetails } from "@/app/data/user/get-user-details";
 import { requireUser } from "@/app/data/user/require-user";
 import { ProSubscriptionEmail } from "@/emails/pro-subscription-email";
 import { prisma } from "@/lib/db";
@@ -29,6 +30,12 @@ export const activateSubscription = async ({
   const { user } = await requireUser();
 
   try {
+    const userDetails = await getUserDetails();
+    if (userDetails.status === "SUSPENDED")
+      return { status: "error", message: "Your account has been suspended" };
+    if (userDetails.status === "DELETED")
+      return { status: "error", message: "Your account has been deleted" };
+
     const plan = await prisma.subscriptionPlan.findUnique({
       where: { id: planId },
     });

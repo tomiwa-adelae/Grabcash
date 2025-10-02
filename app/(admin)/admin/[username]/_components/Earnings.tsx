@@ -3,12 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import { NairaIcon } from "@/components/NairaIcon";
+import { formatMoneyInput } from "@/lib/utils";
 
 interface Props {
   earnings: number;
+  lifeTimeEarnings: number;
 }
 
-export const Earnings = ({ earnings }: Props) => {
+export const Earnings = ({ earnings, lifeTimeEarnings }: Props) => {
   return (
     <Card className="gap-0">
       <CardHeader className="border-b">
@@ -19,15 +21,15 @@ export const Earnings = ({ earnings }: Props) => {
           Current balance:{" "}
           <span className="text-muted-foreground">
             <NairaIcon />
-            {earnings}
+            {formatMoneyInput(earnings)}
           </span>
         </p>
         <Separator />
         <p>
-          Total earned:{" "}
+          Lifetime earnings:{" "}
           <span className="text-muted-foreground">
             <NairaIcon />
-            20
+            {formatMoneyInput(lifeTimeEarnings)}
           </span>
         </p>
         <Separator />
@@ -35,7 +37,7 @@ export const Earnings = ({ earnings }: Props) => {
           Total withdrawn:{" "}
           <span className="text-muted-foreground">
             <NairaIcon />
-            20
+            {formatMoneyInput(lifeTimeEarnings - earnings)}
           </span>
         </p>
       </CardContent>

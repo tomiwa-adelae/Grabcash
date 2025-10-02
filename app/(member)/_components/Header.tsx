@@ -1,19 +1,14 @@
 "use client";
 import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
-import {
-  DEFAULT_PROFILE_PICTURE,
-  memberNavLinks,
-  rootNavLinks,
-} from "@/constants";
+import { DEFAULT_PROFILE_PICTURE, memberNavLinks } from "@/constants";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
@@ -21,9 +16,20 @@ import { Bell } from "lucide-react";
 import UserDropdown from "@/app/(root)/_components/UserDropdown";
 import { MobileNavbar } from "@/app/(root)/_components/MobileNavbar";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { GetUserDetailsType } from "@/app/data/user/get-user-details";
 
 export const Header = () => {
   const { data: session, isPending } = authClient.useSession();
+
+  const [user, setUser] = useState<GetUserDetailsType>();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const dbUser = await fetch("/api/admin").then((r) => r.json());
+      setUser(dbUser);
+    };
+    fetchUser();
+  }, [session]);
 
   return (
     <header className="fixed top-0 w-full bg-white dark:bg-black min-h-20 py-4 flex items-center justify-center shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1)] z-50">
@@ -87,12 +93,13 @@ export const Header = () => {
             <Bell />
           </Button> */}
           <div className="hidden md:flex items-center justify-end gap-2">
-            {!isPending && (
+            {!isPending && user && (
               <UserDropdown
                 image={session?.user.image || DEFAULT_PROFILE_PICTURE}
                 name={session?.user.name ?? "User"}
                 email={session?.user.email ?? ""}
                 username={session?.user.username ?? ""}
+                isAdmin={user.isAdmin}
               />
             )}
           </div>

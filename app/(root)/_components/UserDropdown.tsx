@@ -22,9 +22,16 @@ interface Props {
   email: string;
   image?: string;
   username: string;
+  isAdmin: boolean;
 }
 
-export default function UserDropdown({ image, name, email, username }: Props) {
+export default function UserDropdown({
+  image,
+  name,
+  email,
+  username,
+  isAdmin,
+}: Props) {
   const handleSignout = useSignout();
   const profilePicture = useConstructUrl(image);
 
@@ -62,6 +69,14 @@ export default function UserDropdown({ image, name, email, username }: Props) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          {isAdmin && (
+            <DropdownMenuItem className="cursor-pointer" asChild>
+              <Link href={`/admin/dashboard`}>
+                <User size={16} className="opacity-60" aria-hidden="true" />
+                <span>Admin Dashboard</span>
+              </Link>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem className="cursor-pointer" asChild>
             <Link href={`/${username}`}>
               <User size={16} className="opacity-60" aria-hidden="true" />

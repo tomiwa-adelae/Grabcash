@@ -44,7 +44,7 @@ export const GRABCASH_LOGO =
 
 export const CREDIT_TO_POST_NEW_JOB = 6;
 
-export const DEFAULT_LIMIT = 10;
+export const DEFAULT_LIMIT = 4;
 
 export const rootNavLinks = [
   {
@@ -239,7 +239,7 @@ export const subjects = [
   "General enquiry",
   "Technical support",
   "Payment support",
-];
+] as const;
 
 export const countries = [
   "Afghanistan",

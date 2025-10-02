@@ -64,6 +64,46 @@ export function LoginForm() {
         password: data.password,
         fetchOptions: {
           onSuccess: async (res) => {
+            const response = await fetch("/api/admin");
+
+            console.log(response);
+
+            if (response.status === 401) {
+              toast.error("You must be logged in");
+              router.push("/login");
+              return;
+            }
+
+            if (response.status === 403) {
+              toast.error("Your account is suspended");
+              router.push("/account-suspended");
+              return;
+            }
+
+            if (response.status === 410) {
+              toast.error("Your account has been deleted");
+              router.push("/account-deleted");
+              return;
+            }
+
+            let dbUser;
+            try {
+              dbUser = await response.json();
+            } catch (error) {
+              console.log(error);
+              toast.error("Invalid server response (not JSON)");
+              return;
+            }
+
+            if (dbUser.isAdmin) {
+              toast.success(`Welcome back Admin, ${dbUser.name}`);
+              return router.push(`/admin/dashboard`);
+            }
+
+            if (dbUser.status === "DELETED") {
+              return router.push(`/account-deleted`);
+            }
+
             if (res.data.user.emailVerified) {
               toast.success(`Welcome back, ${res.data.user.name}`);
               router.push(`/available-jobs`);

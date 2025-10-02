@@ -9,7 +9,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -31,7 +30,6 @@ import {
   Settings,
   Moon,
   Sun,
-  User,
   ChevronRight,
 } from "lucide-react";
 import { Logo } from "@/components/Logo";
@@ -44,19 +42,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
-
-const menuItems = [
-  { title: "Dashboard", icon: LayoutDashboard, href: "#dashboard" },
-  { title: "Analytics", icon: BarChart3, href: "#analytics" },
-  { title: "Users", icon: Users, href: "#users" },
-  { title: "Content", icon: FileText, href: "#content" },
-  { title: "Activity", icon: Activity, href: "#activity" },
-  { title: "Database", icon: Database, href: "#database" },
-  { title: "Security", icon: Shield, href: "#security" },
-  { title: "Performance", icon: Zap, href: "#performance" },
-  { title: "Notifications", icon: Bell, href: "#notifications" },
-  { title: "Settings", icon: Settings, href: "#settings" },
-];
 
 export const AdminSidebar = memo(() => {
   const { theme, setTheme } = useTheme();

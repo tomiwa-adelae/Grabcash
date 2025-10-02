@@ -1,5 +1,5 @@
 import { ShareButton } from "@/components/ShareButton";
-import { formatDate, formattedStatus } from "@/lib/utils";
+import { cn, formatDate, formattedStatus } from "@/lib/utils";
 import { env } from "@/lib/env";
 import { followers } from "@/app/data/follow/followers";
 import { followings } from "@/app/data/follow/followings";
@@ -11,7 +11,31 @@ import { getUserProfile } from "@/app/data/admin/user/get-user-profile";
 import { QuickActions } from "./_components/QuickActions";
 import { Earnings } from "./_components/Earnings";
 import { ProfileTabs } from "./_components/ProfileTabs";
-import { Transactions } from "./_components/Transactions";
+import { Metadata, ResolvingMetadata } from "next";
+import { getUserSubscriptions } from "@/app/data/admin/subscription/get-user-subscriptions";
+import { SubscriptionsList } from "../subscriptions/_components/SubscriptionsList";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RecentTransactionHistory } from "@/app/(member)/wallet/_components/RecentTransactionHistory";
+import { getUserPayouts } from "@/app/data/admin/user/get-user-payouts";
+import { Banner } from "@/components/Banner";
+import { IconTrash } from "@tabler/icons-react";
+
+export async function generateMetadata(
+  { params }: any,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { username } = await params;
+  try {
+    const user = await getUserProfile(username);
+    return {
+      title: `${user.name} - Grabcash`,
+    };
+  } catch (error) {
+    return {
+      title: "Grabcash",
+    };
+  }
+}
 
 type Params = Promise<{
   username: string;
@@ -28,6 +52,20 @@ const page = async ({
   const { query } = await searchParams;
 
   const user = await getUserProfile(username);
+
+  const subscriptionData = await getUserSubscriptions({
+    query,
+    userId: user.id,
+    page: 1,
+    limit: DEFAULT_LIMIT, // Back to 10 for production, or keep at 2 for testing
+  });
+
+  const payoutsData = await getUserPayouts({
+    query,
+    page: 1,
+    limit: DEFAULT_LIMIT, // Back to 10 for production, or keep at 2 for testing
+    userId: user.id,
+  });
 
   // Updated to get pagination data
   const userFollowersData = await followers({
@@ -47,6 +85,11 @@ const page = async ({
 
   return (
     <div className="space-y-6">
+      <Banner
+        icon={IconTrash}
+        text="Account already deleted"
+        variant="destructive"
+      />
       <ProfilePicture myProfile={true} image={user.image} name={user.name} />
       <div className="flex flex-col items-center justify-center text-center space-y-4 w-full">
         <div>
@@ -90,16 +133,51 @@ const page = async ({
           </p>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div
+        className={cn(
+          "grid grid-cols-1 gap-4",
+          user.status !== "DELETED" && "md:grid-cols-2"
+        )}
+      >
         <div>
-          <Earnings earnings={user.earnings} />
+          <Earnings
+            earnings={user.earnings}
+            lifeTimeEarnings={user.lifeTimeEarnings}
+          />
         </div>
-        <div>
-          <QuickActions />
-        </div>
+        {user.status !== "DELETED" && (
+          <div>
+            <QuickActions
+              status={user.status}
+              id={user.id}
+              isAdmin={user.isAdmin}
+              name={user.name}
+              image={user.image}
+              username={user.username}
+            />
+          </div>
+        )}
       </div>
       <ProfileTabs jobsPosted={user.jobs} applications={user.applicants} />
-      <Transactions />
+      <Card className="gap-0">
+        <CardHeader className="border-b">
+          <CardTitle>Subscriptions</CardTitle>
+        </CardHeader>
+        <CardContent className="mt-3 space-y-4 text-sm font-medium">
+          <SubscriptionsList
+            initialSubscriptions={subscriptionData.subscriptions}
+            initialHasNext={subscriptionData.pagination.hasNext}
+            initialTotal={subscriptionData.pagination.total}
+            query={query}
+          />
+        </CardContent>
+      </Card>
+      <RecentTransactionHistory
+        initialPayouts={payoutsData.payouts}
+        initialHasNext={payoutsData.pagination.hasNext}
+        initialTotal={payoutsData.pagination.total}
+        query={query}
+      />
     </div>
   );
 };

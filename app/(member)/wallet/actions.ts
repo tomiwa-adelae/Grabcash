@@ -1,14 +1,22 @@
 "use server";
 
 import { logActivity } from "@/app/data/admin/activity/log-activity";
+import { getUserDetails } from "@/app/data/user/get-user-details";
 import { requireUser } from "@/app/data/user/require-user";
 import { DEFAULT_MINIMUM_PAYOUT, DEFAULT_WITHDRAWAL_FEE } from "@/constants";
+import { PayoutSuccessful } from "@/emails/payout.successful";
 import { prisma } from "@/lib/db";
 import { env } from "@/lib/env";
 import { ApiResponse } from "@/lib/types";
 import { formatMoneyInput } from "@/lib/utils";
 import axios from "axios";
 import { revalidatePath } from "next/cache";
+
+import Mailjet from "node-mailjet";
+const mailjet = Mailjet.apiConnect(
+  env.MAILJET_API_PUBLIC_KEY,
+  env.MAILJET_API_PRIVATE_KEY
+);
 
 export const initiatePayout = async ({
   amount,
@@ -18,6 +26,13 @@ export const initiatePayout = async ({
   const session = await requireUser();
 
   try {
+    const userDetails = await getUserDetails();
+    if (userDetails.status === "SUSPENDED")
+      return { status: "error", message: "Your account has been suspended" };
+
+    if (userDetails.status === "DELETED")
+      return { status: "error", message: "Your account has been deleted" };
+
     const user = await prisma.user.findUnique({
       where: {
         id: session.user.id,
@@ -25,6 +40,7 @@ export const initiatePayout = async ({
       select: {
         earnings: true,
         name: true,
+        email: true,
         accountNumber: true,
         bankCode: true,
         bankName: true,
@@ -102,7 +118,7 @@ export const initiatePayout = async ({
       //   {
       //     source: "balance",
       //     reason: `Payout withdrawal for ${user.name}`,
-      //     amount: Math.floor(payoutAmount * 100), // convert to kobo
+      //     amount: Math.floor(amount * 100), // convert to kobo
       //     recipient: recipientCode,
       //     reference: transferReference,
       //   },
@@ -126,7 +142,7 @@ export const initiatePayout = async ({
         where: { id: session.user.id },
         data: {
           earnings: {
-            decrement: payoutAmount,
+            decrement: amount + withdrawalFee,
           },
         },
       });
@@ -160,10 +176,30 @@ export const initiatePayout = async ({
         },
       });
 
+      await mailjet.post("send", { version: "v3.1" }).request({
+        Messages: [
+          {
+            From: {
+              Email: env.SENDER_EMAIL_ADDRESS,
+              Name: "grabcash",
+            },
+            To: [{ Email: user.email, Name: user.name }],
+            Subject: `Your Grabcash payout was successful`,
+            HTMLPart: PayoutSuccessful({
+              amount: formatMoneyInput(amount),
+              bankName: user.bankName,
+              accountNumber: user.accountNumber,
+              date: payout.createdAt,
+              name: user.name,
+            }),
+          },
+        ],
+      });
+
       // Log the activity
       await logActivity({
         type: "PAYOUT_COMPLETED",
-        description: `${user.name} withdrew ₦${formatMoneyInput(payoutAmount)}`,
+        description: `${user.name} withdrew ₦${formatMoneyInput(amount)}`,
         userId: user.id,
         payoutId: payout.id,
         metadata: {

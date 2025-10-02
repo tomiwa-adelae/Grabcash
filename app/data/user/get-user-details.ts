@@ -1,7 +1,7 @@
 import "server-only";
 import { requireUser } from "./require-user";
 import { prisma } from "@/lib/db";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export const getUserDetails = async (username?: string) => {
   const session = await requireUser();
@@ -21,6 +21,7 @@ export const getUserDetails = async (username?: string) => {
       bankName: true,
       bio: true,
       image: true,
+      status: true,
       dob: true,
       identificationType: true,
       identificationNumber: true,
@@ -61,6 +62,14 @@ export const getUserDetails = async (username?: string) => {
   });
 
   if (!user) return notFound();
+
+  if (user.status === "SUSPENDED") {
+    return redirect("/account-suspended");
+  }
+
+  if (user.status === "DELETED") {
+    return redirect("/account-deleted");
+  }
 
   return user;
 };

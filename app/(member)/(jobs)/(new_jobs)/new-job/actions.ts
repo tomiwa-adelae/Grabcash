@@ -1,6 +1,7 @@
 "use server";
 
 import { logActivity } from "@/app/data/admin/activity/log-activity";
+import { getUserDetails } from "@/app/data/user/get-user-details";
 import { requireUser } from "@/app/data/user/require-user";
 import { requireSubscription } from "@/app/data/user/subscription/require-subscription";
 import { DEFAULT_COMMISSION } from "@/constants";
@@ -26,6 +27,12 @@ export const createJob = async (data: NewJobFormSchemaType) => {
   await requireSubscription();
 
   try {
+    const userDetails = await getUserDetails();
+    if (userDetails.status === "SUSPENDED")
+      return { status: "error", message: "Your account has been suspended" };
+    if (userDetails.status === "DELETED")
+      return { status: "error", message: "Your account has been deleted" };
+
     const validation = newJobFormSchema.safeParse(data);
 
     if (!validation.success)
@@ -91,6 +98,12 @@ export const saveDraft = async (
   await requireSubscription();
 
   try {
+    const userDetails = await getUserDetails();
+    if (userDetails.status === "SUSPENDED")
+      return { status: "error", message: "Your account has been suspended" };
+    if (userDetails.status === "DELETED")
+      return { status: "error", message: "Your account has been deleted" };
+
     if (!data.title) return { status: "error", message: "Please enter title" };
 
     const slug = slugify(data.title);
@@ -161,6 +174,12 @@ export const verifyJobPayment = async ({
   const { user } = await requireUser();
   await requireSubscription();
   try {
+    const userDetails = await getUserDetails();
+    if (userDetails.status === "SUSPENDED")
+      return { status: "error", message: "Your account has been suspended" };
+    if (userDetails.status === "DELETED")
+      return { status: "error", message: "Your account has been deleted" };
+
     if (!id) return { status: "error", message: "Oops! An error occurred!" };
 
     const job = await prisma.job.update({
@@ -192,14 +211,14 @@ export const verifyJobPayment = async ({
           status === "successful"
             ? "SUCCESS"
             : status === "approved"
-              ? "SUCCESS"
-              : status === "success"
-                ? "SUCCESS"
-                : status === "failed"
-                  ? "FAILED"
-                  : status === "pending"
-                    ? "PENDING"
-                    : "PENDING",
+            ? "SUCCESS"
+            : status === "success"
+            ? "SUCCESS"
+            : status === "failed"
+            ? "FAILED"
+            : status === "pending"
+            ? "PENDING"
+            : "PENDING",
       },
     });
 
@@ -297,6 +316,13 @@ export const saveJob = async (data: NewJobFormSchemaType, id: string) => {
   const { user } = await requireUser();
   await requireSubscription();
   try {
+    const userDetails = await getUserDetails();
+    if (userDetails.status === "SUSPENDED")
+      return { status: "error", message: "Your account has been suspended" };
+
+    if (userDetails.status === "DELETED")
+      return { status: "error", message: "Your account has been deleted" };
+
     if (!id) return { status: "error", message: "Oops! Job not found" };
 
     const validation = newJobFormSchema.safeParse(data);

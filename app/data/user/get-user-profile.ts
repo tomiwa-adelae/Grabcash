@@ -1,7 +1,7 @@
 import "server-only";
 import { requireUser } from "./require-user";
 import { prisma } from "@/lib/db";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export const getUserProfile = async (username: string) => {
   await requireUser();
@@ -70,6 +70,14 @@ export const getUserProfile = async (username: string) => {
   });
 
   if (!user) return notFound();
+
+  if (user.status === "SUSPENDED") {
+    return redirect("/account-suspended");
+  }
+
+  if (user.status === "DELETED") {
+    return redirect("/account-deleted");
+  }
 
   return user;
 };

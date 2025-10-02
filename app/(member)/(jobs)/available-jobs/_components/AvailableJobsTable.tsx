@@ -162,7 +162,9 @@ export function AvailableJobsTable({
               </TableCell>
               <TableCell className="text-right">
                 <Button asChild size="md" variant={"link"}>
-                  <Link href={`/available-jobs/${job.slug}`}>View job</Link>
+                  <Link target="_blank" href={`/available-jobs/${job.slug}`}>
+                    View job
+                  </Link>
                 </Button>
               </TableCell>
             </TableRow>

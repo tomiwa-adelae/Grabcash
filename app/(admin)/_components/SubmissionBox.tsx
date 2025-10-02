@@ -1,7 +1,7 @@
 "use client";
 import { Progress } from "@/components/ui/progress";
 import { useConstructUrl } from "@/hooks/use-construct-url";
-import { JobPaymentStatus } from "@/lib/generated/prisma";
+import { JobApplicationStatus, JobPaymentStatus } from "@/lib/generated/prisma";
 import { cn, formatDate, formatMoneyInput, formattedStatus } from "@/lib/utils";
 import { IconCalendar } from "@tabler/icons-react";
 import { motion } from "framer-motion";
@@ -24,7 +24,7 @@ interface Props {
   title: string;
   username: string;
   createdAt: Date;
-  status: string;
+  status: JobApplicationStatus;
   reward: string;
   id: string;
 }
@@ -98,6 +98,7 @@ export const SubmissionBox = ({
             <SubmissionActions
               id={id}
               slug={slug}
+              status={status}
               onReject={() => {
                 setOpenRejectModal(true);
               }}
@@ -115,6 +116,7 @@ export const SubmissionBox = ({
           <SubmissionActions
             id={id}
             slug={slug}
+            status={status}
             onReject={() => {
               setOpenRejectModal(true);
             }}

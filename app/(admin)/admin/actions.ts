@@ -1,7 +1,10 @@
 "use server";
 
+import { logActivity } from "@/app/data/admin/activity/log-activity";
 import { requireAdmin } from "@/app/data/admin/require-admin";
 import { JobSubmissionReviewedEmail } from "@/emails/job-submission-reviewed-email";
+import { ReactivatedEmail } from "@/emails/reactivated-email";
+import { SuspensionEmail } from "@/emails/suspension-email";
 import { prisma } from "@/lib/db";
 import { env } from "@/lib/env";
 import { ApiResponse } from "@/lib/types";
@@ -17,13 +20,27 @@ export const suspendUser = async (id: string): Promise<ApiResponse> => {
   await requireAdmin();
 
   try {
-    await prisma.user.update({
+    const user = await prisma.user.update({
       where: {
         id,
       },
       data: {
         status: "SUSPENDED",
+        suspendedDate: new Date(),
       },
+      select: {
+        name: true,
+        email: true,
+        suspendedDate: true,
+        id: true,
+      },
+    });
+
+    // Log the activity
+    await logActivity({
+      type: "USER_SUSPENDED",
+      description: `${user.name}'s account suspended`,
+      userId: user.id,
     });
 
     revalidatePath("/");
@@ -38,13 +55,44 @@ export const activateUser = async (id: string): Promise<ApiResponse> => {
   await requireAdmin();
 
   try {
-    await prisma.user.update({
+    const user = await prisma.user.update({
       where: {
         id,
       },
       data: {
         status: "ACTIVE",
       },
+      select: {
+        name: true,
+        email: true,
+        id: true,
+      },
+    });
+
+    // Send rejection email
+    await mailjet.post("send", { version: "v3.1" }).request({
+      Messages: [
+        {
+          From: {
+            Email: env.SENDER_EMAIL_ADDRESS,
+            Name: "grabcash",
+          },
+          To: [{ Email: user.email, Name: user.name }],
+          Subject: `Account reactivated`,
+          HTMLPart: ReactivatedEmail({
+            name: user.name,
+          }),
+        },
+      ],
+    });
+
+    console.log("ysss");
+
+    // Log the activity
+    await logActivity({
+      type: "USER_REACTIVATED",
+      description: `${user.name}'s account reactivated`,
+      userId: user.id,
     });
 
     revalidatePath("/");
@@ -70,9 +118,9 @@ export const promoteUser = async (id: string): Promise<ApiResponse> => {
 
     revalidatePath("/");
 
-    return { status: "success", message: "User promoted" };
+    return { status: "success", message: "User deleted" };
   } catch (error) {
-    return { status: "error", message: "Failed to promote user" };
+    return { status: "error", message: "Failed to delete user" };
   }
 };
 
@@ -80,13 +128,20 @@ export const deleteUser = async (id: string): Promise<ApiResponse> => {
   await requireAdmin();
 
   try {
-    await prisma.user.update({
+    const user = await prisma.user.update({
       where: {
         id,
       },
       data: {
         status: "DELETED",
       },
+    });
+
+    // Log the activity
+    await logActivity({
+      type: "USER_DELETED",
+      description: `${user.name}'s account deleted`,
+      userId: user.id,
     });
 
     revalidatePath("/");
@@ -242,8 +297,6 @@ export const approveApplication = async (
     return { status: "error", message: "Failed to approve submission" };
   }
 };
-
-// export const rejectApplication = async (
 //   id: string,
 //   slug: string,
 //   reason: string

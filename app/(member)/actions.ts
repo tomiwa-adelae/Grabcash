@@ -5,11 +5,18 @@ import { requireUser } from "../data/user/require-user";
 import { prisma } from "@/lib/db";
 import * as bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
+import { getUserDetails } from "../data/user/get-user-details";
 
 export const saveWithdrawalPin = async (pin: string): Promise<ApiResponse> => {
   const { user } = await requireUser();
 
   try {
+    const userDetails = await getUserDetails();
+    if (userDetails.status === "SUSPENDED")
+      return { status: "error", message: "Your account has been suspended" };
+    if (userDetails.status === "DELETED")
+      return { status: "error", message: "Your account has been deleted" };
+
     const hashedPIN = await bcrypt.hash(pin, 10);
 
     await prisma.user.update({
@@ -33,6 +40,12 @@ export const verifyPin = async (pin: string): Promise<ApiResponse> => {
   const { user } = await requireUser();
 
   try {
+    const userDetails = await getUserDetails();
+    if (userDetails.status === "SUSPENDED")
+      return { status: "error", message: "Your account has been suspended" };
+    if (userDetails.status === "DELETED")
+      return { status: "error", message: "Your account has been deleted" };
+
     const hashedUser = await prisma.user.findUnique({
       where: {
         id: user.id,

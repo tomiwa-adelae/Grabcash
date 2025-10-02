@@ -6,7 +6,7 @@ export function JobPostedEmail({
   category,
   reward,
   noOfWorkers,
-  status, // "Pending Review" | "Published"
+  status,
   manageJobUrl,
 }: {
   name: string;
@@ -42,9 +42,21 @@ export function JobPostedEmail({
           <td style="padding: 20px; background: #f3f4f6; border-radius: 8px;">
             <h2 style="color: #111827; font-size: 18px; margin-bottom: 15px;">📌 Job Details</h2>
             <p style="margin: 4px 0; font-size: 15px; color: #374151;"><b>Title:</b> ${jobTitle}</p>
-            ${category ? `<p style="margin: 4px 0; font-size: 15px; color: #374151;"><b>Category:</b> ${category}</p>` : ""}
-            ${reward ? `<p style="margin: 4px 0; font-size: 15px; color: #374151;"><b>Reward:</b> ₦${reward} per worker</p>` : ""}
-            ${noOfWorkers ? `<p style="margin: 4px 0; font-size: 15px; color: #374151;"><b>No. of Workers:</b> ${noOfWorkers}</p>` : ""}
+            ${
+              category
+                ? `<p style="margin: 4px 0; font-size: 15px; color: #374151;"><b>Category:</b> ${category}</p>`
+                : ""
+            }
+            ${
+              reward
+                ? `<p style="margin: 4px 0; font-size: 15px; color: #374151;"><b>Reward:</b> ₦${reward} per worker</p>`
+                : ""
+            }
+            ${
+              noOfWorkers
+                ? `<p style="margin: 4px 0; font-size: 15px; color: #374151;"><b>No. of Workers:</b> ${noOfWorkers}</p>`
+                : ""
+            }
             <p style="margin: 4px 0; font-size: 15px; color: #374151;"><b>Status:</b> ${status}</p>
           </td>
         </tr>
@@ -63,7 +75,9 @@ export function JobPostedEmail({
         <tr>
           <td style="padding-top: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
             <p style="color: #6b7280; font-size: 14px; margin: 0;">
-              If you have any questions, please contact our <a href={${env.NEXT_PUBLIC_BETTER_AUTH_URL}/support} style="color: #2563eb; text-decoration: none;">Support Team</a>.
+              If you have any questions, please contact our <a href={${
+                env.NEXT_PUBLIC_BETTER_AUTH_URL
+              }/support} style="color: #2563eb; text-decoration: none;">Support Team</a>.
             </p>
           </td>
         </tr>

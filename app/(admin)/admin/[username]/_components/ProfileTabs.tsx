@@ -1,5 +1,6 @@
 import { AllJobsList } from "@/app/(admin)/_components/AllJobsList";
 import { AllSubmissionsList } from "@/app/(admin)/_components/AllSubmissionsList";
+import { EmptyState } from "@/components/EmptyState";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -35,7 +36,6 @@ export const ProfileTabs = ({ jobsPosted, applications }: Props) => {
               </TabsTrigger>
             ))}
           </TabsList>
-
           <TabsContent className="w-full" value="Job submitted">
             <AllSubmissionsList
               initialSubmissions={applications}
@@ -43,8 +43,13 @@ export const ProfileTabs = ({ jobsPosted, applications }: Props) => {
               initialTotal={0}
               query={""}
             />
+            {applications.length === 0 && (
+              <EmptyState
+                title="No submissions yet"
+                description="User has not submitted any job yet. They would appear here once they do"
+              />
+            )}
           </TabsContent>
-
           <TabsContent className="w-full" value="Job posted">
             <AllJobsList
               initialJobs={jobsPosted}
@@ -52,6 +57,12 @@ export const ProfileTabs = ({ jobsPosted, applications }: Props) => {
               initialTotal={0}
               query={""}
             />
+            {jobsPosted.length === 0 && (
+              <EmptyState
+                title="No jobs"
+                description="User has not posted any job yet. They would appear here once they do"
+              />
+            )}
           </TabsContent>
         </Tabs>
       </CardContent>

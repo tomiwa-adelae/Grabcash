@@ -9,10 +9,10 @@ datasource db {
 }
 
 model User {
-  id                   String           @id
+  id                   String     @id
   name                 String
-  email                String           @unique
-  username             String?          @unique
+  email                String     @unique
+  username             String?    @unique
   displayUsername      String?
   phoneNumber          String?
   country              String?
@@ -26,27 +26,29 @@ model User {
   dob                  String?
   identificationType   String?
   identificationNumber String?
-  onboardingCompleted  Boolean?         @default(false)
-  credits              Int              @default(20)
-  createdAt            DateTime         @default(now())
-  updatedAt            DateTime         @updatedAt
-  earnings             Int              @default(0)
-  isAdmin              Boolean          @default(false)
-  status               UserStatus       @default(ACTIVE)
-  lifeTimeEarnings     Int              @default(0)
+  onboardingCompleted  Boolean?   @default(false)
+  credits              Int        @default(20)
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+  earnings             Int        @default(0)
+  isAdmin              Boolean    @default(false)
+  status               UserStatus @default(ACTIVE)
+  lifeTimeEarnings     Int        @default(0)
   withdrawalPin        String?
-  applicants           Applicant[]
-  jobs                 Job[]
-  jobPayments          JobPayment[]
-  Payment              Payment[]
-  payouts              Payout[]
-  subscription         Subscription?
-  accounts             Account[]
-  following            Follow[]         @relation("UserFollowing")
-  followers            Follow[]         @relation("UserFollowers")
-  sessions             Session[]
-  socials              Socials[]
-  RecentActivity       RecentActivity[]
+  suspendedDate        DateTime?
+
+  applicants     Applicant[]
+  jobs           Job[]
+  jobPayments    JobPayment[]
+  Payment        Payment[]
+  payouts        Payout[]
+  subscription   Subscription?
+  accounts       Account[]
+  following      Follow[]         @relation("UserFollowing")
+  followers      Follow[]         @relation("UserFollowers")
+  sessions       Session[]
+  socials        Socials[]
+  RecentActivity RecentActivity[]
 
   @@unique([email, username])
   @@map("user")
@@ -265,9 +267,22 @@ model RecentActivity {
   metadata Json? // flexible field for extra details (amount, IP address, etc.)
 }
 
+model Contact {
+  id      String @id @default(uuid())
+  name    String
+  email   String
+  subject String
+  message String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 enum ActivityType {
   USER_REGISTERED
   USER_SUSPENDED
+  USER_REACTIVATED
+  USER_DELETED
   USER_UPGRADED
   USER_REACHED_MILESTONE
 

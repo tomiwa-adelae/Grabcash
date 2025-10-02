@@ -15,6 +15,9 @@ export const getTotalUsers = async ({
   // Base query conditions
   const whereConditions: any = {
     // isAdmin: false,
+    status: {
+      not: "DELETED",
+    },
   };
 
   // Add search if provided

@@ -8,8 +8,6 @@ import { getJobDetails } from "@/app/data/user/job/get-job-details";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { FileUser, Pen } from "lucide-react";
-import { Banner } from "@/components/Banner";
-import { IconBan } from "@tabler/icons-react";
 import { PaymentFailedBanner } from "@/components/PaymentFailedBanner";
 import { DEFAULT_COMMISSION } from "@/constants";
 import { getUserDetails } from "@/app/data/user/get-user-details";

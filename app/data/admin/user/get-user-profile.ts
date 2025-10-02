@@ -26,6 +26,7 @@ export const getUserProfile = async (username: string) => {
       emailVerified: true,
       createdAt: true,
       earnings: true,
+      lifeTimeEarnings: true,
       isAdmin: true,
       status: true,
       socials: {

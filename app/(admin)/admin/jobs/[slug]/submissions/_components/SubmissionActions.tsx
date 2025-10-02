@@ -14,14 +14,16 @@ import { tryCatch } from "@/hooks/use-try-catch";
 import { toast } from "sonner";
 import { Loader } from "@/components/Loader";
 import { approveApplication } from "@/app/(admin)/admin/actions";
+import { JobApplicationStatus } from "@/lib/generated/prisma";
 
 interface Props {
   id: string;
   slug: string;
   onReject?: () => void; // Callback to handle reject modal
+  status: JobApplicationStatus;
 }
 
-export const SubmissionActions = ({ slug, id, onReject }: Props) => {
+export const SubmissionActions = ({ slug, id, onReject, status }: Props) => {
   const [pending, startTransition] = useTransition();
 
   const handleApproveSubmission = () => {
@@ -68,25 +70,52 @@ export const SubmissionActions = ({ slug, id, onReject }: Props) => {
             View Submission
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem
-          disabled={pending}
-          onSelect={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleApproveSubmission();
-          }}
-        >
-          {pending ? <Loader text="Approving..." /> : "Approve submission"}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onSelect={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onReject?.(); // Call the parent's reject handler
-          }}
-        >
-          Reject submission
-        </DropdownMenuItem>
+        {status === "PENDING" && (
+          <>
+            <DropdownMenuItem
+              disabled={pending}
+              onSelect={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleApproveSubmission();
+              }}
+            >
+              {pending ? <Loader text="Approving..." /> : "Approve submission"}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onReject?.(); // Call the parent's reject handler
+              }}
+            >
+              Reject submission
+            </DropdownMenuItem>
+          </>
+        )}
+        {status === "APPROVED" && (
+          <DropdownMenuItem
+            onSelect={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onReject?.(); // Call the parent's reject handler
+            }}
+          >
+            Reject submission
+          </DropdownMenuItem>
+        )}
+        {status === "REJECTED" && (
+          <DropdownMenuItem
+            disabled={pending}
+            onSelect={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleApproveSubmission();
+            }}
+          >
+            {pending ? <Loader text="Approving..." /> : "Approve submission"}
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );

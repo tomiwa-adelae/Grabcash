@@ -16,4 +16,5 @@ declare interface Params {
   id?: string;
   slug?: string;
   status?: string;
+  userId?: string;
 }

@@ -1,5 +1,6 @@
 "use server";
 
+import { getUserDetails } from "@/app/data/user/get-user-details";
 import { requireUser } from "@/app/data/user/require-user";
 import { requireSubscription } from "@/app/data/user/subscription/require-subscription";
 import { JobClosedEmail } from "@/emails/job.closed-email";
@@ -22,6 +23,13 @@ export const saveApplicantScreenshot = async (
   await requireSubscription();
 
   try {
+    const userDetails = await getUserDetails();
+    if (userDetails.status === "SUSPENDED")
+      return { status: "error", message: "Your account has been suspended" };
+
+    if (userDetails.status === "DELETED")
+      return { status: "error", message: "Your account has been deleted" };
+
     if (screenshots.length === 0 || !screenshots)
       return { status: "error", message: "No screenshot to save" };
 

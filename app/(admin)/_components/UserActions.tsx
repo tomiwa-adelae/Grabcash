@@ -135,7 +135,11 @@ export const UserActions = ({
               handleActivateUser();
             }}
           >
-            {suspendPending ? <Loader text="Activating..." /> : "Activate user"}
+            {activatePending ? (
+              <Loader text="Activating..." />
+            ) : (
+              "Activate user"
+            )}
           </DropdownMenuItem>
         )}
         <DropdownMenuItem
@@ -146,15 +150,21 @@ export const UserActions = ({
         >
           Delete account
         </DropdownMenuItem>
-        <DropdownMenuItem
-          disabled={promotePending}
-          onSelect={(e) => {
-            e.preventDefault();
-            handlePromoteUser();
-          }}
-        >
-          {promotePending ? <Loader text="Promoting..." /> : "Promote to admin"}
-        </DropdownMenuItem>
+        {!isAdmin && (
+          <DropdownMenuItem
+            disabled={promotePending}
+            onSelect={(e) => {
+              e.preventDefault();
+              handlePromoteUser();
+            }}
+          >
+            {promotePending ? (
+              <Loader text="Promoting..." />
+            ) : (
+              "Promote to admin"
+            )}
+          </DropdownMenuItem>
+        )}
       </DropdownMenuContent>
     </DropdownMenu>
   );
