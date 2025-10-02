@@ -202,6 +202,7 @@ export function SubmissionsTable({
                   <TableCell className="text-right">
                     <SubmissionActions
                       slug={slug}
+                      status={applicant.status}
                       id={applicant.id}
                       onReject={() => {
                         setSelectedApplicant(applicant);
