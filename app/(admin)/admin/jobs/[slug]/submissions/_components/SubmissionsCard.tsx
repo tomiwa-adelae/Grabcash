@@ -140,6 +140,7 @@ export function SubmissionsCard({
                     </Link>
                   </div>
                   <SubmissionActions
+                    status={applicant.status}
                     slug={slug}
                     id={applicant.id}
                     onReject={() => {
