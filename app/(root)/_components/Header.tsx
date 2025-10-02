@@ -3,14 +3,24 @@ import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_PROFILE_PICTURE, rootNavLinks } from "@/constants";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MobileNavbar } from "./MobileNavbar";
 import { authClient } from "@/lib/auth-client";
 import UserDropdown from "./UserDropdown";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { GetUserDetailsType } from "@/app/data/user/get-user-details";
 
 export const Header = () => {
   const { data: session, isPending } = authClient.useSession();
+  const [user, setUser] = useState<GetUserDetailsType>();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const dbUser = await fetch("/api/admin").then((r) => r.json());
+      setUser(dbUser);
+    };
+    fetchUser();
+  }, [session]);
 
   return (
     <header className="fixed top-0 w-full bg-white dark:bg-black min-h-20 py-4 flex items-center justify-center shadow-[0px_4px_6px_-1px_rgba(0,0,0,0.1)] z-50">
@@ -39,12 +49,14 @@ export const Header = () => {
               </Button>
             </>
           ) : (
-            session !== null && (
+            session !== null &&
+            user && (
               <UserDropdown
                 image={session?.user.image || DEFAULT_PROFILE_PICTURE}
                 name={session?.user.name!}
                 email={session?.user.email!}
                 username={session?.user.username!}
+                isAdmin={user.isAdmin}
               />
             )
           )}
