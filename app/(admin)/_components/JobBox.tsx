@@ -46,6 +46,7 @@ export const JobBox = ({
 }: Props) => {
   const router = useRouter();
   const profilePicture = useConstructUrl(image);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}

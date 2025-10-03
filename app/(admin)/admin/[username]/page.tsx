@@ -85,11 +85,13 @@ const page = async ({
 
   return (
     <div className="space-y-6">
-      <Banner
-        icon={IconTrash}
-        text="Account already deleted"
-        variant="destructive"
-      />
+      {user.status === "DELETED" && (
+        <Banner
+          icon={IconTrash}
+          text="Account already deleted"
+          variant="destructive"
+        />
+      )}
       <ProfilePicture myProfile={true} image={user.image} name={user.name} />
       <div className="flex flex-col items-center justify-center text-center space-y-4 w-full">
         <div>

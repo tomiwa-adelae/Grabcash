@@ -108,6 +108,7 @@ export const getUserProfile = async (username: string) => {
           reward: true,
           createdAt: true,
           status: true,
+          paymentVerified: true,
           jobOpen: true,
           jobPayments: {
             select: {
@@ -131,6 +132,7 @@ export const getUserProfile = async (username: string) => {
             },
           },
         },
+        orderBy: { createdAt: "desc" },
       },
     },
   });

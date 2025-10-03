@@ -101,6 +101,8 @@ export function AllJobsList({
     setIsLoading(false);
   }, [query]); // ✅ not watching initialUsers/initialHasNext
 
+  console.log(jobs);
+
   return (
     <div>
       {jobs.map((job, index) => (

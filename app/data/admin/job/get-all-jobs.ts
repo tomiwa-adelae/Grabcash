@@ -65,6 +65,7 @@ export const getAllJobs = async ({
         User: {
           select: {
             name: true,
+
             username: true,
             image: true,
           },

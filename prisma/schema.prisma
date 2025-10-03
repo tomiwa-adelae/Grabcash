@@ -154,20 +154,6 @@ model SubscriptionPlan {
   Subscription Subscription[]
 }
 
-// model Subscription {
-//   id                 String             @id @default(uuid())
-//   startDate          DateTime
-//   endDate            DateTime
-//   status             SubscriptionStatus
-//   userId             String             @unique
-//   subscriptionPlanId String
-//   createdAt          DateTime           @default(now())
-//   updatedAt          DateTime           @default(now()) @updatedAt
-//   plan               SubscriptionPlan   @relation(fields: [subscriptionPlanId], references: [id])
-//   user               User               @relation(fields: [userId], references: [id])
-//   RecentActivity     RecentActivity[]
-// }
-
 model Subscription {
   id                 String             @id @default(uuid())
   startDate          DateTime
