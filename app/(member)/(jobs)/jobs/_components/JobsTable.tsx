@@ -26,6 +26,8 @@ import { loadMoreMyJobs } from "@/app/data/user/job/my-job/load-more-my-jobs";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Loader } from "@/components/Loader";
 import { Badge } from "@/components/ui/badge";
+import { JobActions } from "./JobActions";
+import { DEFAULT_COMMISSION } from "@/constants";
 
 interface Props {
   initialJobs: GetMyJobsType[];
@@ -137,77 +139,65 @@ export function JobsTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {jobs.map((job, index) => (
-            <TableRow
-              onClick={() => router.push(`/jobs/${job.slug}`)}
-              className="cursor-pointer"
-              key={`${job.id}-${index}`}
-            >
-              <TableCell className="font-medium">
-                <Link
-                  href={`/available-jobs/${job.slug}`}
-                  className="hover:underline hover:text-primary transition-all"
-                >
-                  {job.title}
-                </Link>
-                <p className="text-muted-foreground text-xs">{job.jobID}</p>
-              </TableCell>
-              <TableCell>{job.category}</TableCell>
-              <TableCell>
-                <div className="flex flex-col items-start justify-center gap-1">
-                  {job._count.applicants}/{job.noOfWorkers}
-                  <Progress
-                    value={
-                      (job._count.applicants / Number(job.noOfWorkers)) * 100
-                    }
-                    className={cn("h-1")}
+          {jobs.map((job, index) => {
+            const baseTotal = Number(job.reward) * Number(job.noOfWorkers);
+            const totalWithFee = (
+              baseTotal +
+              (baseTotal * DEFAULT_COMMISSION) / 100
+            ).toFixed(); // Add 10%
+            return (
+              <TableRow
+                onClick={() => router.push(`/jobs/${job.slug}`)}
+                className="cursor-pointer"
+                key={`${job.id}-${index}`}
+              >
+                <TableCell className="font-medium">
+                  <Link
+                    href={`/available-jobs/${job.slug}`}
+                    className="hover:underline hover:text-primary transition-all"
+                  >
+                    {job.title}
+                  </Link>
+                  <p className="text-muted-foreground text-xs">{job.jobID}</p>
+                </TableCell>
+                <TableCell>{job.category}</TableCell>
+                <TableCell>
+                  <div className="flex flex-col items-start justify-center gap-1">
+                    {job._count.applicants}/{job.noOfWorkers}
+                    <Progress
+                      value={
+                        (job._count.applicants / Number(job.noOfWorkers)) * 100
+                      }
+                      className={cn("h-1")}
+                    />
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <NairaIcon />
+                  {formatMoneyInput(job.reward)}
+                </TableCell>
+                <TableCell>
+                  {job.paymentVerified ? (
+                    <Badge variant={job.jobOpen ? "default" : "pending"}>
+                      {job.jobOpen ? "Active" : "Closed"}
+                    </Badge>
+                  ) : (
+                    <Badge variant={"pending"}>No payment</Badge>
+                  )}
+                </TableCell>
+                <TableCell className="text-right">
+                  <JobActions
+                    id={job.id}
+                    slug={job.slug!}
+                    phoneNumber={job.User.phoneNumber}
+                    email={job.User.email}
+                    paymentVerified={job.paymentVerified}
+                    totalWithFee={totalWithFee}
                   />
-                </div>
-              </TableCell>
-              <TableCell>
-                <NairaIcon />
-                {formatMoneyInput(job.reward)}
-              </TableCell>
-              <TableCell>
-                {job.paymentVerified ? (
-                  <Badge variant={job.jobOpen ? "default" : "pending"}>
-                    {job.jobOpen ? "Active" : "Closed"}
-                  </Badge>
-                ) : (
-                  <Badge variant={"pending"}>No payment</Badge>
-                )}
-              </TableCell>
-              <TableCell className="text-right">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="rounded-full shadow-none"
-                      aria-label="Open edit menu"
-                    >
-                      <EllipsisIcon size={16} aria-hidden="true" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem asChild>
-                      <Link href={`/jobs/${job.slug}`}>View Job</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href={`/jobs/${job.slug}/edit`}>Edit Job</Link>
-                    </DropdownMenuItem>
-                    {job.paymentVerified && (
-                      <DropdownMenuItem asChild>
-                        <Link href={`/jobs/${job.slug}/submissions`}>
-                          View Submissions
-                        </Link>
-                      </DropdownMenuItem>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
+                </TableCell>
+              </TableRow>
+            );
+          })}
 
           {/* Observer sentinel row - this is what gets watched */}
           {hasNext && (

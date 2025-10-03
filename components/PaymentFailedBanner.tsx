@@ -84,50 +84,6 @@ export function PaymentFailedBanner({
   // };
 
   const handlePayment = () => {
-    // startTransition(async () => {
-    // const config = {
-    //   public_key: env.NEXT_PUBLIC_FW_PUBLIC_KEY,
-    //   tx_ref: `${Date.now()}`,
-    //   amount: totalWithFee, // dynamic price
-    //   currency: "NGN",
-    //   payment_options: "card,mobilemoney,ussd",
-    //   customer: {
-    //     email,
-    //     phone_number: phoneNumber,
-    //     name,
-    //   },
-    //   customizations: {
-    //     title: `grabcash - ${title}`,
-    //     description: `Payment for ${totalWithFee} (${title})`,
-    //     logo: GRABCASH_LOGO,
-    //   },
-    // };
-    // initiatePayment({
-    //   config,
-    //   onSuccess: async (response) => {
-    //     const { data: paymentResult, error } = await tryCatch(
-    //       verifyJobPayment(id!, totalWithFee, response)
-    //     );
-    //     if (error) {
-    //       toast.error(error.message || "Oops! Internal server error");
-    //       return;
-    //     }
-    //     if (paymentResult?.status === "success") {
-    //       toast.success(paymentResult.message);
-    //       router.push(`/new-job/success?slug=${slug}`);
-    //     } else {
-    //       toast.error(paymentResult.message);
-    //     }
-    //   },
-    //   onClose: async () => {
-    //     toast.info("Payment cancelled");
-    //   },
-    //   onError: (error) => {
-    //     toast.error("Payment failed: " + error.message);
-    //   },
-    // });
-    // });
-
     const config = {
       reference: new Date().getTime().toString(),
       email,

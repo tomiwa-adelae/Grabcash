@@ -58,6 +58,12 @@ export const getMyJobs = async ({
         _count: {
           select: { applicants: true },
         },
+        User: {
+          select: {
+            email: true,
+            phoneNumber: true,
+          },
+        },
       },
       orderBy: { createdAt: "desc" },
       skip,
