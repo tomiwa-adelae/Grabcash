@@ -230,7 +230,7 @@ export function SubmittedJobsTable({
           )}
 
           {/* End state */}
-          {!hasNext && jobs.length > 0 && (
+          {/* {!hasNext && jobs.length > 0 && (
             <TableRow>
               <TableCell
                 colSpan={5}
@@ -239,7 +239,7 @@ export function SubmittedJobsTable({
                 All submissions loaded ({jobs.length} total)
               </TableCell>
             </TableRow>
-          )}
+          )} */}
         </TableBody>
       </Table>
     </div>
