@@ -17,14 +17,7 @@ export const BankDetails = ({
   return (
     <div className="bg-muted py-8 rounded-lg">
       <div className="container">
-        {myProfile && (
-          <div className="flex items-center justify-end pb-8">
-            <Button size={"md"} asChild variant={"outline"}>
-              <Link href="/bank-details/edit">Edit Bank Details</Link>
-            </Button>
-          </div>
-        )}
-        <div className="grid grid-cols-1 gap-8 text-sm text-left">
+        <div className="grid grid-cols-1 gap-4 text-sm text-left">
           <div>
             <h4 className="text-muted-foreground">Account Name</h4>
             <h4 className="font-medium">{accountName}</h4>
@@ -37,6 +30,18 @@ export const BankDetails = ({
             <h4 className="text-muted-foreground">Bank Name</h4>
             <h4 className="font-medium">{bankName}</h4>
           </div>
+          {myProfile && (
+            <div className="flex items-center justify-end pb-8">
+              <Button
+                className="w-full"
+                size={"md"}
+                asChild
+                variant={"outline"}
+              >
+                <Link href="/bank-details/edit">Edit Bank Details</Link>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -58,17 +58,17 @@ export const activateSubscription = async ({
       },
     });
 
-    const subscription = await prisma.subscription.upsert({
-      where: { userId: user.id },
-      update: {
-        subscriptionPlanId: plan.id,
-        startDate: new Date(),
-        endDate: new Date(
-          Date.now() + Number(plan.durationDays) * 24 * 60 * 60 * 1000
-        ),
-        status: "ACTIVE",
-      },
-      create: {
+    const subscription = await prisma.subscription.create({
+      // where: { userId: user.id },
+      // update: {
+      //   subscriptionPlanId: plan.id,
+      //   startDate: new Date(),
+      //   endDate: new Date(
+      //     Date.now() + Number(plan.durationDays) * 24 * 60 * 60 * 1000
+      //   ),
+      //   status: "ACTIVE",
+      // },
+      data: {
         userId: user.id,
         subscriptionPlanId: plan.id,
         startDate: new Date(),

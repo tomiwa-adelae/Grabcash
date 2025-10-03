@@ -86,8 +86,6 @@ export const activateUser = async (id: string): Promise<ApiResponse> => {
       ],
     });
 
-    console.log("ysss");
-
     // Log the activity
     await logActivity({
       type: "USER_REACTIVATED",

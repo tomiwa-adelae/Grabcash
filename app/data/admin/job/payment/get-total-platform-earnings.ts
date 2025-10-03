@@ -7,10 +7,9 @@ export const getTotalPlatformEarnings = async () => {
 
   // 1. Payout fees
   const payouts = await prisma.payout.findMany({
-    where: { status: "PAID" },
+    where: { status: "PAID", jobPayment: true },
     select: { fee: true },
   });
-
   const totalPayoutFees = payouts.reduce(
     (sum, p) => sum + Number(p.fee ?? 0),
     0

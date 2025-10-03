@@ -42,7 +42,7 @@ model User {
   jobPayments    JobPayment[]
   Payment        Payment[]
   payouts        Payout[]
-  subscription   Subscription?
+  subscription   Subscription[]
   accounts       Account[]
   following      Follow[]         @relation("UserFollowing")
   followers      Follow[]         @relation("UserFollowers")
@@ -154,18 +154,35 @@ model SubscriptionPlan {
   Subscription Subscription[]
 }
 
+// model Subscription {
+//   id                 String             @id @default(uuid())
+//   startDate          DateTime
+//   endDate            DateTime
+//   status             SubscriptionStatus
+//   userId             String             @unique
+//   subscriptionPlanId String
+//   createdAt          DateTime           @default(now())
+//   updatedAt          DateTime           @default(now()) @updatedAt
+//   plan               SubscriptionPlan   @relation(fields: [subscriptionPlanId], references: [id])
+//   user               User               @relation(fields: [userId], references: [id])
+//   RecentActivity     RecentActivity[]
+// }
+
 model Subscription {
   id                 String             @id @default(uuid())
   startDate          DateTime
   endDate            DateTime
   status             SubscriptionStatus
-  userId             String             @unique
+  userId             String
   subscriptionPlanId String
+  isActive           Boolean            @default(true) // ✅ track current subscription
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @default(now()) @updatedAt
   plan               SubscriptionPlan   @relation(fields: [subscriptionPlanId], references: [id])
   user               User               @relation(fields: [userId], references: [id])
   RecentActivity     RecentActivity[]
+
+  @@index([userId]) // instead of unique
 }
 
 model Follow {
@@ -239,6 +256,7 @@ model Payout {
   accountName    String?
   title          String?
   withdrawal     Boolean?         @default(false)
+  jobPayment     Boolean?         @default(false)
   type           PayoutType?
   status         PayoutStatus     @default(PENDING)
   User           User             @relation(fields: [userId], references: [id])

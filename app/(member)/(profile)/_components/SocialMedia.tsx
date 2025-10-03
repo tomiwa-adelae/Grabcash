@@ -44,14 +44,7 @@ export const SocialMedia = ({ socialMedia, myProfile }: Props) => {
         />
       )}
       <div className="container">
-        {socialMedia.length !== 0 && myProfile && (
-          <div className="flex items-center justify-end pb-8">
-            <Button size={"md"} asChild variant={"outline"}>
-              <Link href="/social-media/edit">Edit Details</Link>
-            </Button>
-          </div>
-        )}
-        <div className="grid grid-cols-1 gap-8 text-sm text-left">
+        <div className="grid grid-cols-1 gap-4 text-sm text-left">
           {socialMedia.length !== 0 &&
             socialMedia.map(
               ({ id, url }: { id: string; url: string }, index: string) => (
@@ -67,6 +60,18 @@ export const SocialMedia = ({ socialMedia, myProfile }: Props) => {
                 </div>
               )
             )}
+          {socialMedia.length !== 0 && myProfile && (
+            <div className="flex items-center justify-end pb-8">
+              <Button
+                className="w-full"
+                size={"md"}
+                asChild
+                variant={"outline"}
+              >
+                <Link href="/social-media/edit">Edit Details</Link>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -5,8 +5,8 @@ import React, { ReactNode } from "react";
 const layout = async ({ children }: { children: ReactNode }) => {
   const user = await getUserDetails();
 
-  if (user.subscription?.plan.name === "Basic")
-    return redirect("/subscriptions");
+  // if (user.subscription?.plan.name === "Basic")
+  //   return redirect("/subscriptions");
 
   return <div>{children}</div>;
 };

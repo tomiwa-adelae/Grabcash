@@ -2,9 +2,11 @@ import "server-only";
 import { requireUser } from "./require-user";
 import { prisma } from "@/lib/db";
 import { notFound, redirect } from "next/navigation";
+import { requireSubscription } from "./subscription/require-subscription";
 
 export const getUserProfile = async (username: string) => {
   await requireUser();
+  await requireSubscription();
   const user = await prisma.user.findUnique({
     where: { username },
     select: {

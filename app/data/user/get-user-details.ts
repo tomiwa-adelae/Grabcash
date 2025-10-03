@@ -40,9 +40,14 @@ export const getUserDetails = async (username?: string) => {
       },
       subscription: {
         select: {
+          startDate: true,
+          endDate: true,
+          status: true,
+          id: true,
           plan: {
             select: {
               name: true,
+              billingCycle: true,
             },
           },
         },

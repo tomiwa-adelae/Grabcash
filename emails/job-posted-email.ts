@@ -75,9 +75,9 @@ export function JobPostedEmail({
         <tr>
           <td style="padding-top: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
             <p style="color: #6b7280; font-size: 14px; margin: 0;">
-              If you have any questions, please contact our <a href={${
+              If you have any questions, please contact our <a href="${
                 env.NEXT_PUBLIC_BETTER_AUTH_URL
-              }/support} style="color: #2563eb; text-decoration: none;">Support Team</a>.
+              }/contact" style="color: #2563eb; text-decoration: none;">Support Team</a>.
             </p>
           </td>
         </tr>

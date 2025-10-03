@@ -60,21 +60,21 @@ export const createJob = async (data: NewJobFormSchemaType) => {
       });
     }
 
-    const job = await prisma.job.upsert({
-      where: {
-        slug,
-      },
-      update: {
+    const job = await prisma.job.create({
+      // where: {
+      //   slug,
+      // },
+      // update: {
+      //   userId: user.id,
+      //   ...validation.data,
+      //   slug,
+      //   status: "PUBLISHED",
+      //   jobID,
+      // },
+      data: {
         userId: user.id,
         ...validation.data,
-        slug,
-        status: "PUBLISHED",
-        jobID,
-      },
-      create: {
-        userId: user.id,
-        ...validation.data,
-        slug,
+        slug: `${slug}-${jobID}`,
         status: "PUBLISHED",
         jobID,
       },
@@ -233,6 +233,7 @@ export const verifyJobPayment = async ({
         userId: user.id,
         title: `${job.title} payment`,
         status: "PAID",
+        jobPayment: true,
       },
     });
 

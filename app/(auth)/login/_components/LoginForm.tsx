@@ -66,8 +66,6 @@ export function LoginForm() {
           onSuccess: async (res) => {
             const response = await fetch("/api/admin");
 
-            console.log(response);
-
             if (response.status === 401) {
               toast.error("You must be logged in");
               router.push("/login");
@@ -90,7 +88,6 @@ export function LoginForm() {
             try {
               dbUser = await response.json();
             } catch (error) {
-              console.log(error);
               toast.error("Invalid server response (not JSON)");
               return;
             }

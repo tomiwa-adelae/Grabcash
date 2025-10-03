@@ -6,7 +6,7 @@ import { DEFAULT_MINIMUM_PAYOUT, DEFAULT_WITHDRAWAL_FEE } from "@/constants";
 import { formatMoneyInput } from "@/lib/utils";
 import { IconEye, IconEyeClosed } from "@tabler/icons-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PayoutModal } from "./PayoutModal";
 import { SetWithdrawalPinModal } from "../../_components/SetWithdrawalPinModal";
 
@@ -18,6 +18,8 @@ interface Props {
   accountNumber: string | null;
 }
 
+const STORAGE_KEY = "wallet-balance";
+
 export const WalletBalance = ({
   lifeTimeEarnings,
   earnings,
@@ -25,9 +27,28 @@ export const WalletBalance = ({
   accountNumber,
   withdrawalPin,
 }: Props) => {
-  const [showBalance, setShowBalance] = useState(true);
+  // const [showBalance, setShowBalance] = useState(true);
   const [openModal, setOpenModal] = useState(false);
   const [openWithdrawalModal, setOpenWithdrawalModal] = useState(false);
+
+  const [showBalance, setShowBalance] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved !== null) {
+        return saved === "true"; // convert string to boolean
+      }
+    }
+    return true; // default
+  });
+
+  // Persist to localStorage when view changes
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, String(showBalance)); // save as "true"/"false"
+  }, [showBalance]);
+
+  const toggleView = () => {
+    setShowBalance((prev) => (prev === true ? false : true));
+  };
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -57,11 +78,7 @@ export const WalletBalance = ({
               <NairaIcon />
               {showBalance ? `${formatMoneyInput(earnings)}` : "****"}
             </h1>
-            <Button
-              onClick={() => setShowBalance(!showBalance)}
-              size="icon"
-              variant={"secondary"}
-            >
+            <Button onClick={toggleView} size="icon" variant={"secondary"}>
               {showBalance ? <IconEyeClosed /> : <IconEye />}
             </Button>
           </div>
