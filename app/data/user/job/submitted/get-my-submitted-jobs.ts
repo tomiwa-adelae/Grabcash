@@ -38,9 +38,9 @@ export const getMySubmittedJobs = async (
             {
               User: {
                 OR: [
-                  { name: { contain: query, mode: "insensitive" } },
-                  { username: { contain: query, mode: "insensitive" } },
-                  { email: { contain: query, mode: "insensitive" } },
+                  { name: { contains: query, mode: "insensitive" } },
+                  { username: { contains: query, mode: "insensitive" } },
+                  { email: { contains: query, mode: "insensitive" } },
                 ],
               },
             },
