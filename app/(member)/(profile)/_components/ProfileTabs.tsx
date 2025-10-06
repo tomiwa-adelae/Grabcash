@@ -50,11 +50,7 @@ export const ProfileTabs = ({ user, query, myProfile }: Props) => {
           <TabsList className="mb-3 w-full">
             {(myProfile ? myProfileTab : visitingProfileTab).map(
               ({ label, value }, index) => (
-                <TabsTrigger
-                  key={index}
-                  value={value}
-                  className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none h-11 cursor-pointer text-xs"
-                >
+                <TabsTrigger key={index} value={value}>
                   {label}
                 </TabsTrigger>
               )

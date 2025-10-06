@@ -178,7 +178,7 @@ export function JobsTable({
                 </TableCell>
                 <TableCell>
                   {job.paymentVerified ? (
-                    <Badge variant={job.jobOpen ? "default" : "pending"}>
+                    <Badge variant={job.jobOpen ? "default" : "secondary"}>
                       {job.jobOpen ? "Active" : "Closed"}
                     </Badge>
                   ) : (

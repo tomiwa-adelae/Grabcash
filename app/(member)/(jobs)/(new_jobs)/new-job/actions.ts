@@ -83,7 +83,7 @@ export const createJob = async (data: NewJobFormSchemaType) => {
     return {
       status: "success",
       message: "New job successfully created",
-      slug: slug,
+      slug: `${slug}-${jobID}`,
       id: job.id,
     };
   } catch (error) {
@@ -242,10 +242,12 @@ export const verifyJobPayment = async ({
         id: {
           not: user.id,
         },
+        emailNotification: true,
       },
       select: {
         email: true,
         name: true,
+        emailNotification: true,
       },
     });
 
@@ -262,27 +264,29 @@ export const verifyJobPayment = async ({
       },
     });
 
-    await mailjet.post("send", { version: "v3.1" }).request({
-      Messages: [
-        {
-          From: {
-            Email: env.SENDER_EMAIL_ADDRESS,
-            Name: "grabcash",
+    if (userDetails.emailNotification) {
+      await mailjet.post("send", { version: "v3.1" }).request({
+        Messages: [
+          {
+            From: {
+              Email: env.SENDER_EMAIL_ADDRESS,
+              Name: "grabcash",
+            },
+            To: [{ Email: user.email, Name: user.name }],
+            Subject: `Your Job is Live`,
+            HTMLPart: JobPostedEmail({
+              name: user.name,
+              jobTitle: job.title,
+              category: job.category!,
+              reward: job.reward!,
+              noOfWorkers: job.noOfWorkers!,
+              status: formattedStatus[job.status],
+              manageJobUrl: `${env.NEXT_PUBLIC_BETTER_AUTH_URL}/job/${job.slug}`,
+            }),
           },
-          To: [{ Email: user.email, Name: user.name }],
-          Subject: `Your Job is Live`,
-          HTMLPart: JobPostedEmail({
-            name: user.name,
-            jobTitle: job.title,
-            category: job.category!,
-            reward: job.reward!,
-            noOfWorkers: job.noOfWorkers!,
-            status: formattedStatus[job.status],
-            manageJobUrl: `${env.NEXT_PUBLIC_BETTER_AUTH_URL}/job/${job.slug}`,
-          }),
-        },
-      ],
-    });
+        ],
+      });
+    }
 
     // ✅ Send broadcast email to all other users
     if (users.length > 0) {

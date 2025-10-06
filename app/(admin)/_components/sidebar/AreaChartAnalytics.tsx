@@ -1,7 +1,6 @@
 "use client";
 
 import { getPlatformAnalytics } from "@/app/data/admin/job/payment/get-revenue-analytics";
-import { memo } from "react";
 import {
   ResponsiveContainer,
   AreaChart,
@@ -25,50 +24,78 @@ function calcPercentageChange(current: number, prev: number) {
 }
 
 export const AreaChartAnalytics = ({ analytics }: Props) => {
-  const last6Months = getLastMonths(3);
+  const allMonths = getLastMonths(12);
 
   const merged = mergeAnalytics(
-    last6Months,
+    allMonths,
     analytics.jobPaymentsByMonth,
     analytics.subscriptionsByMonth,
     analytics.payoutsByMonth
   );
 
-  const data = merged.map((d) => ({
+  // Only keep months that have data
+  const filtered = merged.filter(
+    (m) => m.jobPayments || m.subscriptions || m.payouts
+  );
+
+  // Use all available months, but at least show 3
+  const visibleData =
+    filtered.length < 3
+      ? merged.slice(-3) // show last 3 months even if empty
+      : filtered;
+
+  const data = visibleData.map((d) => ({
     ...d,
     month: new Date(d.month + "-01").toLocaleString("default", {
       month: "short",
     }),
   }));
 
-  const latest = merged[merged.length - 1];
-  const prev = merged[merged.length - 2];
+  const latest = data[data.length - 1];
+  const prev = data[data.length - 2] ?? {
+    jobPayments: 0,
+    subscriptions: 0,
+    payouts: 0,
+  };
 
   const jobPaymentsChange = calcPercentageChange(
     latest.jobPayments,
-    prev?.jobPayments || 0
+    prev.jobPayments
   );
   const subscriptionsChange = calcPercentageChange(
     latest.subscriptions,
-    prev?.subscriptions || 0
+    prev.subscriptions
   );
-  const payoutsChange = calcPercentageChange(
-    latest.payouts,
-    prev?.payouts || 0
-  );
+  const payoutsChange = calcPercentageChange(latest.payouts, prev.payouts);
+
+  // Dynamic chart spacing
+  const smallData = data.length <= 3;
 
   return (
     <>
-      <ResponsiveContainer width="100%" height={350}>
-        <AreaChart data={data}>
+      <ResponsiveContainer width="100%" height={smallData ? 250 : 350}>
+        <AreaChart
+          data={data}
+          margin={{
+            top: 10,
+            right: smallData ? 50 : 20,
+            left: smallData ? 20 : 0,
+            bottom: 0,
+          }}
+        >
           <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-          <XAxis dataKey="month" />
-          <Tooltip
-            formatter={(value: number) => `₦${value.toLocaleString()}`}
+          <XAxis
+            dataKey="month"
+            tick={{ fontSize: smallData ? 12 : 14 }}
+            interval={0}
+            padding={
+              smallData ? { left: 50, right: 50 } : { left: 10, right: 10 }
+            }
           />
+          <YAxis hide={smallData} />
+          <Tooltip formatter={(v: number) => `₦${v.toLocaleString()}`} />
           <Legend />
 
-          {/* Multiple areas with transparency */}
           <Area
             type="monotone"
             dataKey="jobPayments"
@@ -76,6 +103,7 @@ export const AreaChartAnalytics = ({ analytics }: Props) => {
             fill="#22c55e"
             fillOpacity={0.3}
             name="Job Payments"
+            connectNulls
           />
           <Area
             type="monotone"
@@ -84,6 +112,7 @@ export const AreaChartAnalytics = ({ analytics }: Props) => {
             fill="#3b82f6"
             fillOpacity={0.3}
             name="Subscriptions"
+            connectNulls
           />
           <Area
             type="monotone"
@@ -91,12 +120,13 @@ export const AreaChartAnalytics = ({ analytics }: Props) => {
             stroke="#ef4444"
             fill="#ef4444"
             fillOpacity={0.3}
-            name="Payouts (outflow)"
+            name="Payouts"
+            connectNulls
           />
         </AreaChart>
       </ResponsiveContainer>
 
-      {/* Totals with % change */}
+      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
         <StatCard
           title="Total Job Payments"
@@ -138,8 +168,8 @@ function StatCard({
     color === "green"
       ? "text-green-500"
       : color === "blue"
-        ? "text-blue-500"
-        : "text-red-500";
+      ? "text-blue-500"
+      : "text-red-500";
 
   return (
     <div className="text-center">

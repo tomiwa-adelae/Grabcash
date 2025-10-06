@@ -37,6 +37,9 @@ model User {
   withdrawalPin        String?
   suspendedDate        DateTime?
 
+  emailNotification Boolean @default(true)
+  inAppNotification Boolean @default(false)
+
   applicants     Applicant[]
   jobs           Job[]
   jobPayments    JobPayment[]

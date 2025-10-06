@@ -117,20 +117,22 @@ export const requireSubscription = async () => {
       },
     });
 
-    // Send email (only once per subscription)
-    await mailjet.post("send", { version: "v3.1" }).request({
-      Messages: [
-        {
-          From: {
-            Email: env.SENDER_EMAIL_ADDRESS,
-            Name: "grabcash",
+    if (user.emailNotification) {
+      // Send email (only once per subscription)
+      await mailjet.post("send", { version: "v3.1" }).request({
+        Messages: [
+          {
+            From: {
+              Email: env.SENDER_EMAIL_ADDRESS,
+              Name: "grabcash",
+            },
+            To: [{ Email: user.email, Name: user.name }],
+            Subject: `Your ${subscription.plan.name} subscription has expired`,
+            HTMLPart: SubscriptionExpired({ name: user.name }),
           },
-          To: [{ Email: user.email, Name: user.name }],
-          Subject: `Your ${subscription.plan.name} subscription has expired`,
-          HTMLPart: SubscriptionExpired({ name: user.name }),
-        },
-      ],
-    });
+        ],
+      });
+    }
 
     return redirect("/subscription-expired");
   }

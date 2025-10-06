@@ -32,6 +32,8 @@ export const getUserDetails = async (username?: string) => {
       lifeTimeEarnings: true,
       withdrawalPin: true,
       isAdmin: true,
+      emailNotification: true,
+      inAppNotification: true,
       socials: {
         select: {
           id: true,

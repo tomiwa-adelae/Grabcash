@@ -255,6 +255,7 @@ export const approveApplication = async (
       select: {
         name: true,
         email: true,
+        emailNotification: true,
       },
     });
 
@@ -269,24 +270,26 @@ export const approveApplication = async (
       },
     });
 
-    await mailjet.post("send", { version: "v3.1" }).request({
-      Messages: [
-        {
-          From: {
-            Email: env.SENDER_EMAIL_ADDRESS,
-            Name: "grabcash",
+    if (worker.emailNotification) {
+      await mailjet.post("send", { version: "v3.1" }).request({
+        Messages: [
+          {
+            From: {
+              Email: env.SENDER_EMAIL_ADDRESS,
+              Name: "grabcash",
+            },
+            To: [{ Email: worker.email, Name: worker.name }],
+            Subject: `Submission approved - ${applicant.Job.title}`,
+            HTMLPart: JobSubmissionReviewedEmail({
+              workerName: worker.name,
+              jobTitle: applicant.Job.title,
+              status: "APPROVED",
+              reward: applicant.Job.reward!,
+            }),
           },
-          To: [{ Email: worker.email, Name: worker.name }],
-          Subject: `Submission approved - ${applicant.Job.title}`,
-          HTMLPart: JobSubmissionReviewedEmail({
-            workerName: worker.name,
-            jobTitle: applicant.Job.title,
-            status: "APPROVED",
-            reward: applicant.Job.reward!,
-          }),
-        },
-      ],
-    });
+        ],
+      });
+    }
 
     revalidatePath("/");
 
@@ -459,31 +462,33 @@ export const rejectApplication = async (
     // Get worker info
     const worker = await prisma.user.findUnique({
       where: { id: updatedApplicant.userId },
-      select: { name: true, email: true },
+      select: { name: true, email: true, emailNotification: true },
     });
 
     if (!worker) return { status: "error", message: "Oops! An error occurred" };
 
-    // Send rejection email
-    await mailjet.post("send", { version: "v3.1" }).request({
-      Messages: [
-        {
-          From: {
-            Email: env.SENDER_EMAIL_ADDRESS,
-            Name: "grabcash",
+    if (worker.emailNotification) {
+      // Send rejection email
+      await mailjet.post("send", { version: "v3.1" }).request({
+        Messages: [
+          {
+            From: {
+              Email: env.SENDER_EMAIL_ADDRESS,
+              Name: "grabcash",
+            },
+            To: [{ Email: worker.email, Name: worker.name }],
+            Subject: `Submission rejected - ${updatedApplicant.Job.title}`,
+            HTMLPart: JobSubmissionReviewedEmail({
+              workerName: worker.name,
+              jobTitle: updatedApplicant.Job.title,
+              status: "REJECTED",
+              reward: updatedApplicant.Job.reward!,
+              reason,
+            }),
           },
-          To: [{ Email: worker.email, Name: worker.name }],
-          Subject: `Submission rejected - ${updatedApplicant.Job.title}`,
-          HTMLPart: JobSubmissionReviewedEmail({
-            workerName: worker.name,
-            jobTitle: updatedApplicant.Job.title,
-            status: "REJECTED",
-            reward: updatedApplicant.Job.reward!,
-            reason,
-          }),
-        },
-      ],
-    });
+        ],
+      });
+    }
 
     revalidatePath("/");
 

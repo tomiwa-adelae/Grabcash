@@ -10,12 +10,14 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 import { Metadata } from "next";
+import { getUserDetails } from "@/app/data/user/get-user-details";
 export const metadata: Metadata = {
   title: "Settings - Grabcash",
 };
 
 const page = async () => {
   const sessions = await auth.api.listSessions({ headers: await headers() });
+  const user = await getUserDetails();
 
   return (
     <div className="py-16 md:py-24 container">
@@ -30,7 +32,7 @@ const page = async () => {
         </p>
         <div className="space-y-1 mt-2">
           <InAppNotificationBox />
-          <EmailNotificationBox />
+          <EmailNotificationBox emailNotification={user.emailNotification} />
         </div>
       </div>
       <Separator className="my-10" />

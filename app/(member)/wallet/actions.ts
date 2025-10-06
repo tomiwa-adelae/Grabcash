@@ -46,6 +46,7 @@ export const initiatePayout = async ({
         bankName: true,
         accountName: true,
         id: true,
+        emailNotification: true,
       },
     });
 
@@ -176,26 +177,27 @@ export const initiatePayout = async ({
         },
       });
 
-      await mailjet.post("send", { version: "v3.1" }).request({
-        Messages: [
-          {
-            From: {
-              Email: env.SENDER_EMAIL_ADDRESS,
-              Name: "grabcash",
+      if (user.emailNotification) {
+        await mailjet.post("send", { version: "v3.1" }).request({
+          Messages: [
+            {
+              From: {
+                Email: env.SENDER_EMAIL_ADDRESS,
+                Name: "grabcash",
+              },
+              To: [{ Email: user.email, Name: user.name }],
+              Subject: `Your Grabcash payout was successful`,
+              HTMLPart: PayoutSuccessful({
+                amount: formatMoneyInput(amount),
+                bankName: user.bankName,
+                accountNumber: user.accountNumber,
+                date: payout.createdAt,
+                name: user.name,
+              }),
             },
-            To: [{ Email: user.email, Name: user.name }],
-            Subject: `Your Grabcash payout was successful`,
-            HTMLPart: PayoutSuccessful({
-              amount: formatMoneyInput(amount),
-              bankName: user.bankName,
-              accountNumber: user.accountNumber,
-              date: payout.createdAt,
-              name: user.name,
-            }),
-          },
-        ],
-      });
-
+          ],
+        });
+      }
       // Log the activity
       await logActivity({
         type: "PAYOUT_COMPLETED",

@@ -145,24 +145,26 @@ export const saveApplicantScreenshot = async (
         },
       });
 
-      await mailjet.post("send", { version: "v3.1" }).request({
-        Messages: [
-          {
-            From: {
-              Email: env.SENDER_EMAIL_ADDRESS,
-              Name: "grabcash",
+      if (userDetails.emailNotification) {
+        await mailjet.post("send", { version: "v3.1" }).request({
+          Messages: [
+            {
+              From: {
+                Email: env.SENDER_EMAIL_ADDRESS,
+                Name: "grabcash",
+              },
+              To: [{ Email: job.User.email, Name: job.User.name }],
+              Subject: `Job closed - ${job.title}`,
+              HTMLPart: JobClosedEmail({
+                ownerName: job.User.name,
+                jobTitle: job.title,
+                noOfWorkers: job.noOfWorkers!,
+                slug: job.slug!,
+              }),
             },
-            To: [{ Email: job.User.email, Name: job.User.name }],
-            Subject: `Job closed - ${job.title}`,
-            HTMLPart: JobClosedEmail({
-              ownerName: job.User.name,
-              jobTitle: job.title,
-              noOfWorkers: job.noOfWorkers!,
-              slug: job.slug!,
-            }),
-          },
-        ],
-      });
+          ],
+        });
+      }
     }
 
     return {
