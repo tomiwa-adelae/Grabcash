@@ -398,7 +398,7 @@ export function RegisterForm() {
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="referral"
             render={({ field }) => (
@@ -410,7 +410,7 @@ export function RegisterForm() {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
           <FormField
             control={form.control}
             name="password"

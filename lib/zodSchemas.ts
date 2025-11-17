@@ -50,7 +50,7 @@ export const registerSchema = z
     phoneNumber: z.string().regex(/^(\+?\d{10,15})$/, {
       message: "Enter a valid phone number.",
     }),
-    referral: z.string().optional(),
+    // referral: z.string().optional(),
     password: z
       .string()
       .min(8, { message: "Password must be at least 8 characters." })
