@@ -81,7 +81,7 @@ export const SubmissionBox = ({
                   status === "REJECTED"
                     ? "destructive"
                     : status === "APPROVED"
-                    ? "default"
+                    ? "success"
                     : "pending"
                 }
               >

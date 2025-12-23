@@ -136,7 +136,7 @@ export const SubmittedJobsCard = ({
                       job.status === "PENDING"
                         ? "pending"
                         : job.status === "APPROVED"
-                        ? "default"
+                        ? "success"
                         : job.status === "REJECTED"
                         ? "destructive"
                         : "default"

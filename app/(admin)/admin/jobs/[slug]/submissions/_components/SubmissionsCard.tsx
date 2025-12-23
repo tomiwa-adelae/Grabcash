@@ -157,7 +157,7 @@ export function SubmissionsCard({
                       applicant.status === "PENDING"
                         ? "pending"
                         : applicant.status === "APPROVED"
-                        ? "default"
+                        ? "success"
                         : applicant.status === "REJECTED"
                         ? "destructive"
                         : "default"

@@ -189,7 +189,7 @@ export function SubmissionsTable({
                         applicant.status === "PENDING"
                           ? "pending"
                           : applicant.status === "APPROVED"
-                          ? "default"
+                          ? "success"
                           : applicant.status === "REJECTED"
                           ? "destructive"
                           : "default"
