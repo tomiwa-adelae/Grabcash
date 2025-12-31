@@ -81,10 +81,7 @@ export default async function ReferralAuditPage({ searchParams }: any) {
 
       <SearchBar placeholder="Search by referrer name or code..." />
 
-      <ReferralAuditList
-        initialData={data.payouts}
-        hasNext={data.pagination.hasNext}
-      />
+      <ReferralAuditList initialData={data.payouts} />
     </div>
   );
 }
