@@ -19,6 +19,8 @@ import { RecentTransactionHistory } from "@/app/(member)/wallet/_components/Rece
 import { getUserPayouts } from "@/app/data/admin/user/get-user-payouts";
 import { Banner } from "@/components/Banner";
 import { IconTrash } from "@tabler/icons-react";
+import { Separator } from "@/components/ui/separator";
+import { NairaIcon } from "@/components/NairaIcon";
 
 export async function generateMetadata(
   { params }: any,
@@ -82,6 +84,8 @@ const page = async ({
     page: 1,
     limit: DEFAULT_LIMIT,
   });
+
+  console.log(payoutsData);
 
   return (
     <div className="space-y-6">
@@ -147,6 +151,42 @@ const page = async ({
             lifeTimeEarnings={user.lifeTimeEarnings}
           />
         </div>
+        <Card className="gap-0">
+          <CardHeader>
+            <CardTitle>Referral Insights</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-4 text-muted-foreground text-sm font-medium space-y-4">
+            <div>
+              <span>Code:</span>
+              <span>{user.referralCode || "N/A"}</span>
+            </div>
+            <Separator />
+            <div>
+              <span>Total Referred:</span>
+              <span className="font-bold">
+                {/* You'll need a count here from RecentActivity */}
+                {
+                  payoutsData.payouts.filter((p) =>
+                    p.title?.includes("Referral")
+                  ).length
+                }
+              </span>
+            </div>
+            <Separator />
+            <div>
+              <span>Total Earned:</span>
+              <span className="font-bold text-green-600">
+                <NairaIcon />
+                {
+                  payoutsData.payouts
+                    .filter((p) => p.title?.includes("Referral"))
+                    .reduce((acc, current) => acc + current.amount, 0)
+                    .toLocaleString() // Adds commas for readability (e.g., 1,500)
+                }
+              </span>
+            </div>
+          </CardContent>
+        </Card>
         {user.status !== "DELETED" && (
           <div>
             <QuickActions

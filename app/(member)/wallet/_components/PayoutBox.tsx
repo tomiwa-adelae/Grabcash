@@ -33,7 +33,7 @@ export const PayoutBox = ({
       //   onClick={() => router.push(`/admin/jobs/${slug}`)}
     >
       <div className="flex items-center gap-2 md:w-auto">
-        <Button
+        {/* <Button
           size="icon"
           className={cn(
             "size-10 lg:size-12 rounded-full",
@@ -43,6 +43,18 @@ export const PayoutBox = ({
           )}
         >
           <BanknoteArrowUp />
+        </Button> */}
+
+        <Button
+          size="icon"
+          className={cn(
+            "size-10 lg:size-12 rounded-full",
+            type === "DEBIT"
+              ? "bg-destructive/10 text-destructive" // Red for Withdrawals
+              : "bg-green-500/10 text-green-600" // Green for Referral Bonuses
+          )}
+        >
+          {type === "DEBIT" ? <BanknoteArrowUp /> : <BanknoteArrowDown />}
         </Button>
 
         <div className="flex-1 flex items-start justify-between">

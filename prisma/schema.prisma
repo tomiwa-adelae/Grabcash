@@ -13,6 +13,7 @@ model User {
   name                 String
   email                String     @unique
   username             String?    @unique
+  referralCode         String?    @unique
   displayUsername      String?
   phoneNumber          String?
   country              String?

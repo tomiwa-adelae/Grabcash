@@ -17,6 +17,7 @@ import { TopMembersList } from "../../_components/TopMembersList";
 import { getTotalActiveJobs } from "@/app/data/admin/job/get-total-active-jobs";
 
 import { Metadata } from "next";
+import { getTotalReferralPayouts } from "../actions";
 export const metadata: Metadata = {
   title: "Dashboard - Grabcash",
 };
@@ -39,6 +40,7 @@ export default async function page({
   const totalPlatformEarnings = await getTotalPlatformEarnings();
 
   const totalPayments = await getPlatformAnalytics();
+  const totalReferralPayouts = await getTotalReferralPayouts();
 
   // Get initial data - change limit back to 10 for production
   const activitiesData = await getAllActivities({
@@ -91,6 +93,15 @@ export default async function page({
       icon: "clock",
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
+    },
+    {
+      title: "Referral Bonuses",
+      value: `₦${formatMoneyInput(totalReferralPayouts)}`,
+      change: "+5.4%",
+      changeType: "positive" as const,
+      icon: "gift", // Ensure your icon mapper handles 'gift'
+      color: "text-pink-500",
+      bgColor: "bg-pink-500/10",
     },
   ];
 

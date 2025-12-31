@@ -32,9 +32,12 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { tryCatch } from "@/hooks/use-try-catch";
 import { sendRegistrationEmail } from "../../actions";
+import { useSearchParams } from "next/navigation";
 
 export function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const refCode = searchParams.get("ref"); // looks for ?ref=CODE
 
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(registerSchema),
@@ -46,8 +49,16 @@ export function RegisterForm() {
       password: "",
       confirmPassword: "",
       phoneNumber: "",
+      referralCode: refCode || "",
     },
   });
+
+  // Optional: If the URL changes after load, update the form
+  useEffect(() => {
+    if (refCode) {
+      form.setValue("referralCode", refCode);
+    }
+  }, [refCode, form]);
 
   const password = form.watch("password");
   const [isVisible, setIsVisible] = useState<boolean>(false);

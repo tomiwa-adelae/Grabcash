@@ -18,6 +18,7 @@ export const getUserProfile = async (username: string) => {
       country: true,
       accountName: true,
       accountNumber: true,
+      referralCode: true,
       bankName: true,
       bio: true,
       image: true,

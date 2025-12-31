@@ -50,7 +50,7 @@ export const registerSchema = z
     phoneNumber: z.string().regex(/^(\+?\d{10,15})$/, {
       message: "Enter a valid phone number.",
     }),
-    // referral: z.string().optional(),
+    referralCode: z.string().optional().or(z.literal("")),
     password: z
       .string()
       .min(8, { message: "Password must be at least 8 characters." })
@@ -148,6 +148,7 @@ export const onboardingProfileSchema = z
     email: z.string().email().min(2, {
       message: "Email must be at least 2 characters.",
     }),
+    referralCode: z.string().optional().or(z.literal("")),
     username: z
       .string()
       .min(3, "Username must be at least 3 characters")

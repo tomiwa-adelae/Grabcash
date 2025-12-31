@@ -39,6 +39,7 @@ export const getTotalUsers = async ({
         id: true,
         name: true,
         username: true,
+        referralCode: true, // Add this
         country: true,
         createdAt: true,
         image: true,

@@ -63,6 +63,7 @@ export const getAllActivities = async ({
     user: a.user?.email || a.user?.name || "System",
     time: formatDistanceToNow(new Date(a.createdAt), { addSuffix: true }),
     type: a.type || "DEFAULT", // Only string
+    isReferral: a.description?.includes("Referral bonus"),
   }));
 
   const totalPages = Math.ceil(totalCount / limit);

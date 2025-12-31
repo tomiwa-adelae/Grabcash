@@ -11,6 +11,7 @@ export const getUserProfile = async (username: string) => {
       id: true,
       name: true,
       email: true,
+      referralCode: true, // Add this
       username: true,
       phoneNumber: true,
       country: true,

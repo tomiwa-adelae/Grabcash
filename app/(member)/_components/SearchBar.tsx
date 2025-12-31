@@ -41,7 +41,7 @@ export const SearchBar = ({ placeholder = "Search...", search }: Props) => {
       setIsLoading(true);
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 3000);
+      }, 5000);
       return () => clearTimeout(timer);
     }
     setIsLoading(false);
@@ -63,7 +63,7 @@ export const SearchBar = ({ placeholder = "Search...", search }: Props) => {
 
       const newUrl = `${pathname}?${params.toString()}`;
       router.push(newUrl, { scroll: false });
-    }, 3000);
+    }, 5000);
 
     return () => clearTimeout(delayDebounceFn);
   }, [query]);

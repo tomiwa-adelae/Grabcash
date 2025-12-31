@@ -494,7 +494,6 @@ export const rejectApplication = async (
 
     return { status: "success", message: "Submission rejected" };
   } catch (error) {
-    console.error(error);
     return { status: "error", message: "Failed to reject submission" };
   }
 };
@@ -518,4 +517,12 @@ export const verifyPayment = async (id: string): Promise<ApiResponse> => {
   } catch (error) {
     return { status: "error", message: "Failed to mark payment as paid" };
   }
+};
+
+export const getTotalReferralPayouts = async () => {
+  const result = await prisma.payout.aggregate({
+    where: { title: { contains: "Referral Bonus" }, status: "PAID" },
+    _sum: { amount: true },
+  });
+  return result._sum.amount || 0;
 };

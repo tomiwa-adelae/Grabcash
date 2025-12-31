@@ -5,6 +5,8 @@ import { SocialMedia } from "./SocialMedia";
 import { Jobs } from "./Jobs";
 import { GetUserProfileType } from "@/app/data/user/get-user-profile";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ReferralsList } from "./ReferralsList";
+import { Suspense } from "react";
 
 interface Props {
   query: string;
@@ -14,22 +16,11 @@ interface Props {
 
 export const ProfileTabs = ({ user, query, myProfile }: Props) => {
   const myProfileTab = [
-    {
-      label: "Personal Information",
-      value: "Personal Information",
-    },
-    {
-      label: "Bank Details",
-      value: "Bank Details",
-    },
-    {
-      label: "Social Media",
-      value: "Social Media",
-    },
-    {
-      label: "Jobs",
-      value: "Jobs",
-    },
+    { label: "Personal Information", value: "Personal Information" },
+    { label: "Bank Details", value: "Bank Details" },
+    { label: "Social Media", value: "Social Media" },
+    { label: "Jobs", value: "Jobs" },
+    { label: "Referrals", value: "Referrals" }, // Added this
   ];
 
   const visitingProfileTab = [
@@ -70,6 +61,18 @@ export const ProfileTabs = ({ user, query, myProfile }: Props) => {
             username={user.username}
           />
         </TabsContent>
+        {/* New Referrals Content */}
+        {myProfile && (
+          <TabsContent value="Referrals">
+            <Suspense
+              fallback={
+                <div className="h-40 w-full animate-pulse bg-muted rounded-xl" />
+              }
+            >
+              <ReferralsList userId={user.id} />
+            </Suspense>
+          </TabsContent>
+        )}
         <TabsContent className="w-full" value="Bank Details">
           <BankDetails
             myProfile={myProfile}

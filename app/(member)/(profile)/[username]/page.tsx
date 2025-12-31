@@ -19,6 +19,7 @@ import { followings } from "@/app/data/follow/followings";
 import { DEFAULT_LIMIT } from "@/constants";
 import { getMyJobs } from "@/app/data/user/job/my-job/get-my-jobs";
 import { Metadata, ResolvingMetadata } from "next";
+import { ReferralCard } from "../_components/ReferralCard";
 
 export async function generateMetadata(
   { params }: any,
@@ -92,6 +93,9 @@ const page = async ({
               @{user.username}
             </p>
           </div>
+          {myProfile && user.referralCode && (
+            <ReferralCard referralCode={user.referralCode} />
+          )}
           {myProfile && (
             <ShareButton
               profileName={user.name}

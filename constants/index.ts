@@ -12,6 +12,7 @@ import {
   IconFileDislike,
   IconFileLike,
   IconFlagExclamation,
+  IconGift,
   IconLayoutDashboard,
   IconSettings,
   IconUsersGroup,
@@ -993,6 +994,11 @@ export const adminNavLinks = [
       //   icon: IconCreditCardRefund,
       // },
     ],
+  },
+  {
+    title: "Referral Audit",
+    slug: "/admin/referrals",
+    icon: IconGift, // Or similar icon
   },
   {
     title: "Exit",

@@ -239,6 +239,7 @@ export function OnBoardingProfileForm({ user }: Props) {
         bankName: data.bankName,
         accountNumber: data.accountNumber,
         image: data.image || data.selectedAvatar,
+        referralCode: data.referralCode,
         socialLinks:
           // @ts-ignore
           data?.socialLinks.length === 1 &&
@@ -275,7 +276,7 @@ export function OnBoardingProfileForm({ user }: Props) {
             <h4 className="font-medium text-lg text-muted-foreground mb-4">
               Personal information
             </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="firstName"
@@ -388,6 +389,22 @@ export function OnBoardingProfileForm({ user }: Props) {
                         placeholder="8012345679"
                         value={field.value}
                         onChange={(value) => field.onChange(value)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="referralCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Referral Code (Optional)</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter username of who invited you"
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />

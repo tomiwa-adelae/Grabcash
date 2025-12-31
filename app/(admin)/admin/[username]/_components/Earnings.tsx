@@ -13,10 +13,10 @@ interface Props {
 export const Earnings = ({ earnings, lifeTimeEarnings }: Props) => {
   return (
     <Card className="gap-0">
-      <CardHeader className="border-b">
+      <CardHeader>
         <CardTitle>Earnings & Wallets</CardTitle>
       </CardHeader>
-      <CardContent className="mt-3 space-y-4 text-sm font-medium">
+      <CardContent className="pt-4 space-y-4 text-sm font-medium">
         <p>
           Current balance:{" "}
           <span className="text-muted-foreground">
