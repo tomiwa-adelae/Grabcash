@@ -74,7 +74,7 @@ export const ContactFormEmail = ({
             </tr>
             <tr>
               <td style="padding-top:20px; font-size:13px; color:#666;" align="center">
-                &copy; 2025 Grabcash. All rights reserved.
+                &copy; 2026 Grabcash. All rights reserved.
               </td>
             </tr>
           </table>

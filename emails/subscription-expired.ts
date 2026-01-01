@@ -58,7 +58,7 @@ export function SubscriptionExpired({ name }: { name: string }) {
             <!-- Footer -->
             <tr>
               <td style="background:#f3f4f6; text-align:center; padding:15px; font-size:12px; color:#6b7280;">
-                © 2025 Grabcash. All rights reserved.
+                © 2026 Grabcash. All rights reserved.
               </td>
             </tr>
 
