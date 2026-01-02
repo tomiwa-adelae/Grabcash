@@ -76,7 +76,7 @@ const page = async ({
 
   const following = await isFollowing(user.id);
 
-  const myProfile = username === session?.user.username;
+  const myProfile = username === session?.user?.username!;
 
   return (
     <div className="py-16 md:py-24 container">
