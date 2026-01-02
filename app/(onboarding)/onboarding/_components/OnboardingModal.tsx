@@ -62,7 +62,7 @@ export function OnboardingModal({ user }: Props) {
         <div className="p-2">
           <Image
             className="size-full aspect-auto object-cover"
-            src="/assets/images/onboarding-img.jpg"
+            src="/assets/images/hero-image.jpeg"
             width={1000}
             height={1000}
             alt="dialog"

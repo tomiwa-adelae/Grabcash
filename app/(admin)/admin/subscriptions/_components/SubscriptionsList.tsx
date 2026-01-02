@@ -6,6 +6,7 @@ import { Loader } from "@/components/Loader";
 import { loadMoreSubscriptions } from "@/app/data/admin/subscription/load-more-subscriptions";
 import { SubscriptionBox } from "@/app/(admin)/_components/SubscriptionBox";
 import { GetSubscriptionsType } from "@/app/data/admin/subscription/get-subscriptions";
+import { EmptyState } from "@/components/EmptyState";
 
 interface Props {
   initialSubscriptions: GetSubscriptionsType[];
@@ -104,6 +105,9 @@ export function SubscriptionsList({
 
   return (
     <div>
+      {subscriptions.length === 0 && (
+        <EmptyState title="No subscriptions yet" />
+      )}
       {subscriptions.map((subscription, index) => (
         <SubscriptionBox
           amount={subscription.payment?.amount!}

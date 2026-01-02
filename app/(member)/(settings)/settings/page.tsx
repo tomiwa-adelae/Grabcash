@@ -31,7 +31,7 @@ const page = async () => {
           you'd like to receive updates.
         </p>
         <div className="space-y-1 mt-2">
-          <InAppNotificationBox />
+          {/* <InAppNotificationBox /> */}
           <EmailNotificationBox emailNotification={user.emailNotification} />
         </div>
       </div>

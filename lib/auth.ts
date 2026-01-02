@@ -17,6 +17,14 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  trustedOrigins: [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://192.168.1.250:3000",
+
+    // allow all LAN IPs (DEV ONLY)
+    /^http:\/\/192\.168\.\d{1,3}\.\d{1,3}:3000$/,
+  ],
   socialProviders: {
     google: {
       clientId: env.GOOGLE_CLIENT_ID,

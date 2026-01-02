@@ -26,7 +26,7 @@ const page = () => {
             Terms of Use
           </h1>
           <p>
-            Thank you for visiting grabcash.com. Please read, understand and
+            Thank you for visiting grabcash.ng. Please read, understand and
             agree to these Terms of Use before accessing or using our services.
           </p>
         </div>
@@ -40,10 +40,10 @@ const page = () => {
             <ul className="list-disc list-inside space-y-2 text-sm">
               <li>
                 "The Company" refers to grabcash Limited (the parent company of
-                grabcash.com).
+                grabcash.ng).
               </li>
-              <li>"This website" refers to grabcash.com.</li>
-              <li>"Us", "We" refer to grabcash.com and its parent company.</li>
+              <li>"This website" refers to grabcash.ng.</li>
+              <li>"Us", "We" refer to grabcash.ng and its parent company.</li>
               <li>
                 "User Content" refers to all data, materials, and media provided
                 by users on the marketplace, including but not limited to

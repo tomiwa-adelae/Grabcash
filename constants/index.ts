@@ -28,7 +28,7 @@ import {
   UsersRound,
 } from "lucide-react";
 
-export const EMAIL_ADDRESS = "contact@grabcash.com";
+export const EMAIL_ADDRESS = "support@grabcash.ng";
 export const PHONE_NUMBER = "+234 800 233 4433";
 export const YOUTUBE_URL = "www.youtube.com";
 export const INSTAGRAM_URL = "www.instagram.com";
@@ -52,10 +52,10 @@ export const rootNavLinks = [
     slug: "/about",
     label: "About",
   },
-  {
-    slug: "/blogs",
-    label: "Blogs",
-  },
+  // {
+  //   slug: "/blogs",
+  //   label: "Blogs",
+  // },
   {
     slug: "/faqs",
     label: "FAQs",
@@ -136,10 +136,10 @@ export const footer = [
         slug: "/about",
         label: "About us",
       },
-      {
-        slug: "/blog",
-        label: "Blog",
-      },
+      // {
+      //   slug: "/blog",
+      //   label: "Blog",
+      // },
       {
         slug: "/faqs",
         label: "FAQs",
@@ -541,10 +541,10 @@ export const jobCategories = [
     value: "Article Writing",
     label: "Article Writing",
   },
-  {
-    value: "Blog Writing",
-    label: "Blog Writing",
-  },
+  // {
+  //   value: "Blog Writing",
+  //   label: "Blog Writing",
+  // },
   {
     value: "Copywriting",
     label: "Copywriting",

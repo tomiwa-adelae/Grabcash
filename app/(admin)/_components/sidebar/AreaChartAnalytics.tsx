@@ -127,7 +127,7 @@ export const AreaChartAnalytics = ({ analytics }: Props) => {
       </ResponsiveContainer>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-6">
         <StatCard
           title="Total Job Payments"
           value={analytics.totals.jobPayments}

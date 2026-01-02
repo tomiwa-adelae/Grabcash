@@ -18,7 +18,7 @@ interface Props {
 export const LoginActivities = ({ sessions }: Props) => {
   return (
     <div className="mt-4 flex items-start justify-start gap-4">
-      <h3 className="font-medium text-base">Login Activities</h3>
+      <h3 className="font-medium text-sm md:text-base">Login Activities</h3>
       <div className="grid gap-2">
         {sessions && sessions.length > 0 ? (
           sessions.map((session, index) => {
@@ -36,11 +36,11 @@ export const LoginActivities = ({ sessions }: Props) => {
                   <DeviceIcon className="size-5" />
                 </Button>
                 <div>
-                  <p className="text-base font-medium flex items-center gap-1">
+                  <p className="text-sm md:text-base font-medium flex items-center gap-1">
                     {deviceInfo.name}
                     {isCurrentSession && <Badge>Current</Badge>}
                   </p>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-muted-foreground text-xs md:text-sm">
                     Last log in: {lastLogin}
                   </p>
                 </div>

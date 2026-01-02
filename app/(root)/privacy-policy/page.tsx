@@ -27,8 +27,8 @@ const page = () => {
           </h1>
           <p>
             This privacy policy ("Policy") explains how grabcash Limited (“the
-            site”, “grabcash.com”, “we”, “our”, “us”) collects, uses, and
-            protects your information when you visit or use our website. It also
+            site”, “grabcash.ng, “we”, “our”, “us”) collects, uses, and protects
+            your information when you visit or use our website. It also
             describes how we handle personal data and device information to
             support our platform’s features and services.
           </p>
@@ -176,7 +176,7 @@ const page = () => {
             </h2>
             <p className="text-sm my-2">
               Our website may contain links to third-party sites. Once you leave
-              grabcash.com, we are not responsible for the protection or privacy
+              grabcash.ng, we are not responsible for the protection or privacy
               of your information on other sites. Please review the privacy
               policies of any third-party websites you visit.
             </p>

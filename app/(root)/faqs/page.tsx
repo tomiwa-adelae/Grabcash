@@ -13,7 +13,7 @@ const page = () => {
       <Showcase
         title="Frequency asked question"
         description="Have questions? We’ve got answers. Browse through our most commonly asked questions to get quick help on how the platform works—from signing up and completing tasks to earning rewards and getting paid."
-        image={"/assets/images/faq-img.jpg"}
+        image={"/assets/images/hero-image.jpeg"}
       />
       <FAQs showTitle={false} />
       <HelpForm />

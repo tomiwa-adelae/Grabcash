@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { BarChartAnalytics } from "./BarChartAnalytics";
 import { Button } from "@/components/ui/button";
 import { AreaChartAnalytics } from "./AreaChartAnalytics";
+import { IconChartBarPopular, IconChartHistogram } from "@tabler/icons-react";
 
 interface Props {
   analytics: Awaited<ReturnType<typeof getPlatformAnalytics>>;
@@ -36,8 +37,8 @@ export const PlatformRevenueChart = ({ analytics }: Props) => {
     <div className="border rounded-xl p-6 bg-card">
       <div className="flex items-center justify-between gap-2 mb-4">
         <h3 className="text-lg font-semibold mb-4">Revenue Analytics</h3>
-        <Button size="md" variant="secondary" onClick={toggleView}>
-          {view === "area" ? "Bar view" : "Area view"}
+        <Button size="icon" variant="secondary" onClick={toggleView}>
+          {view === "area" ? <IconChartBarPopular /> : <IconChartHistogram />}
         </Button>
       </div>
 

@@ -14,7 +14,7 @@ const page = () => {
       <Showcase
         title="About us"
         description="We are on a mission to make online earning accessible, rewarding, and transparent. Our platform connects individuals with verified jobs, rewarding campaigns, and affiliate opportunities while promoting financial literacy through educational resources."
-        image={"/assets/images/about-img.jpg"}
+        image={"/assets/images/hero-image.jpeg"}
       />
       <How
         title={<>What we offer</>}

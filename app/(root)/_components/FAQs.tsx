@@ -43,7 +43,7 @@ interface Props {
 
 export const FAQs = ({ showTitle }: Props) => {
   return (
-    <div className="bg-[#F3F7FA] py-16 md:py-20">
+    <div className="bg-[#faf3f6] py-16">
       <div className="container">
         {showTitle && (
           <h2 className="dark:text-black mb-8 font-semibold text-3xl md:text-4xl text-center">
@@ -57,7 +57,7 @@ export const FAQs = ({ showTitle }: Props) => {
           <Accordion
             type="single"
             collapsible
-            className="w-full grid gap-4"
+            className="w-full grid gap-2"
             defaultValue="3"
           >
             {items.map((item) => (

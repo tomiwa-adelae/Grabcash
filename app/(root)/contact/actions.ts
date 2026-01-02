@@ -65,7 +65,6 @@ export const contactUs = async (
       message: "Message successfully sent. We will reach out to you shortly",
     };
   } catch (error) {
-    console.error(error);
     return { status: "error", message: "Your message was not sent." };
   }
 };

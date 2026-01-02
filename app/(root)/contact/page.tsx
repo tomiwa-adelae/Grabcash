@@ -16,7 +16,7 @@ const page = () => {
       <Showcase
         title={"Contact us"}
         description="Do have a question or feedback? We're here to help you make the most of your earning journey."
-        image="/assets/images/contact-img.jpg"
+        image="/assets/images/hero-image.jpeg"
       />
       <ContactInformation />
       <ContactForm />

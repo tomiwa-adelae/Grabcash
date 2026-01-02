@@ -28,7 +28,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
   return (
     <div className="py-16 md:py-24 container space-y-6">
       <div>
-        <PageHeader title="Our Top Members members" />
+        <PageHeader title="Our Top Members" />
       </div>
       <SearchBar />
       {membersData.members.length !== 0 && (

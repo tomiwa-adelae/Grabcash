@@ -14,7 +14,7 @@ const page = () => {
         <h1 className="font-semibold text-4xl md:text-5xl">Forgot password</h1>
         <p className="text-base text-muted-foreground max-w-2xl">
           Enter the email address linked to your grabcash account. We will send
-          you a 6-digit code to reset your password.
+          you a password reset link.
         </p>
       </div>
       <ForgotPasswordForm />

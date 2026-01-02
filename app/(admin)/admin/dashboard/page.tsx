@@ -94,15 +94,15 @@ export default async function page({
       color: "text-purple-500",
       bgColor: "bg-purple-500/10",
     },
-    {
-      title: "Referral Bonuses",
-      value: `₦${formatMoneyInput(totalReferralPayouts)}`,
-      change: "+5.4%",
-      changeType: "positive" as const,
-      icon: "gift", // Ensure your icon mapper handles 'gift'
-      color: "text-pink-500",
-      bgColor: "bg-pink-500/10",
-    },
+    // {
+    //   title: "Referral Bonuses",
+    //   value: `₦${formatMoneyInput(totalReferralPayouts)}`,
+    //   change: "+5.4%",
+    //   changeType: "positive" as const,
+    //   icon: "gift", // Ensure your icon mapper handles 'gift'
+    //   color: "text-pink-500",
+    //   bgColor: "bg-pink-500/10",
+    // },
   ];
 
   return (
@@ -115,16 +115,16 @@ export default async function page({
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat, index) => (
           <DashboardCard key={stat.title} stat={stat} index={index} />
         ))}
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 gap-4 sm:gap-6 xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-2 xl:grid-cols-3">
         {/* Charts Section */}
-        <div className="space-y-4 sm:space-y-6 xl:col-span-2">
+        <div className="space-y-4 xl:col-span-2">
           <PlatformRevenueChart analytics={totalPayments} />
           {/* <PlatformRevenueChart analytics={sampleAnalytics} /> */}
           <RecentUsers />

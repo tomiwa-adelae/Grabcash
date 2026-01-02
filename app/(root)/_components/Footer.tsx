@@ -24,13 +24,13 @@ export const Footer = () => {
           <NewsLetterForm />
         </div>
         <Separator className="my-12 bg-muted-foreground" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-10">
           <div className="col-span-2">
             <Logo />
           </div>
           {footer.map(({ title, links }, idx) => (
             <div key={idx}>
-              <h4 className="text-base md:text-lg font-medium">{title}</h4>
+              <h4 className="text-base font-medium">{title}</h4>
               <div className="grid gap-4 mt-2 text-sm text-gray-200">
                 {links.map(({ slug, label }, index) => (
                   <Link

@@ -37,11 +37,11 @@ export const Header = () => {
             </Link>
           ))}
         </div>
-        <div className="hidden md:flex items-center justify-end gap-4">
+        <div className="hidden md:flex items-center justify-end gap-2">
           <ThemeToggle />
           {!isPending && !session ? (
             <>
-              <Button size="md" asChild variant={"ghost"}>
+              <Button size="md" asChild variant={"outline"}>
                 <Link href="/login">Login</Link>
               </Button>
               <Button size="md" asChild>

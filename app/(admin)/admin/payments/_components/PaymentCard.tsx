@@ -49,7 +49,7 @@ export const PaymentCard = ({ stat, index }: DashboardCardProps) => {
               <Icon className={`h-6 w-6 ${stat.color}`} />
             </div>
 
-            <div
+            {/* <div
               className={`flex items-center gap-1 text-sm font-medium ${
                 stat.changeType === "positive"
                   ? "text-green-500"
@@ -62,10 +62,10 @@ export const PaymentCard = ({ stat, index }: DashboardCardProps) => {
                 }`}
               />
               <span>{stat.change}</span>
-            </div>
+            </div> */}
           </div>
 
-          <div className="mb-3">
+          <div>
             <h3 className="text-foreground mb-1 text-3xl font-bold">
               {stat.value}
             </h3>
@@ -74,14 +74,14 @@ export const PaymentCard = ({ stat, index }: DashboardCardProps) => {
             </p>
           </div>
 
-          <div className="bg-muted h-2 overflow-hidden rounded-full">
+          {/* <div className="bg-muted h-2 overflow-hidden rounded-full">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${65 + index * 8}%` }}
               transition={{ duration: 1, delay: index * 0.1 }}
               className={`h-full rounded-full ${stat.color.replace("text-", "bg-")}`}
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </motion.div>

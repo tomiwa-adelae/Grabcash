@@ -333,7 +333,7 @@ export function ChangePasswordForm({ password: hashPassword }: Props) {
               Forgotten password?
             </Link>
           </p>
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-2">
             <Button
               size={"md"}
               variant={"outline"}

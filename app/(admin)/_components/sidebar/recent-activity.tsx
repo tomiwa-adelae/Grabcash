@@ -114,7 +114,7 @@ export const RecentActivity = ({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 }}
-              className="hover:bg-accent/50 flex flex-col md:flex-row items-start md:items-center gap-3 rounded-lg p-2 transition-colors"
+              className="hover:bg-accent/50 overflow-x-hidden flex flex-col md:flex-row items-start md:items-center gap-3 rounded-lg p-2 transition-colors"
             >
               <div className="flex items-start justify-start gap-2">
                 <div className="bg-accent/50 rounded-lg p-2">
@@ -124,7 +124,7 @@ export const RecentActivity = ({
                   <div className="text-sm font-medium line-clamp-2">
                     {activity.action}
                   </div>
-                  <div className="text-muted-foreground line-clamp-1 text-xs">
+                  <div className="text-muted-foreground line-clamp-1 max-w-sm overflow-x-hidden text-xs">
                     {activity.user}
                   </div>
                   <div className="text-muted-foreground text-xs">

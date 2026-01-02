@@ -47,7 +47,7 @@ export const TopMemberBox = ({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="group hover:bg-accent/50 flex flex-col cursor-pointer items-start gap-4 rounded-lg p-4 transition-colors sm:flex-row sm:items-center"
+      className="group hover:bg-accent/50 flex flex-col cursor-pointer items-start gap-4 rounded-lg p-4 transition-colors sm:flex-row sm:items-center overflow-x-hidden"
       onClick={() => router.push(`/admin/${username}`)}
     >
       <div className="flex w-full items-center gap-4 md:w-auto">
@@ -57,7 +57,7 @@ export const TopMemberBox = ({
             alt={`${name}'s profile`}
             width={1000}
             height={1000}
-            className="rounded-full size-14 object-cover"
+            className="rounded-full size-12 object-cover"
           />
           <div
             className={`border-background absolute -right-1 -bottom-1 h-3 w-3 rounded-full border-2 ${
@@ -83,12 +83,12 @@ export const TopMemberBox = ({
             <div className="text-muted-foreground mt-1 flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:gap-4">
               <div className="flex items-center gap-1">
                 <IconMail className="h-3 w-3" />
-                <span className="line-clamp-1">{email}</span>
+                <span className="truncate max-w-[120px]">{email}</span>
               </div>
-              <div className="flex items-center gap-1">
+              {/* <div className="flex items-center gap-1">
                 <IconMapPin className="h-3 w-3" />
                 <span>{country}</span>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

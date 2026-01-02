@@ -43,7 +43,7 @@ const page = async () => {
           { slug: "/register", label: "Get started" },
           { slug: "/about", label: "Learn more", variant: "outline" },
         ]}
-        image={"/assets/images/hero-img.jpg"}
+        image={"/assets/images/hero-image.jpeg"}
       />
       <How
         title={

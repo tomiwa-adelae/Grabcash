@@ -59,7 +59,7 @@ export const UserBox = ({
             alt={`${name}'s profile`}
             width={1000}
             height={1000}
-            className="rounded-full size-14 object-cover"
+            className="rounded-full size-12 object-cover"
           />
           <div
             className={`border-background absolute -right-1 -bottom-1 h-3 w-3 rounded-full border-2 ${
@@ -85,7 +85,9 @@ export const UserBox = ({
             <div className="text-muted-foreground mt-1 flex flex-col gap-2 text-xs sm:flex-row sm:items-center sm:gap-4">
               <div className="flex items-center gap-1">
                 <IconMail className="h-3 w-3" />
-                <span className="line-clamp-1">{email}</span>
+                <span className="truncate max-w-[120px] md:max-w-full">
+                  {email}
+                </span>
               </div>
               <div className="flex items-center gap-1">
                 <IconMapPin className="h-3 w-3" />
@@ -107,7 +109,7 @@ export const UserBox = ({
         </div>
       </div>
 
-      <div className="ml-auto hidden md:flex items-center justify-between md:justify-end w-full md:w-auto gap-3">
+      <div className="ml-auto hidden 2xl:flex items-center justify-between md:justify-end w-full md:w-auto gap-3">
         <div>
           <div className="text-muted-foreground flex items-center gap-1 text-xs">
             <IconCalendar className="h-3 w-3" />

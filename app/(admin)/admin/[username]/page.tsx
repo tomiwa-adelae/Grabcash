@@ -85,8 +85,6 @@ const page = async ({
     limit: DEFAULT_LIMIT,
   });
 
-  console.log(payoutsData);
-
   return (
     <div className="space-y-6">
       {user.status === "DELETED" && (
