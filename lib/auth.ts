@@ -17,11 +17,26 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  advanced: {
+    cookies: {
+      session_token: {
+        name: "grabcash_auth",
+        attributes: {
+          httpOnly: true,
+          secure: true,
+          sameSite: "lax",
+          domain: ".grabcash.ng",
+          path: "/",
+        },
+      },
+    },
+  },
   trustedOrigins: [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "http://192.168.1.250:3000",
     "https://grabcash.ng",
+    "https://www.grabcash.ng",
 
     // allow all LAN IPs (DEV ONLY)
     // /^http:\/\/192\.168\.\d{1,3}\.\d{1,3}:3000$/,

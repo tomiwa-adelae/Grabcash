@@ -14,7 +14,8 @@ export const useSignout = () => {
           toast.success("Signed out successfully");
           router.push("/login?logout=success");
         },
-        onError: () => {
+        onError: (error) => {
+          console.log(error);
           toast.error("Oops! An error occurred!");
         },
       },
