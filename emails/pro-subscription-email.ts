@@ -31,7 +31,7 @@ export function ProSubscriptionEmail({
           <tr>
             <td style="padding: 20px; text-align: center; background: #f3f4f6; border-radius: 8px;">
               <p style="color: #111827; font-size: 16px; margin-bottom: 8px;">
-                You are currently on the <b>${plan} Pro Plan</b>.
+                You are currently on the <b>${plan} Plan</b>.
               </p>
               <p style="color: #374151; font-size: 14px; margin: 0;">
                 Enjoy uninterrupted access to premium features and earning opportunities.
