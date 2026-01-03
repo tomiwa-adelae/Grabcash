@@ -452,9 +452,9 @@ export const banks = [
     bankCode: "214",
     ussd: "*329#",
   },
-  { bankName: "Globus Bank", bankCode: "103", ussd: "*989#" },
+  { bankName: "Globus Bank", bankCode: "00103", ussd: "*989#" },
   { bankName: "Guaranty Trust Bank (GTBank)", bankCode: "058", ussd: "*737#" },
-  { bankName: "Heritage Bank", bankCode: "030", ussd: "*745#" },
+  // { bankName: "Heritage Bank", bankCode: "030", ussd: "*745#" },
   { bankName: "Keystone Bank", bankCode: "082", ussd: "*7111#" },
   { bankName: "Polaris Bank", bankCode: "076", ussd: "*833#" },
   { bankName: "Providus Bank", bankCode: "101", ussd: "*969#" },
@@ -462,7 +462,7 @@ export const banks = [
   { bankName: "Standard Chartered Bank", bankCode: "068", ussd: "N/A" },
   { bankName: "Sterling Bank", bankCode: "232", ussd: "*822#" },
   { bankName: "SunTrust Bank", bankCode: "100", ussd: "*5230#" },
-  { bankName: "Titan Trust Bank", bankCode: "250", ussd: "*922#" },
+  { bankName: "Titan Trust Bank", bankCode: "102", ussd: "*922#" },
   { bankName: "Union Bank of Nigeria", bankCode: "032", ussd: "*826#" },
   { bankName: "United Bank for Africa (UBA)", bankCode: "033", ussd: "*919#" },
   { bankName: "Unity Bank", bankCode: "215", ussd: "*7799#" },
@@ -470,15 +470,17 @@ export const banks = [
   { bankName: "Zenith Bank", bankCode: "057", ussd: "*966#" },
 
   // 🔹 Fintech / Digital / Microfinance Banks
-  { bankName: "Kuda Microfinance Bank", bankCode: "611", ussd: "N/A" },
-  { bankName: "Moniepoint Microfinance Bank", bankCode: "993", ussd: "*5573#" },
-  { bankName: "OPay", bankCode: "305", ussd: "*955#" },
-  { bankName: "PalmPay", bankCode: "312", ussd: "*861#" },
-  { bankName: "Paga", bankCode: "327", ussd: "*242#" },
-  { bankName: "FairMoney Microfinance Bank", bankCode: "E30", ussd: "*566#" },
-  { bankName: "Sparkle Microfinance Bank", bankCode: "B57", ussd: "*833#" },
-  { bankName: "9 Payment Service Bank", bankCode: "B97", ussd: "*990#" },
-  { bankName: "MoneyMaster PSB", bankCode: "D86", ussd: "*995#" },
+  { bankName: "Kuda Microfinance Bank", bankCode: "50211", ussd: "N/A" },
+  {
+    bankName: "Moniepoint Microfinance Bank",
+    bankCode: "50515",
+    ussd: "*5573#",
+  },
+  { bankName: "OPay", bankCode: "999992", ussd: "*955#" },
+  { bankName: "PalmPay", bankCode: "999991", ussd: "*861#" },
+  { bankName: "Paga", bankCode: "100002", ussd: "*242#" },
+  { bankName: "FairMoney Microfinance Bank", bankCode: "51318", ussd: "*566#" },
+  { bankName: "Sparkle Microfinance Bank", bankCode: "51310", ussd: "*833#" },
 ];
 
 // export const banks = [
@@ -1047,7 +1049,7 @@ export const adminNavLinks = [
   },
 ];
 
-export const DEFAULT_MINIMUM_PAYOUT = 500;
-// export const DEFAULT_MINIMUM_PAYOUT = 5000;
+// export const DEFAULT_MINIMUM_PAYOUT = 50;
+export const DEFAULT_MINIMUM_PAYOUT = 5000;
 export const DEFAULT_WITHDRAWAL_FEE = 5.5;
 export const PLATFORM_NAME = "Grabcash";

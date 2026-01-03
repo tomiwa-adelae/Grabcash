@@ -39,7 +39,7 @@ const page = async ({ searchParams }: { searchParams: SearchParams }) => {
   });
 
   return (
-    <div className="py-16 md:py-24 container space-y-6">
+    <div className="py-16 container space-y-6">
       <WalletBalance
         earnings={user.earnings}
         lifeTimeEarnings={user.lifeTimeEarnings}

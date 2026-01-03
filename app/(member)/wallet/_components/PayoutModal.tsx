@@ -76,7 +76,9 @@ export function PayoutModal({
     if (Number(removeCommas(amount)) < DEFAULT_MINIMUM_PAYOUT) {
       setAmountError(true);
       return toast.error(
-        `You cannot withdraw less than ₦${formatMoneyInput(DEFAULT_MINIMUM_PAYOUT)}`
+        `You cannot withdraw less than ₦${formatMoneyInput(
+          DEFAULT_MINIMUM_PAYOUT
+        )}`
       );
     }
 

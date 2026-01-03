@@ -77,7 +77,7 @@ export const PayoutBox = ({
         <Badge
           variant={
             status === "PAID"
-              ? "default"
+              ? "success"
               : status === "PENDING"
               ? "pending"
               : "destructive"
