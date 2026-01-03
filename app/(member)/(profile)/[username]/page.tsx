@@ -76,6 +76,7 @@ const page = async ({
 
   const following = await isFollowing(user.id);
 
+  // @ts-ignore
   const myProfile = username === session?.user?.username!;
 
   return (

@@ -20,6 +20,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { AlertDialog } from "@radix-ui/react-alert-dialog";
+import {
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Props {
   user: GetUserDetailsType | any;
@@ -57,8 +65,8 @@ export function OnboardingModal({ user }: Props) {
   };
 
   return (
-    <Dialog onOpenChange={setOpenModal} open={openModal}>
-      <DialogContent className="gap-0 p-0 [&>button:last-child]:text-white">
+    <AlertDialog onOpenChange={setOpenModal} open={openModal}>
+      <AlertDialogContent className="gap-0 p-0 [&>button:last-child]:text-white">
         <div className="p-2">
           <Image
             className="size-full aspect-auto object-cover"
@@ -69,20 +77,20 @@ export function OnboardingModal({ user }: Props) {
           />
         </div>
         <div className="space-y-6 px-6 pt-3 pb-6">
-          <DialogHeader>
-            <DialogTitle>Complete your profile</DialogTitle>
-            <DialogDescription>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Complete your profile</AlertDialogTitle>
+            <AlertDialogDescription>
               You are few steps away from unlocking the full experience of
               grabcash. Get started now
-            </DialogDescription>
-          </DialogHeader>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
           <div className="flex flex-col justify-end gap-4 sm:flex-row sm:items-center">
-            <DialogFooter>
-              <DialogClose asChild>
+            <AlertDialogFooter>
+              {/* <DialogClose asChild>
                 <Button size="md" type="button" variant="secondary">
                   Skip
                 </Button>
-              </DialogClose>
+              </DialogClose> */}
               <Button
                 size="md"
                 className="group"
@@ -96,10 +104,10 @@ export function OnboardingModal({ user }: Props) {
                   aria-hidden="true"
                 />
               </Button>
-            </DialogFooter>
+            </AlertDialogFooter>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
