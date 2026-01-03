@@ -1047,6 +1047,7 @@ export const adminNavLinks = [
   },
 ];
 
-export const DEFAULT_MINIMUM_PAYOUT = 5000;
+export const DEFAULT_MINIMUM_PAYOUT = 500;
+// export const DEFAULT_MINIMUM_PAYOUT = 5000;
 export const DEFAULT_WITHDRAWAL_FEE = 5.5;
 export const PLATFORM_NAME = "Grabcash";
