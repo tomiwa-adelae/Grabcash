@@ -37,9 +37,6 @@ export const auth = betterAuth({
     "http://192.168.1.250:3000",
     "https://grabcash.ng",
     "https://www.grabcash.ng",
-
-    // allow all LAN IPs (DEV ONLY)
-    // /^http:\/\/192\.168\.\d{1,3}\.\d{1,3}:3000$/,
   ],
   socialProviders: {
     google: {

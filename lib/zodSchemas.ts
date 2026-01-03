@@ -171,7 +171,7 @@ export const onboardingProfileSchema = z
     accountName: z.string().min(3, {
       message: "Account name must be at least 3 character.",
     }),
-    bankName: z.string().min(8, {
+    bankName: z.string().min(2, {
       message: "Bank must be selected.",
     }),
     accountNumber: z.string().min(8, {
