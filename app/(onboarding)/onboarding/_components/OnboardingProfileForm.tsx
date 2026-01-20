@@ -251,7 +251,7 @@ export function OnBoardingProfileForm({ user }: Props) {
       };
 
       const { data: result, error } = await tryCatch(
-        saveProfile(parsedData, bankCode)
+        saveProfile(parsedData, bankCode),
       );
 
       if (error) {
@@ -334,7 +334,7 @@ export function OnBoardingProfileForm({ user }: Props) {
                           {...field}
                           className={cn(
                             usernameStatus.available === false &&
-                              "border-destructive"
+                              "border-destructive",
                           )}
                         />
                         {usernameStatus.checking && (
@@ -623,7 +623,8 @@ export function OnBoardingProfileForm({ user }: Props) {
                               onClick={() => handleAvatarSelect(avatar.src)}
                               className={cn(
                                 "cursor-pointer bg-muted hover:bg-primary/10 transition-all flex items-center justify-center size-[80px] lg:size-[100px] rounded-full",
-                                selectedAvatar === avatar.src && "bg-primary/30"
+                                selectedAvatar === avatar.src &&
+                                  "bg-primary/30",
                               )}
                             >
                               <Image

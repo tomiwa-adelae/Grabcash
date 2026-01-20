@@ -10,7 +10,7 @@ import { VerificationEmail } from "@/emails/verification-email";
 
 const mailjet = Mailjet.apiConnect(
   env.MAILJET_API_PUBLIC_KEY,
-  env.MAILJET_API_PRIVATE_KEY
+  env.MAILJET_API_PRIVATE_KEY,
 );
 
 export const auth = betterAuth({

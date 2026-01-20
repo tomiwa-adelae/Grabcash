@@ -1,3 +1,380 @@
+// "use server";
+
+// import { logActivity } from "@/app/data/admin/activity/log-activity";
+// import { getUserDetails } from "@/app/data/user/get-user-details";
+// import { requireUser } from "@/app/data/user/require-user";
+// import { DEFAULT_MINIMUM_PAYOUT, DEFAULT_WITHDRAWAL_FEE } from "@/constants";
+// import { PayoutSuccessful } from "@/emails/payout.successful";
+// import { prisma } from "@/lib/db";
+// import { env } from "@/lib/env";
+// import { ApiResponse } from "@/lib/types";
+// import { formatMoneyInput } from "@/lib/utils";
+// import axios from "axios";
+// import { revalidatePath } from "next/cache";
+
+// import Mailjet from "node-mailjet";
+// const mailjet = Mailjet.apiConnect(
+//   env.MAILJET_API_PUBLIC_KEY,
+//   env.MAILJET_API_PRIVATE_KEY
+// );
+
+// export const initiatePayout = async ({
+//   amount,
+// }: {
+//   amount: number;
+// }): Promise<ApiResponse> => {
+//   const session = await requireUser();
+
+//   try {
+//     const userDetails = await getUserDetails();
+//     if (userDetails.status === "SUSPENDED")
+//       return { status: "error", message: "Your account has been suspended" };
+
+//     if (userDetails.status === "DELETED")
+//       return { status: "error", message: "Your account has been deleted" };
+
+//     const user = await prisma.user.findUnique({
+//       where: {
+//         id: session.user.id,
+//       },
+//       select: {
+//         earnings: true,
+//         name: true,
+//         email: true,
+//         accountNumber: true,
+//         bankCode: true,
+//         bankName: true,
+//         accountName: true,
+//         id: true,
+//         emailNotification: true,
+//       },
+//     });
+
+//     // Input validations
+//     if (amount < DEFAULT_MINIMUM_PAYOUT) {
+//       return {
+//         status: "error",
+//         message: `You cannot withdraw less than ₦${DEFAULT_MINIMUM_PAYOUT}`,
+//       };
+//     }
+
+//     if (!user?.earnings || user.earnings <= 0) {
+//       return { status: "error", message: "Insufficient balance" };
+//     }
+
+//     if (amount > user.earnings) {
+//       return { status: "error", message: "Insufficient balance" };
+//     }
+
+//     if (
+//       !user.accountNumber ||
+//       !user.bankCode ||
+//       !user.bankName ||
+//       !user.accountName
+//     ) {
+//       return {
+//         status: "error",
+//         message:
+//           "Account details incomplete. Please update your bank information.",
+//       };
+//     }
+
+//     try {
+//       // 1️⃣ Create transfer recipient
+//       const recipientRes = await axios.post(
+//         "https://api.paystack.co/transferrecipient",
+//         {
+//           type: "nuban",
+//           name: user.name || "User",
+//           account_number: user.accountNumber,
+//           bank_code: user.bankCode,
+//           currency: "NGN",
+//         },
+//         {
+//           headers: {
+//             Authorization: `Bearer ${env.PS_SECRET_KEY}`,
+//             "Content-Type": "application/json",
+//           },
+//         }
+//       );
+
+//       if (!recipientRes.data.status) {
+//         return {
+//           status: "error",
+//           message: recipientRes.data.message || "Failed to create recipient",
+//         };
+//       }
+
+//       const recipientCode = recipientRes.data.data.recipient_code;
+
+//       // Generate unique reference for this transfer
+//       const transferReference = `payout_${session.user.id}_${Date.now()}`;
+
+//       const withdrawalFee = (amount * Number(DEFAULT_WITHDRAWAL_FEE)) / 100;
+//       const payoutAmount = amount - withdrawalFee;
+
+//       try {
+//         const payload = {
+//           source: "balance",
+//           reason: `Payout withdrawal for ${user.name}`,
+//           amount: Math.floor(amount * 100), // convert to kobo
+//           recipient: recipientCode,
+//           reference: transferReference,
+//         };
+
+//         const res = await fetch("https://api.paystack.co/transfer", {
+//           method: "POST",
+//           headers: {
+//             Authorization: `Bearer ${env.PS_SECRET_KEY}`,
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify(payload),
+//         });
+
+//         const text = await res.text();
+
+//         let data;
+//         try {
+//           data = JSON.parse(text);
+//         } catch (error) {
+//           console.log(error);
+//           throw new Error("Paystack returned non-JSON response");
+//         }
+
+//         if (!res.ok) {
+//           throw new Error(data?.message || "Transfer failed");
+//         }
+
+//         // 3️⃣ Update user earnings in database
+//         await prisma.user.update({
+//           where: { id: session.user.id },
+//           data: {
+//             earnings: {
+//               decrement: amount + withdrawalFee,
+//             },
+//           },
+//         });
+
+//         await prisma.payout.create({
+//           data: {
+//             userId: session.user.id,
+//             amount,
+//             status: "PAID",
+//             bankName: user.bankName,
+//             accountNumber: user.accountNumber,
+//             accountName: user.accountName,
+//             fee: withdrawalFee,
+//             title: "Payout Withdrawal",
+//             type: "DEBIT",
+//             withdrawal: true,
+//           },
+//         });
+
+//         const payout = await prisma.payout.create({
+//           data: {
+//             userId: session.user.id,
+//             amount: withdrawalFee,
+//             status: "PAID",
+//             bankName: user.bankName,
+//             accountNumber: user.accountNumber,
+//             accountName: user.accountName,
+//             fee: 0,
+//             title: "Withdrawal fee",
+//             type: "DEBIT",
+//           },
+//         });
+
+//         if (user.emailNotification) {
+//           await mailjet.post("send", { version: "v3.1" }).request({
+//             Messages: [
+//               {
+//                 From: {
+//                   Email: env.SENDER_EMAIL_ADDRESS,
+//                   Name: "grabcash",
+//                 },
+//                 To: [{ Email: user.email, Name: user.name }],
+//                 Subject: `Your Grabcash payout was successful`,
+//                 HTMLPart: PayoutSuccessful({
+//                   amount: formatMoneyInput(amount),
+//                   bankName: user.bankName,
+//                   accountNumber: user.accountNumber,
+//                   date: payout.createdAt,
+//                   name: user.name,
+//                 }),
+//               },
+//             ],
+//           });
+//         }
+//         // Log the activity
+//         await logActivity({
+//           type: "PAYOUT_COMPLETED",
+//           description: `${user.name} withdrew ₦${formatMoneyInput(amount)}`,
+//           userId: user.id,
+//           payoutId: payout.id,
+//           metadata: {
+//             amount: amount,
+//           },
+//         });
+
+//         revalidatePath("/");
+
+//         return {
+//           status: "success",
+//           message: `${data.message}. Funds will be transferred shortly.`,
+//           // data: {
+//           //   transferCode: transferRes.data.data.transfer_code,
+//           //   reference: transferReference,
+//           // },
+//         };
+
+//         // return data;
+//       } catch (err) {
+//         console.error("Paystack Transfer Error:", err);
+//         throw err;
+//       }
+
+//       // 2️⃣ Initiate transfer
+//       // const transferRes = await axios.post(
+//       //   "https://api.paystack.co/transfer",
+//       //   {
+//       //     source: "balance",
+//       //     reason: `Payout withdrawal for ${user.name}`,
+//       //     amount: Math.floor(amount * 100), // convert to kobo
+//       //     recipient: recipientCode,
+//       //     reference: transferReference,
+//       //   },
+//       //   {
+//       //     headers: {
+//       //       Authorization: `Bearer ${env.PS_SECRET_KEY}`,
+//       //       "Content-Type": "application/json",
+//       //     },
+//       //   }
+//       // );
+
+//       // console.log(transferRes.data);
+
+//       // if (!transferRes.data.status) {
+//       //   console.log(transferRes);
+//       //   return {
+//       //     status: "error",
+//       //     message: transferRes.data.message || "Transfer failed",
+//       //   };
+//       // }
+
+//       // // if(transferRes.data.message)
+
+//       // return;
+
+//       // // 3️⃣ Update user earnings in database
+//       // await prisma.user.update({
+//       //   where: { id: session.user.id },
+//       //   data: {
+//       //     earnings: {
+//       //       decrement: amount + withdrawalFee,
+//       //     },
+//       //   },
+//       // });
+
+//       // await prisma.payout.create({
+//       //   data: {
+//       //     userId: session.user.id,
+//       //     amount,
+//       //     status: "PAID",
+//       //     bankName: user.bankName,
+//       //     accountNumber: user.accountNumber,
+//       //     accountName: user.accountName,
+//       //     fee: withdrawalFee,
+//       //     title: "Payout Withdrawal",
+//       //     type: "DEBIT",
+//       //     withdrawal: true,
+//       //   },
+//       // });
+
+//       // const payout = await prisma.payout.create({
+//       //   data: {
+//       //     userId: session.user.id,
+//       //     amount: withdrawalFee,
+//       //     status: "PAID",
+//       //     bankName: user.bankName,
+//       //     accountNumber: user.accountNumber,
+//       //     accountName: user.accountName,
+//       //     fee: 0,
+//       //     title: "Withdrawal fee",
+//       //     type: "DEBIT",
+//       //   },
+//       // });
+
+//       // if (user.emailNotification) {
+//       //   await mailjet.post("send", { version: "v3.1" }).request({
+//       //     Messages: [
+//       //       {
+//       //         From: {
+//       //           Email: env.SENDER_EMAIL_ADDRESS,
+//       //           Name: "grabcash",
+//       //         },
+//       //         To: [{ Email: user.email, Name: user.name }],
+//       //         Subject: `Your Grabcash payout was successful`,
+//       //         HTMLPart: PayoutSuccessful({
+//       //           amount: formatMoneyInput(amount),
+//       //           bankName: user.bankName,
+//       //           accountNumber: user.accountNumber,
+//       //           date: payout.createdAt,
+//       //           name: user.name,
+//       //         }),
+//       //       },
+//       //     ],
+//       //   });
+//       // }
+//       // // Log the activity
+//       // await logActivity({
+//       //   type: "PAYOUT_COMPLETED",
+//       //   description: `${user.name} withdrew ₦${formatMoneyInput(amount)}`,
+//       //   userId: user.id,
+//       //   payoutId: payout.id,
+//       //   metadata: {
+//       //     amount: amount,
+//       //   },
+//       // });
+
+//       // revalidatePath("/");
+
+//       // return {
+//       //   status: "success",
+//       //   message:
+//       //     "Payout initiated successfully. Funds will be transferred shortly.",
+//       //   // data: {
+//       //   //   transferCode: transferRes.data.data.transfer_code,
+//       //   //   reference: transferReference,
+//       //   // },
+//       // };
+//     } catch (transferError: any) {
+//       console.error(
+//         "Transfer error:",
+//         transferError.response?.data || transferError.message
+//       );
+
+//       // Handle specific Paystack errors
+//       if (transferError.response?.data) {
+//         return {
+//           status: "error",
+//           message: transferError.response.data.message || "Transfer failed",
+//         };
+//       }
+
+//       return {
+//         status: "error",
+//         message: "Failed to process transfer. Please try again.",
+//       };
+//     }
+//   } catch (error: any) {
+//     console.error("Payout error:", error);
+//     return {
+//       status: "error",
+//       message: "An unexpected error occurred. Please try again.",
+//     };
+//   }
+// };
+
 "use server";
 
 import { logActivity } from "@/app/data/admin/activity/log-activity";
@@ -9,13 +386,12 @@ import { prisma } from "@/lib/db";
 import { env } from "@/lib/env";
 import { ApiResponse } from "@/lib/types";
 import { formatMoneyInput } from "@/lib/utils";
-import axios from "axios";
 import { revalidatePath } from "next/cache";
-
 import Mailjet from "node-mailjet";
+
 const mailjet = Mailjet.apiConnect(
   env.MAILJET_API_PUBLIC_KEY,
-  env.MAILJET_API_PRIVATE_KEY
+  env.MAILJET_API_PRIVATE_KEY,
 );
 
 export const initiatePayout = async ({
@@ -30,13 +406,8 @@ export const initiatePayout = async ({
     if (userDetails.status === "SUSPENDED")
       return { status: "error", message: "Your account has been suspended" };
 
-    if (userDetails.status === "DELETED")
-      return { status: "error", message: "Your account has been deleted" };
-
     const user = await prisma.user.findUnique({
-      where: {
-        id: session.user.id,
-      },
+      where: { id: session.user.id },
       select: {
         earnings: true,
         name: true,
@@ -50,327 +421,119 @@ export const initiatePayout = async ({
       },
     });
 
-    // Input validations
-    if (amount < DEFAULT_MINIMUM_PAYOUT) {
+    // 1. Validations
+    if (!user || amount < DEFAULT_MINIMUM_PAYOUT) {
       return {
         status: "error",
-        message: `You cannot withdraw less than ₦${DEFAULT_MINIMUM_PAYOUT}`,
+        message: `Minimum withdrawal is ₦${DEFAULT_MINIMUM_PAYOUT}`,
       };
     }
 
-    if (!user?.earnings || user.earnings <= 0) {
+    if (!user.earnings || amount > user.earnings) {
       return { status: "error", message: "Insufficient balance" };
     }
 
-    if (amount > user.earnings) {
-      return { status: "error", message: "Insufficient balance" };
+    if (!user.accountNumber || !user.bankCode) {
+      return { status: "error", message: "Bank details incomplete." };
     }
 
-    if (
-      !user.accountNumber ||
-      !user.bankCode ||
-      !user.bankName ||
-      !user.accountName
-    ) {
-      return {
-        status: "error",
-        message:
-          "Account details incomplete. Please update your bank information.",
-      };
-    }
+    const withdrawalFee = (amount * Number(DEFAULT_WITHDRAWAL_FEE)) / 100;
+    const finalAmountToDebit = amount + withdrawalFee;
+
+    // 2. Initiate Flutterwave Transfer
+    const transferReference = `payout_${user.id}_${Date.now()}`;
 
     try {
-      // 1️⃣ Create transfer recipient
-      const recipientRes = await axios.post(
-        "https://api.paystack.co/transferrecipient",
-        {
-          type: "nuban",
-          name: user.name || "User",
-          account_number: user.accountNumber,
-          bank_code: user.bankCode,
-          currency: "NGN",
+      const response = await fetch("https://api.flutterwave.com/v3/transfers", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${env.FW_SECRET_KEY}`,
+          "Content-Type": "application/json",
         },
-        {
-          headers: {
-            Authorization: `Bearer ${env.PS_SECRET_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+        body: JSON.stringify({
+          account_bank: user.bankCode,
+          account_number: user.accountNumber,
+          amount: amount, // Flutterwave takes the raw amount (not in kobo/cents)
+          narration: `Payout for ${user.name}`,
+          currency: "NGN",
+          reference: transferReference,
+          callback_url: `${env.NEXT_PUBLIC_BETTER_AUTH_URL}/api/webhooks/flutterwave-transfer`,
+        }),
+      });
 
-      if (!recipientRes.data.status) {
-        return {
-          status: "error",
-          message: recipientRes.data.message || "Failed to create recipient",
-        };
+      const data = await response.json();
+
+      if (data.status !== "success") {
+        return { status: "error", message: data.message || "Transfer failed" };
       }
 
-      const recipientCode = recipientRes.data.data.recipient_code;
-
-      // Generate unique reference for this transfer
-      const transferReference = `payout_${session.user.id}_${Date.now()}`;
-
-      const withdrawalFee = (amount * Number(DEFAULT_WITHDRAWAL_FEE)) / 100;
-      const payoutAmount = amount - withdrawalFee;
-
-      try {
-        const payload = {
-          source: "balance",
-          reason: `Payout withdrawal for ${user.name}`,
-          amount: Math.floor(amount * 100), // convert to kobo
-          recipient: recipientCode,
-          reference: transferReference,
-        };
-
-        const res = await fetch("https://api.paystack.co/transfer", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${env.PS_SECRET_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
+      // 3. Update Database (Atomic Transaction)
+      const payoutRecord = await prisma.$transaction(async (tx) => {
+        // Deduct total (amount + fee)
+        await tx.user.update({
+          where: { id: user.id },
+          data: { earnings: { decrement: finalAmountToDebit } },
         });
 
-        const text = await res.text();
-
-        let data;
-        try {
-          data = JSON.parse(text);
-        } catch (error) {
-          console.log(error);
-          throw new Error("Paystack returned non-JSON response");
-        }
-
-        if (!res.ok) {
-          throw new Error(data?.message || "Transfer failed");
-        }
-
-        // 3️⃣ Update user earnings in database
-        await prisma.user.update({
-          where: { id: session.user.id },
+        // Create the main payout record
+        return await tx.payout.create({
           data: {
-            earnings: {
-              decrement: amount + withdrawalFee,
-            },
-          },
-        });
-
-        await prisma.payout.create({
-          data: {
-            userId: session.user.id,
+            userId: user.id,
             amount,
             status: "PAID",
-            bankName: user.bankName,
-            accountNumber: user.accountNumber,
-            accountName: user.accountName,
+            bankName: user.bankName!,
+            accountNumber: user.accountNumber!,
+            accountName: user.accountName!,
             fee: withdrawalFee,
             title: "Payout Withdrawal",
             type: "DEBIT",
             withdrawal: true,
           },
         });
+      });
 
-        const payout = await prisma.payout.create({
-          data: {
-            userId: session.user.id,
-            amount: withdrawalFee,
-            status: "PAID",
-            bankName: user.bankName,
-            accountNumber: user.accountNumber,
-            accountName: user.accountName,
-            fee: 0,
-            title: "Withdrawal fee",
-            type: "DEBIT",
-          },
+      // 4. Notifications & Logs
+      if (user.emailNotification) {
+        await mailjet.post("send", { version: "v3.1" }).request({
+          Messages: [
+            {
+              From: { Email: env.SENDER_EMAIL_ADDRESS, Name: "grabcash" },
+              To: [{ Email: user.email, Name: user.name }],
+              Subject: `Your payout was successful`,
+              HTMLPart: PayoutSuccessful({
+                amount: formatMoneyInput(amount),
+                bankName: user.bankName!,
+                accountNumber: user.accountNumber!,
+                date: payoutRecord.createdAt,
+                name: user.name!,
+              }),
+            },
+          ],
         });
-
-        if (user.emailNotification) {
-          await mailjet.post("send", { version: "v3.1" }).request({
-            Messages: [
-              {
-                From: {
-                  Email: env.SENDER_EMAIL_ADDRESS,
-                  Name: "grabcash",
-                },
-                To: [{ Email: user.email, Name: user.name }],
-                Subject: `Your Grabcash payout was successful`,
-                HTMLPart: PayoutSuccessful({
-                  amount: formatMoneyInput(amount),
-                  bankName: user.bankName,
-                  accountNumber: user.accountNumber,
-                  date: payout.createdAt,
-                  name: user.name,
-                }),
-              },
-            ],
-          });
-        }
-        // Log the activity
-        await logActivity({
-          type: "PAYOUT_COMPLETED",
-          description: `${user.name} withdrew ₦${formatMoneyInput(amount)}`,
-          userId: user.id,
-          payoutId: payout.id,
-          metadata: {
-            amount: amount,
-          },
-        });
-
-        revalidatePath("/");
-
-        return {
-          status: "success",
-          message: `${data.message}. Funds will be transferred shortly.`,
-          // data: {
-          //   transferCode: transferRes.data.data.transfer_code,
-          //   reference: transferReference,
-          // },
-        };
-
-        // return data;
-      } catch (err) {
-        console.error("Paystack Transfer Error:", err);
-        throw err;
       }
 
-      // 2️⃣ Initiate transfer
-      // const transferRes = await axios.post(
-      //   "https://api.paystack.co/transfer",
-      //   {
-      //     source: "balance",
-      //     reason: `Payout withdrawal for ${user.name}`,
-      //     amount: Math.floor(amount * 100), // convert to kobo
-      //     recipient: recipientCode,
-      //     reference: transferReference,
-      //   },
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${env.PS_SECRET_KEY}`,
-      //       "Content-Type": "application/json",
-      //     },
-      //   }
-      // );
+      await logActivity({
+        type: "PAYOUT_COMPLETED",
+        description: `${user.name} withdrew ₦${formatMoneyInput(amount)}`,
+        userId: user.id,
+        payoutId: payoutRecord.id,
+        metadata: { amount, reference: transferReference },
+      });
 
-      // console.log(transferRes.data);
-
-      // if (!transferRes.data.status) {
-      //   console.log(transferRes);
-      //   return {
-      //     status: "error",
-      //     message: transferRes.data.message || "Transfer failed",
-      //   };
-      // }
-
-      // // if(transferRes.data.message)
-
-      // return;
-
-      // // 3️⃣ Update user earnings in database
-      // await prisma.user.update({
-      //   where: { id: session.user.id },
-      //   data: {
-      //     earnings: {
-      //       decrement: amount + withdrawalFee,
-      //     },
-      //   },
-      // });
-
-      // await prisma.payout.create({
-      //   data: {
-      //     userId: session.user.id,
-      //     amount,
-      //     status: "PAID",
-      //     bankName: user.bankName,
-      //     accountNumber: user.accountNumber,
-      //     accountName: user.accountName,
-      //     fee: withdrawalFee,
-      //     title: "Payout Withdrawal",
-      //     type: "DEBIT",
-      //     withdrawal: true,
-      //   },
-      // });
-
-      // const payout = await prisma.payout.create({
-      //   data: {
-      //     userId: session.user.id,
-      //     amount: withdrawalFee,
-      //     status: "PAID",
-      //     bankName: user.bankName,
-      //     accountNumber: user.accountNumber,
-      //     accountName: user.accountName,
-      //     fee: 0,
-      //     title: "Withdrawal fee",
-      //     type: "DEBIT",
-      //   },
-      // });
-
-      // if (user.emailNotification) {
-      //   await mailjet.post("send", { version: "v3.1" }).request({
-      //     Messages: [
-      //       {
-      //         From: {
-      //           Email: env.SENDER_EMAIL_ADDRESS,
-      //           Name: "grabcash",
-      //         },
-      //         To: [{ Email: user.email, Name: user.name }],
-      //         Subject: `Your Grabcash payout was successful`,
-      //         HTMLPart: PayoutSuccessful({
-      //           amount: formatMoneyInput(amount),
-      //           bankName: user.bankName,
-      //           accountNumber: user.accountNumber,
-      //           date: payout.createdAt,
-      //           name: user.name,
-      //         }),
-      //       },
-      //     ],
-      //   });
-      // }
-      // // Log the activity
-      // await logActivity({
-      //   type: "PAYOUT_COMPLETED",
-      //   description: `${user.name} withdrew ₦${formatMoneyInput(amount)}`,
-      //   userId: user.id,
-      //   payoutId: payout.id,
-      //   metadata: {
-      //     amount: amount,
-      //   },
-      // });
-
-      // revalidatePath("/");
-
-      // return {
-      //   status: "success",
-      //   message:
-      //     "Payout initiated successfully. Funds will be transferred shortly.",
-      //   // data: {
-      //   //   transferCode: transferRes.data.data.transfer_code,
-      //   //   reference: transferReference,
-      //   // },
-      // };
-    } catch (transferError: any) {
-      console.error(
-        "Transfer error:",
-        transferError.response?.data || transferError.message
-      );
-
-      // Handle specific Paystack errors
-      if (transferError.response?.data) {
-        return {
-          status: "error",
-          message: transferError.response.data.message || "Transfer failed",
-        };
-      }
-
+      revalidatePath("/");
+      return {
+        status: "success",
+        message: "Payout initiated. Funds will arrive shortly.",
+      };
+    } catch (err) {
+      console.error("Flutterwave API Error:", err);
       return {
         status: "error",
-        message: "Failed to process transfer. Please try again.",
+        message: "Connection to payment gateway failed.",
       };
     }
-  } catch (error: any) {
-    console.error("Payout error:", error);
-    return {
-      status: "error",
-      message: "An unexpected error occurred. Please try again.",
-    };
+  } catch (error) {
+    console.error("General Payout Error:", error);
+    return { status: "error", message: "An unexpected error occurred." };
   }
 };

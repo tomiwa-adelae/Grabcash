@@ -15,7 +15,6 @@ export const useSignout = () => {
           router.push("/login?logout=success");
         },
         onError: (error) => {
-          console.log(error);
           toast.error("Oops! An error occurred!");
         },
       },

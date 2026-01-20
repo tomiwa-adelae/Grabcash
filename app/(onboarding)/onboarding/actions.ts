@@ -17,11 +17,11 @@ import { revalidatePath } from "next/cache";
 import Mailjet from "node-mailjet";
 const mailjet = Mailjet.apiConnect(
   env.MAILJET_API_PUBLIC_KEY,
-  env.MAILJET_API_PRIVATE_KEY
+  env.MAILJET_API_PRIVATE_KEY,
 );
 
 export const saveProfilePicture = async (
-  image: string
+  image: string,
 ): Promise<ApiResponse> => {
   const { user } = await requireUser();
   try {
@@ -168,7 +168,7 @@ const generateUniqueCode = (username: string) => {
 
 export const saveProfile = async (
   data: OnboardingPrismaProfileSchemaType & { referralCode?: string },
-  bankCode: string
+  bankCode: string,
 ): Promise<ApiResponse> => {
   const { user } = await requireUser();
 
@@ -246,25 +246,25 @@ export const saveProfile = async (
           });
 
           // 5. Send Email to Referrer (Mailjet)
-          if (referrer.emailNotification) {
-            try {
-              await mailjet.post("send", { version: "v3.1" }).request({
-                Messages: [
-                  {
-                    From: { Email: env.SENDER_EMAIL_ADDRESS, Name: "grabcash" },
-                    To: [{ Email: referrer.email, Name: referrer.name }],
-                    Subject: "You just earned a referral bonus! ₦500",
-                    HTMLPart: ReferralBonusEmail({
-                      referrerName: referrer.name || "User",
-                      referredUserName: updatedUser.name,
-                    }),
-                  },
-                ],
-              });
-            } catch (mailError) {
-              // We don't crash the whole process if email fails
-            }
-          }
+          // if (referrer.emailNotification) {
+          //   try {
+          //     await mailjet.post("send", { version: "v3.1" }).request({
+          //       Messages: [
+          //         {
+          //           From: { Email: env.SENDER_EMAIL_ADDRESS, Name: "grabcash" },
+          //           To: [{ Email: referrer.email, Name: referrer.name }],
+          //           Subject: "You just earned a referral bonus! ₦500",
+          //           HTMLPart: ReferralBonusEmail({
+          //             referrerName: referrer.name || "User",
+          //             referredUserName: updatedUser.name,
+          //           }),
+          //         },
+          //       ],
+          //     });
+          //   } catch (mailError) {
+          //     // We don't crash the whole process if email fails
+          //   }
+          // }
         }
       }
 
