@@ -23,6 +23,9 @@ export const env = createEnv({
     ADMIN_EMAIL_ADDRESS: z.string().min(1),
     SUPPORT_EMAIL_ADDRESS: z.string().min(1),
     PS_SECRET_KEY: z.string().min(1),
+    FLUTTERWAVE_CLIENT_ID: z.string().min(1),
+    FLUTTERWAVE_CLIENT_SECRET: z.string().min(1),
+    FLUTTERWAVE_ENV: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_S3_BUCKET_NAME_IMAGES: z.string().min(1),
